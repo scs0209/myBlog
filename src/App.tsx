@@ -1,33 +1,19 @@
 /* eslint-disable */
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import axios from 'axios';
 
-class App extends Component<{}, {host: string, test: string}> {
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      host : '',
-      test: '',
-    }
-  }
+const App = () => {
+  const [data, setData] = useState({ host: '' })
 
-  componentDidMount() {
-    this._dbTest();
-  }
+  useEffect(() => {
+    axios.get('/api/host').then((res) => setData({host: res.data.host}))
+  }, [])
   
-  _dbTest = async() => {
-    const res = await axios.get('/api/test');
-    console.log(res.data)
-  }
-
-
-  render() {
-    return(
-      <div className='App'>
-        <h3> Welcome to <u> {this.state.host} </u> Blog! </h3>
-      </div>
-    )
-  }
+  return (
+    <div className='App'>
+      <h3>Welcome to <u>{data.host}</u> Blog! </h3>
+    </div>
+  )
 }
 
 export default App;
