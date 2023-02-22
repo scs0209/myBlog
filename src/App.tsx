@@ -6,8 +6,17 @@ const App = () => {
   const [data, setData] = useState({ host: '' })
 
   useEffect(() => {
-    axios.get('/api/host').then((res) => setData({host: res.data.host}))
-  }, [])
+    axios.get('/api/host', {
+      withCredentials: true
+    }).then((res) => setData({host: res.data.host}))
+  }, []);
+
+  useEffect(() => {
+    axios.get('/api/test', {
+      withCredentials: true
+    })
+    .then((res) => console.log(res.data));
+  }, []);
   
   return (
     <div className='App'>
