@@ -31,28 +31,40 @@ let sequelize = new Sequelize(
 
     db.sequelize
     .authenticate()
-    .then(() => {
+    .then(() => {//db가 성공적으로 생성됐을 시
         console.log('Connection has been established successfully.');
     })
-    .catch(err => {
+    .catch(err => {//db가 생성 안됐을 시
         console.log('Unable to connect to the database: ', err);
     });
 
-    db.Teacher = require('./teacher')(sequelize, Sequelize);
-    db.Class = require('./class')(sequelize, Sequelize);
+    db.User = require('./User')(sequelize, Sequelize);
+    db.Post = require('./post')(sequelize, Sequelize);
+    db.postTag = require('./postTag')(sequelize, Sequelize);
+    db.Tag = require('./tag')(sequelize, Sequelize);
+    db.Comment = require('./comment')(sequelize, Sequelize);
+    db.Like = require('./like')(sequelize, Sequelize);
 
-    // 1 대 1 관계(Teacher : Class)
-    db.Teacher.hasOne(db.Class);
+    db.User.hasMany(db.Post);
+    db.Post.belongsTo(db.User);
 
-    // M 대 M 관계(Teacher : Classes)
-    db.Teacher.belongsToMany(db.Class, {
-        through : 'scedule',
-        foreignKey : 'teacher_id'
+    db.Post.belongsToMany(db.Tag, {
+      through : 'PostTag',
     });
-    db.Class.belongsToMany(db.Teacher, {
-        through : 'scedule',
-        foreignKey: 'class_id',
+    db.Tag.belongsToMany(db.Post, {
+      through: 'PostTag'
     });
+
+    db.Comment.belongsTo(db.User);
+    db.Comment.belongsTo(db.Post);
+    db.User.hasMany(db.Comment);
+    db.Post.hasMany(db.Comment);
+
+    db.Like.belongsTo(db.User);
+    db.Like.belongsTo(db.Post);
+    db.User.hasMany(db.Like);
+    db.Post.hasMany(db.Like);
+
 
 db.secret = '(9*)5$&!3%^0%^@@2$1!#5@2!4';
 module.exports = db;
