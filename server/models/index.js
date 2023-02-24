@@ -8,9 +8,7 @@ const env = process.env.NODE_ENV || 'development';
 // 두번째의 '..'은 경로의 이동값인데, 현 디렉토리의 밖에 있다는 의미로 쓰인다.
 // 세번째의 config는 현재 디렉토리 안에 있는 config라는 디렉토리로 들어간다는 의미
 // 마지막의 db.json는 config 디렉토리 안에 있는 db.json파일을 가져오겠다는 뜻이다.
-const config = require(path.join(__dirname, '..', 'config', 'db.json'))[
-    env
-  ];
+const config = require('../config/config')[env];
 const db = {};
 
 let sequelize = new Sequelize(
