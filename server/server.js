@@ -1,15 +1,37 @@
-const bodyParser = require('body-parser');
 const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');//기본적으로 express는 post 방식을 처리해주지 않는데, post 방식을 처리해주게 해주는 module
 const app = express();
 const apiRouter = require('./routes/api');
+const passport = require('passport');
+
+const passportConfig = require('./passport');
+
+passportConfig();
 
 const sequelize = require('./models').sequelize;
-sequelize.sync();
+sequelize.sync({ force: false})
+  .then(() => {
+    console.log('데이터베이스 연결 성공')
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 app.use(express.json());
-// body-Parser 모듈 적용
+// body-Parser 모듈 적용(app이 body-parser를 사용하겠다는 뜻)
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(
+  session({
+    secret: "SECRET",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 

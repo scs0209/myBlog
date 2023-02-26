@@ -15,6 +15,7 @@ type ReturnTypes<T> = [
 const useInput = <T>(initialData: T): ReturnTypes<T> => {
   const [value, setValue] = useState(initialData);
   const handler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
     setValue(e.target.value as unknown as T);
   }, []);
   return [value, handler, setValue];

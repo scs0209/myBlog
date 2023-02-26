@@ -1,25 +1,24 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
+import {Link} from 'react-router-dom';
 import useSWR from 'swr';
 import useInput from "../../utils/useInput";
 import fetcher from "../../utils/fetcher";
 
 const Login = () => {
-  const [inputId, handleInputId] = useInput('');
-  const [inputPw, handleInputPw] = useInput(''); 
+  const [email, onChangeEmail] = useInput('');
+  const [password, onChangePassword] = useInput(''); 
 
-  const onSubmitLogin = useCallback((e: any) => {
 
-  }, [])
 
   //Login 버튼 클릭 이벤트
-  const onClickLogin = useCallback(() => {
+  const onSubmitLogin = useCallback((e: any) => {
+    e.preventDefault();
     console.log('click login')
     axios.post(
       '/api/users/login',
       { 
-        "userId": inputId,
-        "userPw": inputPw
+        email, password
       } 
     )
     .then((res) => {
@@ -41,29 +40,31 @@ const Login = () => {
       <h2>LogIn</h2>
       <form onSubmit={onSubmitLogin}>
         <div>
-          <label htmlFor="input_id">ID: </label>
+          <label htmlFor="input_email">Email: </label>
           <input
-            type="text"
-            name="input_id"
-            value={inputId}
-            onChange={handleInputId}
+            type="email"
+            name="email"
+            value={email}
+            onChange={onChangeEmail}
           />
         </div>
         <div>
           <label htmlFor="input_pw">PW: </label>
           <input
             type="password"
-            name="input_pw"
-            value={inputPw}
-            onChange={handleInputPw}
+            name="password"
+            value={password}
+            onChange={onChangePassword}
           />
         </div>
         <div>
-          <button type="button" onClick={onClickLogin}>
-            LogIn
-          </button>
+          <button type="submit">LogIn</button>
         </div>
       </form>
+      <p>
+        아직 회원이 아니신가요?&nbsp;
+        <Link to="/signup">회원가입 하러가기</Link>
+      </p>
     </div>
   );
 };

@@ -1,7 +1,11 @@
 'use strict';
-
-const path = require('path');
 const Sequelize = require('sequelize');
+const User = require('./User');
+const Post = require('./post');
+const PostTag = require('./postTag');
+const Tag = require('./tag');
+const Comment = require('./comment');
+const Like = require('./like');
 
 const env = process.env.NODE_ENV || 'development';
 // path 모듈을 사용할 때 여러개의 인자값이 들어간다.
@@ -11,17 +15,11 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
 const db = {};
 
-let sequelize = new Sequelize(
+const sequelize = new Sequelize(
     config.database,
     config.username,
     config.password,
     config,
-    {
-      define: {
-        charset: 'utf8',
-        collate: 'utf8_general_ci'
-      }
-    }
   );
   
   db.sequelize = sequelize;
@@ -36,32 +34,39 @@ let sequelize = new Sequelize(
         console.log('Unable to connect to the database: ', err);
     });
 
-    db.User = require('./User')(sequelize, Sequelize);
-    db.Post = require('./post')(sequelize, Sequelize);
-    db.postTag = require('./postTag')(sequelize, Sequelize);
-    db.Tag = require('./tag')(sequelize, Sequelize);
-    db.Comment = require('./comment')(sequelize, Sequelize);
-    db.Like = require('./like')(sequelize, Sequelize);
+    db.User = User;
+    db.Post = Post;
+    db.PostTag = PostTag;
+    db.Tag = Tag;
+    db.Comment = Comment;
+    db.Like = Like;
 
-    db.User.hasMany(db.Post);
-    db.Post.belongsTo(db.User);
+    User.initiate(sequelize);
+    Post.initiate(sequelize);
+    PostTag.initiate(sequelize);
+    Tag.initiate(sequelize);
+    Comment.initiate(sequelize);
+    Like.initiate(sequelize);
 
-    db.Post.belongsToMany(db.Tag, {
-      through : 'PostTag',
-    });
-    db.Tag.belongsToMany(db.Post, {
-      through: 'PostTag'
-    });
+    // db.User.hasMany(db.Post);
+    // db.Post.belongsTo(db.User);
 
-    db.Comment.belongsTo(db.User);
-    db.Comment.belongsTo(db.Post);
-    db.User.hasMany(db.Comment);
-    db.Post.hasMany(db.Comment);
+    // db.Post.belongsToMany(db.Tag, {
+    //   through : 'PostTag',
+    // });
+    // db.Tag.belongsToMany(db.Post, {
+    //   through: 'PostTag'
+    // });
 
-    db.Like.belongsTo(db.User);
-    db.Like.belongsTo(db.Post);
-    db.User.hasMany(db.Like);
-    db.Post.hasMany(db.Like);
+    // db.Comment.belongsTo(db.User);
+    // db.Comment.belongsTo(db.Post);
+    // db.User.hasMany(db.Comment);
+    // db.Post.hasMany(db.Comment);
+
+    // db.Like.belongsTo(db.User);
+    // db.Like.belongsTo(db.Post);
+    // db.User.hasMany(db.Like);
+    // db.Post.hasMany(db.Like);
 
 
 db.secret = '(9*)5$&!3%^0%^@@2$1!#5@2!4';
