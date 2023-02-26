@@ -7,23 +7,28 @@ const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
 const User = require('../models/User');
 
 
-router.post('/users', async(req, res) => {
+router.post('/users', async(req, res, next) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-
+    const user = await User.findOne({ where: {email} });
+    if(user) {
+      return res.status(409).json({
+        message: "이미 존재하는 이메일입니다."
+      });
+    }
     //비빌번호 암호화
     const hashedPassword = await bcrypt.hash(password, 10);
-
     //사용자 생성
-    const user = await User.create({
+    await User.create({
       email,
       password: hashedPassword,
     });
-
-    res.json(user);
+    return res.status(201).json({
+      message: "회원가입이 완료되었습니다."
+    });
   } catch(error) {
     console.log(error);
-    res.status(500).json({message: "회원가입에 실패했습니다."})
+    return next(error);
   }
 })
 
