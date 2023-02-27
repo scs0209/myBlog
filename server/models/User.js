@@ -10,14 +10,14 @@ class User extends Sequelize.Model {
       },
       name: {
         type: Sequelize.STRING(50),
-        allowNull: true//NOT NULL 이라는 뜻
+        allowNull: false,//NOT NULL 이라는 뜻
       },
       email: {
         type: Sequelize.STRING(50),
         allowNull: false,
       },
       password: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING,
         allowNull: false
       } 
     },

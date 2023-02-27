@@ -1,6 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize');
-const User = require('./User');
+const User = require('./user');
 const Post = require('./post');
 const PostTag = require('./postTag');
 const Tag = require('./tag');
@@ -69,6 +69,6 @@ const sequelize = new Sequelize(
     // db.Post.hasMany(db.Like);
 
 
-db.secret = '(9*)5$&!3%^0%^@@2$1!#5@2!4';
+
 module.exports = db;
 
