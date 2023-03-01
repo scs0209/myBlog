@@ -33,12 +33,24 @@ const Login = () => {
     });
   }, [email, password, mutate]);
 
+  const onLogout = useCallback(() => {
+    axios.post('/api/logout', null, {
+      withCredentials: true
+    })
+    .then(() => {
+      mutate(false, false);
+    });
+  }, [mutate])
+
   if (data === undefined) {
     return <div>로딩중...</div>;
   }
 
   if(data){
-    return <div>Login Success</div>
+    return <div>
+      Login Success
+      <button onClick={onLogout}>로그아웃</button>
+      </div>
   }
 
 

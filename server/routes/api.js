@@ -73,11 +73,14 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
 });
 
 // 로그아웃
-router.get("/logout", isLoggedIn, (req, res) => {
-  req.logout();
-  req.session.destroy();
-  res.send('ok');
-  }
-);
+router.post("/logout", isLoggedIn, (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    req.session.destroy();
+    res.redirect("/");
+  });
+});
 
 module.exports = router;
