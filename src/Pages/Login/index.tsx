@@ -47,10 +47,7 @@ const Login = () => {
   }
 
   if(data){
-    return <div>
-      Login Success
-      <button onClick={onLogout}>로그아웃</button>
-      </div>
+    return <Navigate to="/main" />
   }
 
 

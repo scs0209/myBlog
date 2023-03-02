@@ -6,6 +6,9 @@ const PostTag = require('./postTag');
 const Tag = require('./tag');
 const Comment = require('./comment');
 const Like = require('./like');
+const Category = require('./category');
+const CategoryTag = require('./categoryTag');
+const CommentCategory = require('./commentCategory');
 
 const env = process.env.NODE_ENV || 'development';
 // path 모듈을 사용할 때 여러개의 인자값이 들어간다.
@@ -20,10 +23,10 @@ const sequelize = new Sequelize(
     config.username,
     config.password,
     config,
-  );
-  
-  db.sequelize = sequelize;
-  db.Sequelize = Sequelize;
+    );
+    
+    db.sequelize = sequelize;
+    db.Sequelize = Sequelize;
 
     db.sequelize
     .authenticate()
@@ -40,6 +43,9 @@ const sequelize = new Sequelize(
     db.Tag = Tag;
     db.Comment = Comment;
     db.Like = Like;
+    db.Category = Category;
+    db.CommentCategory = CommentCategory;
+    db.CategoryTag = CategoryTag;
 
     User.initiate(sequelize);
     Post.initiate(sequelize);
@@ -47,6 +53,9 @@ const sequelize = new Sequelize(
     Tag.initiate(sequelize);
     Comment.initiate(sequelize);
     Like.initiate(sequelize);
+    Category.initiate(sequelize);
+    CategoryTag.initiate(sequelize);
+    CommentCategory.initiate(sequelize);
 
     // db.User.hasMany(db.Post);
     // db.Post.belongsTo(db.User);

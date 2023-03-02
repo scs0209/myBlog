@@ -6,10 +6,21 @@ const passport = require('passport');
 const path = require('path');
 const { isNotLoggedIn, isLoggedIn } = require('./middlewares');
 const User = require('../models/user');
+const Category = require('../models/category');
 
 
 router.get("/", (req, res, next) => {
   res.sendFile(path.join(__dirname, "..", "public"));
+});
+
+// 카테고리 목록 가져오기
+router.get("/categories", async (req, res, next) => {
+  try {
+    const categories = await Category.findAll();
+    res.json(categories);
+  } catch (err) {
+    next(err);
+  }
 });
 
 //주소와 get, post 등 메서드가 있는 것을 라우터라고 부른다.

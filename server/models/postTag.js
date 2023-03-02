@@ -7,7 +7,7 @@ class PostTag extends Sequelize.Model {
         //post 테이블의 Columns역할을 담당
         type: Sequelize.INTEGER, //정수타입 데이터를 50 length까지 가질 수 있다는 의미
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true,//기본키의 자동 증가
       },
     },
     {
@@ -19,11 +19,6 @@ class PostTag extends Sequelize.Model {
       timestamps: true,
       paranoid: true,
     })
-  }
-    static associate(db) {
-    db.Tag.hasMany(db.Post);
-    db.Tag.hasMany(db.Like);
-    db.Tag.hasMany(db.Comment);
   }
 };
 

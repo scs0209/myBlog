@@ -31,10 +31,11 @@ class Post extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.Post.belongTo(db.User);
-    db.Post.belongToMany(db.Tag, {
+    db.Post.belongsTo(db.User);
+    db.Post.belongsToMany(db.Tag, {
       through: 'PostTag'
     });
+    db.Post.belongsToMany(db.Category, { through: 'PostTag' });
     db.Post.hasMany(db.Like);
     db.Post.hasMany(db.Comment);
   }

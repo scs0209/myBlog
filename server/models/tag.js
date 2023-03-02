@@ -27,7 +27,8 @@ class Tag extends Sequelize.Model {
   }
   static associate(db) {
     // DB 특성상 다대다 관계는 중간 테이블이 생김
-    db.User.belongsToMany(db.Post, { through: 'PostTag'});
+    db.Tag.belongsToMany(db.Post, { through: 'PostTag'});
+    db.Tag.belongsToMany(db.Category, { through: 'CategoryTag'});
   }
 };
 

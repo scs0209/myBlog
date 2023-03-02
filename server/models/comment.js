@@ -27,8 +27,10 @@ class Comment extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.Comment.belongTo(db.User);
-    db.Comment.belongTo(db.Post);
+    db.Comment.belongsTo(db.User);
+    db.Comment.belongsTo(db.Post);
+    db.Comment.belongsToMany(db.Tag, { through: 'CategoryTag' });
+    db.Comment.belongsToMany(db.Category, { through: 'CommentCategory' });
   }
 };
 
