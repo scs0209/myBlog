@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { Input, Textarea } from "./styles";
+import autosize from 'autosize'
 
 const Post = () => {
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if(textareaRef.current){
+      autosize(textareaRef.current);
+    }   
+  });
+
   return(
     <div>
       <div>
-        제목
-        <input type="text" />
+        <Input type="text" placeholder="제목" />
       </div>
       <div>
-        내용
-        <textarea></textarea>
+        <Textarea 
+          placeholder="내용"
+          ref={textareaRef}
+        ></Textarea>
       </div>
     </div>
   )
