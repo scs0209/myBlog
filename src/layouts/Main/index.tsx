@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react";
 import { Link, Route, Router, Routes } from "react-router-dom";
 import { Header, MainContainer } from "./styles";
 const Post = loadable(() => import('../../Pages/Post'));
+const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
 
 const MainPage = () => {
   const [showPost, setShowPost] = useState(false);
@@ -29,6 +30,7 @@ const MainPage = () => {
           </div>
           <div className="right-side">
             <h3>Right Side</h3>
+            {showPost && <PostSubmit /> }
           </div>
         </MainContainer>
       </div>

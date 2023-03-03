@@ -18,7 +18,7 @@ const Post = () => {
       </div>
       <div>
         <Textarea 
-          placeholder="내용"
+          placeholder="내용을 입력하세요"
           ref={textareaRef}
         ></Textarea>
       </div>
