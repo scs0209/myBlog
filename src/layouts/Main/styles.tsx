@@ -6,7 +6,8 @@ export const Header = styled.nav`
   display: flex;
   color: white;
   padding: 20px;
-  justify-content: center;
+  justify-content: space-between;
+  padding-left: 30px;
 `;
 
 export const MainContainer = styled.div`
