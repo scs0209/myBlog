@@ -1,16 +1,19 @@
 import loadable from "@loadable/component";
 import React, { useCallback, useState } from "react";
-import { Link, Route, Router, Routes } from "react-router-dom";
+import { Link, Route, Router, Routes, useNavigate } from "react-router-dom";
 import { Header, MainContainer } from "./styles";
 const Post = loadable(() => import('../../Pages/Post'));
 const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
+const PostList = loadable(() => import('../../Components/PostList'));
 
 const MainPage = () => {
+  const navigate = useNavigate();
   const [showPost, setShowPost] = useState(false);
 
   const onClickShowPost = useCallback(() => {
     setShowPost((prev) => !prev);
-  }, [])
+  }, []);
+  
 
   return (
       <div>
@@ -25,6 +28,7 @@ const MainPage = () => {
           <div className="main">
             Main Layout
             <Routes>
+              <Route path="/" element={<PostList />}/>
               {showPost && <Route path="/write" element={<Post />} />}
             </Routes>
           </div>

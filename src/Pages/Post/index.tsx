@@ -1,10 +1,12 @@
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState, VFC } from "react";
 import { Input, Textarea } from "./styles";
 import autosize from 'autosize'
 import axios from "axios";
 import useSWR from 'swr';
 import useInput from "../../utils/useInput";
 import fetcher from "../../utils/fetcher";
+import PostSubmit from "../../Components/PostSubmit";
+
 
 const Post = () => {
   const { data: currentUser } = useSWR('/api/users', fetcher, {
@@ -14,7 +16,7 @@ const Post = () => {
   const [content, setContent] = useState("");
   const textareaRef = useRef(null);
 
-  const { data: postData, mutate } = useSWR("/api/posts", {
+  const { data: postData, mutate } = useSWR("/api/posts", fetcher, {
     revalidateOnMount: true,
   });
 
@@ -65,32 +67,34 @@ const Post = () => {
           console.error(err);
         });
     },
-    [title, content, mutate, setTitle, setContent]
+    [title, content, mutate, setTitle, setContent, currentUser.id]
   );
 
-  return(
-    <form onSubmit={onSubmit}>
-      <div>
-        <Input 
-          type="text" 
-          name="title" 
-          value={title}
-          onChange={onChangeTitle} 
-          placeholder="제목" 
-        />
-      </div>
-      <div>
-        <Textarea 
-          placeholder="내용을 입력하세요"
-          name="content"
-          value={content}
-          ref={textareaRef}
-          onChange={onChangeContents}
-        ></Textarea>
-        <button type="submit">작성하기</button>
-      </div>
-    </form>
-  )
+  return (
+    <div>
+      <form onSubmit={onSubmit}>
+        <div>
+          <Input
+            type="text"
+            name="title"
+            value={title}
+            onChange={onChangeTitle}
+            placeholder="제목"
+          />
+        </div>
+        <div>
+          <Textarea
+            placeholder="내용을 입력하세요"
+            name="content"
+            value={content}
+            ref={textareaRef}
+            onChange={onChangeContents}
+          ></Textarea>
+        </div>
+        <PostSubmit />
+      </form>
+    </div>
+  );
 }
 
 export default Post;

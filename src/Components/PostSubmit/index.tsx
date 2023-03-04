@@ -1,5 +1,6 @@
-import React from "react";
+import React, { VFC } from "react";
 import { PostDiv, SubmitButton } from "./styles";
+
 
 const PostSubmit = () => {
   return(
