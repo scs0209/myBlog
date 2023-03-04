@@ -6,6 +6,7 @@ const passport = require('passport');
 const path = require('path');
 const { isNotLoggedIn, isLoggedIn } = require('./middlewares');
 const User = require('../models/user');
+const Post = require('../models/post');
 const Category = require('../models/category');
 
 
@@ -20,6 +21,32 @@ router.get("/categories", async (req, res, next) => {
     res.json(categories);
   } catch (err) {
     next(err);
+  }
+});
+
+// 글 가져오기
+router.get("/posts", async (req, res) => {
+  try{
+    const posts = await Post.findAll({ order: [["createdAt", "DESC"]] });
+    res.json(posts);
+  } catch (err) {
+    console.err(err);
+    res.status(500).send("서버 오류");
+  }
+})
+
+// 글 입력
+router.post("/posts", async (req, res) => {
+  try{
+    const post = await Post.create({
+      title: req.body.title,
+      content: req.body.content, // content 필드에 값을 설정
+      UserId: req.body.UserId,
+    });
+    res.json(post);
+  } catch(err) {
+    console.error(err);
+    res.status(500).send("서버 오류");
   }
 });
 
