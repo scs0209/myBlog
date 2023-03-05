@@ -24,16 +24,31 @@ router.get("/categories", async (req, res, next) => {
   }
 });
 
-// 글 가져오기
+
+//개시글 가져오기
 router.get("/posts", async (req, res) => {
-  try{
-    const posts = await Post.findAll({ order: [["createdAt", "DESC"]] });
-    res.json(posts);
-  } catch (err) {
-    console.err(err);
-    res.status(500).send("서버 오류");
+  const { page } = req.query;
+  const limit = 10; // 한 페이지에 보여줄 게시글 수
+  const offset = (page - 1) * limit;
+
+  try {
+    const { rows:posts, count} = await Post.findAndCountAll({
+      order: [["createdAt", "DESC"]],
+      limit,
+      offset,
+    });
+    // const count = await Post.count();
+    res.json({
+      posts,
+      count
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "서버 에러가 발생했습니다.",
+    });
   }
-})
+});
 
 // 글 입력
 router.post("/posts", async (req, res) => {

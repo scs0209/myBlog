@@ -52,7 +52,7 @@ const SignUp = () => {
     }
 
   if (data) {
-    return <div>Login Success</div>;
+    return <Navigate to="/main" />
   }
 
   return (

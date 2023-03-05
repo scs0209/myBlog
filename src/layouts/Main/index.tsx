@@ -7,7 +7,6 @@ const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
 const PostList = loadable(() => import('../../Components/PostList'));
 
 const MainPage = () => {
-  const navigate = useNavigate();
   const [showPost, setShowPost] = useState(false);
 
   const onClickShowPost = useCallback(() => {
