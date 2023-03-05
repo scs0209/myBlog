@@ -1,4 +1,4 @@
-import React, { useCallback, useState, VFC } from "react";
+import React, { useCallback, useEffect, useState, VFC } from "react";
 import fetcher from "utils/fetcher";
 import useSWR from 'swr';
 import { Link } from "react-router-dom";
@@ -7,26 +7,35 @@ import Pagination from "../../Components/Pagination";
 
 
 const PostList = () => {
-  const PAGE_SIZE = 10;//한 페이지에서 가져올 데이터의 한계치를 나타내는 값
+  const PAGE_SIZE = 10; //한 페이지에서 가져올 데이터의 한계치를 나타내는 값
+  const [startIdx, setStartIdx] = useState(0);
+  const [endIdx, setEndIdx] = useState(PAGE_SIZE);
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: postData, error, mutate } = useSWR(`/api/posts?page=${currentPage}`, fetcher);
+  const {
+    data: postData,
+    error,
+    mutate,
+  } = useSWR(`/api/posts?page=${currentPage}`, fetcher);
 
-  console.log(currentPage);
   const posts = postData?.posts;
   console.log(posts);
   const totalPosts = postData?.count;
-  const totalPages = Math.ceil(totalPosts/PAGE_SIZE)
+  const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
+  console.log(totalPosts);
   console.log(totalPages);
 
-  const startIdx = (currentPage - 1) * PAGE_SIZE;
-  const endIdx = startIdx + PAGE_SIZE;
   const currentPagePosts = posts?.slice(startIdx, endIdx);
   console.log(startIdx, endIdx, currentPagePosts); // => currentPagePost []빈 배열로 나옴
+  //다음 페이지로 넘어가면 startIdx와 endIdx도 다시 0으로 넘어가야되는데 10~20으로 초기화가 
 
-  const handlePageClick = useCallback((pageNum: number) => {
-    setCurrentPage(pageNum);
-    mutate(`/api/posts?page=${pageNum}`, false);
-  }, [setCurrentPage, mutate]);
+
+  const handlePageClick = useCallback(
+    (pageNum: number) => {
+      setCurrentPage(pageNum);
+      mutate(`/api/posts?page=${pageNum}`, false);
+    },
+    [setCurrentPage, mutate]
+  );
 
   const handleFirstPageClick = useCallback(() => {
     handlePageClick(1);
@@ -49,14 +58,12 @@ const PostList = () => {
   }, [currentPage, totalPages, setCurrentPage, mutate]);
 
   const handleLastPageClick = useCallback(() => {
-    handlePageClick(totalPages)
-  }, [handlePageClick, totalPages])
+    handlePageClick(totalPages);
+  }, [handlePageClick, totalPages]);
 
-
-  if(error) return <div>에러가 발생했습니다.</div>
-  if(!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>
+  if (error) return <div>에러가 발생했습니다.</div>;
+  if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
   if (currentPagePosts.length === undefined) return <div>로딩중...</div>;
-
 
   return (
     <div className="List">
