@@ -47,7 +47,7 @@ const Login = () => {
   }
 
   if(data){
-    return <Navigate to="/main" />
+    return <Navigate to="/main/posts" />
   }
 
 

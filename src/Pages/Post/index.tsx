@@ -6,6 +6,7 @@ import useSWR from 'swr';
 import useInput from "../../utils/useInput";
 import fetcher from "../../utils/fetcher";
 import PostSubmit from "../../Components/PostSubmit";
+import { useParams } from "react-router";
 
 
 const Post = () => {

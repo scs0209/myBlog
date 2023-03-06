@@ -26,7 +26,7 @@ router.get("/categories", async (req, res, next) => {
 
 
 //개시글 가져오기
-router.get("/posts", async (req, res) => {
+router.get("/main/posts", async (req, res) => {
   const { page } = req.query;
   const limit = 10; // 한 페이지에 보여줄 게시글 수
   const offset = (page - 1) * limit;
@@ -37,16 +37,32 @@ router.get("/posts", async (req, res) => {
       limit,
       offset,
     });
-    // const count = await Post.count();
     res.json({
       posts,
       count
     });
+    console.log(posts);
   } catch (error) {
     console.error(error);
     res.status(500).json({
       message: "서버 에러가 발생했습니다.",
     });
+  }
+});
+
+//게시글 상세 조회
+router.get('/main/posts/:id', async(req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await Post.findOne({ where: { id }});
+    if(!post){
+      return res.status(404).send('해당 게시글이 존재하지 않습니다.');
+    }
+    console.log(post);
+    res.json(post);
+  } catch(error) {
+    console.error(error);
+    res.status(500).send('서버 에러');
   }
 });
 
