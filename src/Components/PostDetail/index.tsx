@@ -10,22 +10,25 @@ const PostDetail = () => {
   const navigate = useNavigate();
   const {
     data: post,
-    error
+    error,
+    mutate
   } = useSWR(`/api/main/posts/${id}`, fetcher);
 
-  const handleDeleteClick = useCallback(async () => {
+  const handleDeleteClick = useCallback(() => {
     const confirmResult = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmResult) {
-      try {
-        await axios.delete(`/api/main/posts/${id}`, {
+        axios.delete(`/api/main/posts/${id}`, {
           withCredentials: true,
-        });
-        navigate("/main/posts");
-      } catch (error) {
-        console.error(error);
+        })
+        .then(() => {
+          mutate('/api/main/posts');
+          navigate("/");
+        })
+        .catch((error) => {
+          console.error(error);
+        })
       }
-    }
-  }, [id, history]);
+    }, [id, history, mutate]);
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!post) return <div>로딩 중...</div>;
