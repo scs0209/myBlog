@@ -66,6 +66,26 @@ router.get('/main/posts/:id', async(req, res) => {
   }
 });
 
+//글 삭제
+router.delete('/main/posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findByPk(id);
+    if (!post) {
+      return res.status(404).send({
+        error: '게시글이 존재하지 않습니다.'
+      });
+    }
+    await post.destroy();
+    res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      error: '서버 에러'
+    });
+  }
+});
+
 // 글 입력
 router.post("/posts", async (req, res) => {
   try{
@@ -80,6 +100,8 @@ router.post("/posts", async (req, res) => {
     res.status(500).send("서버 오류");
   }
 });
+
+
 
 //주소와 get, post 등 메서드가 있는 것을 라우터라고 부른다.
 router.get('/users', (req, res, next) => {

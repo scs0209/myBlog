@@ -1,15 +1,31 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import axios from "axios";
+import React, { useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const {
     data: post,
     error
   } = useSWR(`/api/main/posts/${id}`, fetcher);
+
+  const handleDeleteClick = useCallback(async () => {
+    const confirmResult = window.confirm("정말로 삭제하시겠습니까?");
+    if (confirmResult) {
+      try {
+        await axios.delete(`/api/main/posts/${id}`, {
+          withCredentials: true,
+        });
+        navigate("/main/posts");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [id, history]);
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!post) return <div>로딩 중...</div>;
@@ -22,12 +38,15 @@ const PostDetail = () => {
     createdDate.getMonth() + 1
   } - ${createdDate.getDate()}`;
 
+
+
   return (
     <>
       {post && <div>
         <h2>{title}</h2>
         <div>{content}</div>
         <div>{dateString}</div>
+        <button onClick={handleDeleteClick}>삭제하기</button>
       </div>}
     </>
   );
