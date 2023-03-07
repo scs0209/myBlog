@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 
@@ -28,7 +28,7 @@ const PostDetail = () => {
           console.error(error);
         })
       }
-    }, [id, history, mutate]);
+    }, [id, navigate, mutate]);
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!post) return <div>로딩 중...</div>;
@@ -40,17 +40,24 @@ const PostDetail = () => {
   const dateString = `${createdDate.getFullYear()} - ${
     createdDate.getMonth() + 1
   } - ${createdDate.getDate()}`;
+  console.log(dateString);
 
-
+  //이걸 해주지 않으면 중간에 NaN이 나온다.
+  if (`${createdDate.getFullYear()}` === 'NaN') return <div>로딩중...</div>
 
   return (
     <>
-      {post && <div>
-        <h2>{title}</h2>
-        <div>{content}</div>
-        <div>{dateString}</div>
-        <button onClick={handleDeleteClick}>삭제하기</button>
-      </div>}
+      {post && (
+        <div>
+          <h2>{title}</h2>
+          <div>{content}</div>
+          <div>{dateString}</div>
+          <button onClick={handleDeleteClick}>삭제하기</button>
+          <button>
+            <Link to={`/main/posts/${id}/edit`}>수정하기</Link>
+          </button>
+        </div>
+      )}
     </>
   );
 };

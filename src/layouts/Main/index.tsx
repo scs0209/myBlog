@@ -8,6 +8,7 @@ const Post = loadable(() => import('../../Pages/Post'));
 const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
 const PostList = loadable(() => import('../../Components/PostList'));
 const PostDetail = loadable(() => import('../../Components/PostDetail'));
+const PostEdit = loadable(() => import('../../Components/PostEdit'));
 
 const MainPage = () => {
     const { data: userData } = useSWR("/api/users", fetcher, {
@@ -37,6 +38,7 @@ const MainPage = () => {
           {!showPost && <PostList />}
           <Routes>
             <Route path="/posts/:id" element={<PostDetail />} />
+            <Route path="/posts/:id/edit" element={<PostEdit />} />
             {showPost && <Route path="/write" element={<Post />} />}
           </Routes>
         </div>

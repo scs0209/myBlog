@@ -8,6 +8,7 @@ const { isNotLoggedIn, isLoggedIn } = require('./middlewares');
 const User = require('../models/user');
 const Post = require('../models/post');
 const Category = require('../models/category');
+const { useParams } = require('react-router');
 
 
 router.get("/", (req, res, next) => {
@@ -66,6 +67,40 @@ router.get('/main/posts/:id', async(req, res) => {
   }
 });
 
+// 글 입력
+router.post("/posts", async (req, res) => {
+  try{
+    const post = await Post.create({
+      title: req.body.title,
+      content: req.body.content, // content 필드에 값을 설정
+      UserId: req.body.UserId,
+    });
+    res.json(post);
+  } catch(err) {
+    console.error(err);
+    res.status(500).send("서버 오류");
+  }
+});
+
+//글 수정
+router.put('/main/posts/:id', async (req, res) => {
+  // 라우팅 경로에서 :id를 지정했기 때문에 req.params 객체에 id 프로퍼티가 들어가게 된다. 따라서 req.params.id와 req.params는 모두 id값을 가져올 수 있다. req.params 객체에는 라우팅 경로에서 지정한 다른 매개변수들도 포함된다. 여기서 req.params.id를 사용하면 서버에러가 난다.
+  const { id } = req.params;
+  const { title, content } = req.body;
+  try {
+    const post = await Post.findOne({ where: { id }});
+    if(!post){
+      res.status(404).send("해당 게시글이 없습니다.");
+    } else {
+      await post.update({ title, content });
+      res.status(200).json(post);
+    } 
+  } catch(error) {
+    console.error(error);
+    res.status(500).send("서버 에러");
+  }
+});
+
 //글 삭제
 router.delete('/main/posts/:id', async (req, res) => {
   try {
@@ -83,21 +118,6 @@ router.delete('/main/posts/:id', async (req, res) => {
     res.status(500).send({
       error: '서버 에러'
     });
-  }
-});
-
-// 글 입력
-router.post("/posts", async (req, res) => {
-  try{
-    const post = await Post.create({
-      title: req.body.title,
-      content: req.body.content, // content 필드에 값을 설정
-      UserId: req.body.UserId,
-    });
-    res.json(post);
-  } catch(err) {
-    console.error(err);
-    res.status(500).send("서버 오류");
   }
 });
 
