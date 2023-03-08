@@ -18,11 +18,11 @@ class Post extends Sequelize.Model {
           type: Sequelize.TEXT,
           allowNull: false,
         },
-        // views: {
-        //   type: Sequelize.INTEGER,
-        //   allowNull: true,
-        //   defaultValue: 0,
-        // },
+        views: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          defaultValue: 0,
+        },
       },
       {
         sequelize,

@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { PostLi } from "./styles";
 import Pagination from "../../Components/Pagination";
 import Search from "../../Components/Search";
+import axios from "axios";
 
 
 const PostList = () => {
@@ -77,6 +78,17 @@ const PostList = () => {
     [setSearchTerm, setCurrentPage, navigate, mutate]
   );
 
+  const handlePostClick = useCallback((postId: any) => {
+    axios.post(`/api/main/posts/${postId}/views`)
+    .then((response) => {
+      console.log(response.data.message)
+    })
+    .catch((error) => {
+      console.error(error.response.data.message);
+    })
+  }, []);
+
+  // 뒤로 가기 버튼을 클릭할 때 handleGoBack 함수가 실행된다. 이 함수는 현재 경로(location.pathname)가 '/main/posts'가 아니거나 검색가 있는 경우에만 페이지 이동을 수행한다. navigate 함수에 전달되는 값은 이전 경로와 현재 경로를 결합한 값이다. 이전 경로에서 검색어가 설정되어 잇을 경우, 검색어를 포함한 경로로 이동하게 된다. 검색어가 설정되어 있지 않은 경우에는, 이전 경로와 동일한 경로로 이동하게 된다. 이렇게 하면 검색어가 없는 전체 게시글 페이지에서 뒤로 가기 버튼을 누르면 전체 게시글이 표시된다.
   const handleGoBack = useCallback(() => {
     if (location.pathname !== "/main/posts" || queryParams.get("search")) {
       navigate("/main/posts" + location.search);
@@ -111,11 +123,11 @@ const PostList = () => {
             createdDate.getMonth() + 1
           } - ${createdDate.getDate()}`;
           return (
-            <div className="list_grid" key={post.id}>
+            <div className="list_grid" key={post.id} onClick={() => handlePostClick(post.id)}>
               <Link to={`/main/posts/${post.id}`}>
                 <div>{post.title}</div>
               </Link>
-              <div></div>
+              <div>{post.views}</div>
               <div>{dateString}</div>
             </div>
           );

@@ -121,6 +121,23 @@ router.delete('/main/posts/:id', async (req, res) => {
   }
 });
 
+//게시글 조회수 증가 API
+router.post(`/main/posts/:id/views`, async (req, res) => {
+  const postId = req.params.id;
+  const post = await Post.findOne({
+    where: {id: postId}
+  });
+
+  console.log('post', post);
+  if(post) {
+    post.views++;
+    console.log('post.views', post.views);
+    res.status(200).send({ message: '조회수 증가 성공'});
+  } else {
+    res.status(404).send({ message: '게시글을 찾을 수 없습니다.'});
+  }
+})
+
 
 
 //주소와 get, post 등 메서드가 있는 것을 라우터라고 부른다.

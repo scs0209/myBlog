@@ -40,7 +40,6 @@ const PostDetail = () => {
   const dateString = `${createdDate.getFullYear()} - ${
     createdDate.getMonth() + 1
   } - ${createdDate.getDate()}`;
-  console.log(dateString);
 
   //이걸 해주지 않으면 중간에 NaN이 나온다.
   if (`${createdDate.getFullYear()}` === 'NaN') return <div>로딩중...</div>
