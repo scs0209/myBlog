@@ -131,8 +131,11 @@ router.post(`/main/posts/:id/views`, async (req, res) => {
   console.log('post', post);
   if(post) {
     post.views++;
-    console.log('post.views', post.views);
-    res.status(200).send({ message: '조회수 증가 성공'});
+    await post.save(); // DB에 변경된 정보 반영
+    console.log("post.views", post.views);
+    res
+      .status(200)
+      .send({ message: "조회수 증가 성공", post: { views: post.views } });
   } else {
     res.status(404).send({ message: '게시글을 찾을 수 없습니다.'});
   }

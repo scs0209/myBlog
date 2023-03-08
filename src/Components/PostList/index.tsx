@@ -30,7 +30,10 @@ const PostList = () => {
 
   const startIdx = 0;
   const endIdx = PAGE_SIZE
-  const currentPagePosts = posts?.slice(startIdx, endIdx);
+  const [currentPagePosts, setCurrentPagePosts] = useState(posts?.slice(
+    startIdx,
+    endIdx
+  ));
 
 
   const handlePageClick = useCallback(
@@ -78,15 +81,35 @@ const PostList = () => {
     [setSearchTerm, setCurrentPage, navigate, mutate]
   );
 
-  const handlePostClick = useCallback((postId: any) => {
-    axios.post(`/api/main/posts/${postId}/views`)
-    .then((response) => {
-      console.log(response.data.message)
-    })
-    .catch((error) => {
-      console.error(error.response.data.message);
-    })
-  }, []);
+  useEffect(() => {
+    setCurrentPagePosts(posts?.slice(startIdx, endIdx));
+  }, [currentPage, posts]);
+  console.log(startIdx, endIdx, posts);
+
+  const handlePostClick = useCallback(
+    (postId: any) => {
+      axios
+        .post(`/api/main/posts/${postId}/views`)
+        .then((response) => {
+          console.log(response.data.message);
+          console.log(response.data);
+          const updatedPosts = currentPagePosts.map((post: any) => {
+            if (post.id === postId) {
+              return {
+                ...post,
+                views: response.data.post.views,
+              };
+            }
+            return post;
+          });
+          setCurrentPagePosts(updatedPosts);
+        })
+        .catch((error) => {
+          console.error(error.response.data.message);
+        });
+    },
+    [currentPagePosts]
+  );
 
   // 뒤로 가기 버튼을 클릭할 때 handleGoBack 함수가 실행된다. 이 함수는 현재 경로(location.pathname)가 '/main/posts'가 아니거나 검색가 있는 경우에만 페이지 이동을 수행한다. navigate 함수에 전달되는 값은 이전 경로와 현재 경로를 결합한 값이다. 이전 경로에서 검색어가 설정되어 잇을 경우, 검색어를 포함한 경로로 이동하게 된다. 검색어가 설정되어 있지 않은 경우에는, 이전 경로와 동일한 경로로 이동하게 된다. 이렇게 하면 검색어가 없는 전체 게시글 페이지에서 뒤로 가기 버튼을 누르면 전체 게시글이 표시된다.
   const handleGoBack = useCallback(() => {
@@ -106,7 +129,7 @@ const PostList = () => {
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
-  if (currentPagePosts.length === undefined) return <div>로딩중...</div>;
+  if (currentPagePosts === undefined) return <div>로딩중...</div>;
 
   return (
     <div className="List">
