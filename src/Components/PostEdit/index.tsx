@@ -39,6 +39,7 @@ const PostEdit = () => {
     })
     .then(() => {
       mutate('api/main/posts');
+      // 수정하고 나면 내가 수정한 내용을 보기 위해 그 페이지로 가게 해주기!
       navigate(`/main/posts/${id}`)
     })
     .catch((error) => {

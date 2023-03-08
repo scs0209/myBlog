@@ -4,17 +4,22 @@ import useSWR from 'swr';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { PostLi } from "./styles";
 import Pagination from "../../Components/Pagination";
+import Search from "../../Components/Search";
 
 
 const PostList = () => {
   const navigate = useNavigate();
   const PAGE_SIZE = 10; //한 페이지에서 가져올 데이터의 한계치를 나타내는 값
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const {
     data: postData,
     error,
     mutate,
-  } = useSWR(`/api/main/posts?page=${currentPage}`, fetcher);
+  } = useSWR(
+    `/api/main/posts?page=${currentPage}&search=${searchTerm}`,
+    fetcher
+  );
 
   const posts = postData?.posts;
   const totalPosts = postData?.count;
@@ -28,10 +33,10 @@ const PostList = () => {
   const handlePageClick = useCallback(
     (pageNum: number) => {
       setCurrentPage(pageNum);
-      navigate(`/main/posts?page=${pageNum}`);
-      mutate(`/api/main/posts?page=${pageNum}`, false);
+      navigate(`/main/posts?page=${pageNum}&search=${searchTerm}`);
+      mutate(`/api/main/posts?page=${pageNum}&search=${searchTerm}`, false);
     },
-    [setCurrentPage, mutate, navigate]
+    [setCurrentPage, mutate, navigate, searchTerm]
   );
 
   const handleFirstPageClick = useCallback(() => {
@@ -42,23 +47,34 @@ const PostList = () => {
     if (currentPage > 1) {
       const prevPage = currentPage - 1;
       setCurrentPage(prevPage);
-      navigate(`/main/posts?page=${prevPage}`);
-      mutate(`/api/main/posts?page=${prevPage}`, true); // 수정된 부분
+      navigate(`/main/posts?page=${prevPage}&search=${searchTerm}`);
+      mutate(`/api/main/posts?page=${prevPage}&search=${searchTerm}`, true); // 수정된 부분
     }
-  }, [currentPage, setCurrentPage, mutate, navigate]);
+  }, [currentPage, setCurrentPage, mutate, navigate, searchTerm]);
 
   const handleNextPageClick = useCallback(() => {
     if (currentPage < totalPages) {
       const nextPage = currentPage + 1;
       setCurrentPage(nextPage);
-      navigate(`/main/posts?page=${nextPage}`);
-      mutate(`/api/main/posts?page=${nextPage}`, true); // 수정된 부분
+      navigate(`/main/posts?page=${nextPage}&search=${searchTerm}`);
+      mutate(`/api/main/posts?page=${nextPage}&search=${searchTerm}`, true); // 수정된 부분
     }
-  }, [currentPage, totalPages, setCurrentPage, mutate, navigate]);
+  }, [currentPage, totalPages, setCurrentPage, mutate, navigate, searchTerm]);
 
   const handleLastPageClick = useCallback(() => {
     handlePageClick(totalPages);
   }, [handlePageClick, totalPages]);
+
+  const handleSearch = useCallback(
+    (keyword: string) => {
+      setSearchTerm(keyword);
+      setCurrentPage(1);
+      navigate(`/main/posts?page=1&search=${keyword}`);
+      mutate(`/api/main/posts?page=1&search=${keyword}`, false);
+    },
+    [setSearchTerm, setCurrentPage, navigate, mutate]
+  );
+
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
@@ -98,6 +114,7 @@ const PostList = () => {
         handleNextPageClick={handleNextPageClick}
         handleLastPageClick={handleLastPageClick}
       />
+      <Search onSearch={handleSearch} />
     </div>
   );
 }

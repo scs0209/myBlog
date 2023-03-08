@@ -1,4 +1,4 @@
-
+const { Op } = require('sequelize');
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
@@ -28,12 +28,14 @@ router.get("/categories", async (req, res, next) => {
 
 //개시글 가져오기
 router.get("/main/posts", async (req, res) => {
-  const { page } = req.query;
+  const { page, search } = req.query;
   const limit = 10; // 한 페이지에 보여줄 게시글 수
   const offset = (page - 1) * limit;
+  const where = search ? { title: { [Op.like]: `%${search}%` }} : {};
 
   try {
     const { rows:posts, count} = await Post.findAndCountAll({
+      where,
       order: [["createdAt", "DESC"]],
       limit,
       offset,
@@ -42,7 +44,6 @@ router.get("/main/posts", async (req, res) => {
       posts,
       count
     });
-    console.log(posts);
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -59,7 +60,6 @@ router.get('/main/posts/:id', async(req, res) => {
     if(!post){
       return res.status(404).send('해당 게시글이 존재하지 않습니다.');
     }
-    console.log(post);
     res.json(post);
   } catch(error) {
     console.error(error);
