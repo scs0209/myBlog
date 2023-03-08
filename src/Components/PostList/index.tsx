@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, VFC } from "react";
 import fetcher from "utils/fetcher";
 import useSWR from 'swr';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { PostLi } from "./styles";
 import Pagination from "../../Components/Pagination";
 import Search from "../../Components/Search";
@@ -9,6 +9,8 @@ import Search from "../../Components/Search";
 
 const PostList = () => {
   const navigate = useNavigate();
+  const location = useLocation();// 현재 경로(location) 정보 가져오기
+  const queryParams = new URLSearchParams(location.search);
   const PAGE_SIZE = 10; //한 페이지에서 가져올 데이터의 한계치를 나타내는 값
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -74,6 +76,20 @@ const PostList = () => {
     },
     [setSearchTerm, setCurrentPage, navigate, mutate]
   );
+
+  const handleGoBack = useCallback(() => {
+    if (location.pathname !== "/main/posts" || queryParams.get("search")) {
+      navigate("/main/posts" + location.search);
+    }
+  }, [location.pathname, navigate, queryParams]);
+
+  useEffect(() => {
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, [handleGoBack]);  
 
 
   if (error) return <div>에러가 발생했습니다.</div>;
