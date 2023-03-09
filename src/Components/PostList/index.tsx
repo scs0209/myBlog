@@ -10,7 +10,7 @@ import axios from "axios";
 
 const PostList = () => {
   const navigate = useNavigate();
-  const location = useLocation();// 현재 경로(location) 정보 가져오기
+  const location = useLocation(); // 현재 경로(location) 정보 가져오기
   const queryParams = new URLSearchParams(location.search);
   const PAGE_SIZE = 10; //한 페이지에서 가져올 데이터의 한계치를 나타내는 값
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,12 +29,10 @@ const PostList = () => {
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
 
   const startIdx = 0;
-  const endIdx = PAGE_SIZE
-  const [currentPagePosts, setCurrentPagePosts] = useState(posts?.slice(
-    startIdx,
-    endIdx
-  ));
-
+  const endIdx = PAGE_SIZE;
+  const [currentPagePosts, setCurrentPagePosts] = useState(
+    posts?.slice(startIdx, endIdx)
+  );
 
   const handlePageClick = useCallback(
     (pageNum: number) => {
@@ -81,18 +79,12 @@ const PostList = () => {
     [setSearchTerm, setCurrentPage, navigate, mutate]
   );
 
-  useEffect(() => {
-    setCurrentPagePosts(posts?.slice(startIdx, endIdx));
-  }, [currentPage, posts]);
-  console.log(startIdx, endIdx, posts);
-
   const handlePostClick = useCallback(
     (postId: any) => {
       axios
         .post(`/api/main/posts/${postId}/views`)
         .then((response) => {
           console.log(response.data.message);
-          console.log(response.data);
           const updatedPosts = currentPagePosts.map((post: any) => {
             if (post.id === postId) {
               return {
@@ -124,8 +116,13 @@ const PostList = () => {
     return () => {
       window.removeEventListener("popstate", handleGoBack);
     };
-  }, [handleGoBack]);  
+  }, [handleGoBack]);
 
+  //currentPagePosts 변경 될 때마다 업데이트 해줘서 페이지네이션할 때 오류 안나게 해주기 위해 사용
+  useEffect(() => {
+    setCurrentPagePosts(posts?.slice(startIdx, endIdx));
+  }, [currentPage, posts]);
+  console.log(currentPage, currentPagePosts)
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
@@ -146,7 +143,11 @@ const PostList = () => {
             createdDate.getMonth() + 1
           } - ${createdDate.getDate()}`;
           return (
-            <div className="list_grid" key={post.id} onClick={() => handlePostClick(post.id)}>
+            <div
+              className="list_grid"
+              key={post.id}
+              onClick={() => handlePostClick(post.id)}
+            >
               <Link to={`/main/posts/${post.id}`}>
                 <div>{post.title}</div>
               </Link>

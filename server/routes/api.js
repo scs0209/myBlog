@@ -130,10 +130,28 @@ router.post(`/main/posts/:id/views`, async (req, res) => {
 
   console.log('post', post);
   if(post) {
-    post.views++;
-    await post.save(); // DB에 변경된 정보 반영
-    console.log("post.views", post.views);
-    res
+    //조회수를 증가시키기 위한 쿠키 값 이름과 쿠키에 담길 게시글 id의 이름 설정
+    const viewedPostsName = 'viewedPosts';
+    const postIdName = `post_${postId}`
+
+    //쿠키에 담긴 값을 읽어옴
+    const viewedPosts = req.cookies[viewedPostsName] || {};
+
+    //이미 조회수를 증가시킨 게시글인 경우
+    if(viewedPosts[postIdName]){
+      console.log("already viewed");
+      return res
+        .status(200)
+        .send({ message: '조회수를 증가시킨 게시글입니다.' });
+    }
+    //조회수를 증가시키고 쿠키에 게시글 id를 추가함
+    //postId 쿠키가 있는지 확인하고 없으면 조회수 증가
+      post.views++;
+      await post.save(); // DB에 변경된 정보 반영
+      viewedPosts[postIdName] = true;
+      res.cookie(viewedPostsName, viewedPosts, { maxAge: 3600 * 1000 });// 1시간 동안 쿠키 보관
+    console.log("viewedPosts[postIdName]", viewedPosts[postIdName]);
+    return res
       .status(200)
       .send({ message: "조회수 증가 성공", post: { views: post.views } });
   } else {
