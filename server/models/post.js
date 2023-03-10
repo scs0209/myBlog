@@ -23,10 +23,14 @@ class Post extends Sequelize.Model {
           allowNull: false,
           defaultValue: 0,
         },
+        categoryId: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
       },
       {
         sequelize,
-        modelName: "POST",
+        modelName: "Post",
         tableName: "posts",
         charset: "utf8",
         collate: "utf8_general_ci",
@@ -37,10 +41,10 @@ class Post extends Sequelize.Model {
   }
   static associate(db) {
     db.Post.belongsTo(db.User);
-    db.Post.belongsToMany(db.Tag, {
-      through: 'PostTag'
+    db.Post.belongsTo(db.Category, {
+      as: "category",
+      foreignKey: "categoryId",
     });
-    db.Post.belongsToMany(db.Category, { through: 'PostTag' });
     db.Post.hasMany(db.Like);
     db.Post.hasMany(db.Comment);
   }

@@ -8,7 +8,7 @@ const { isNotLoggedIn, isLoggedIn } = require('./middlewares');
 const User = require('../models/user');
 const Post = require('../models/post');
 const Category = require('../models/category');
-const { useParams } = require('react-router');
+
 
 
 router.get("/", (req, res, next) => {
@@ -21,9 +21,51 @@ router.get("/categories", async (req, res, next) => {
     const categories = await Category.findAll();
     res.json(categories);
   } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: '서버 오류' });
     next(err);
   }
 });
+
+router.get("/categories/:categoryId", async (req, res) => {
+  const { categoryId } = req.params;
+
+  try {
+    const category = await Category.findByPk(categoryId);
+
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    res.json(category);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 특정 카테고리에 해당하는 게시글 목록을 가져오는 API
+router.get('/categories/:categoryId/posts', async(req, res, next) => {
+  const { categoryId } = req.params;//categoryId를 가져온다.
+  try{
+    const posts = await Post.findAll({
+      where: {
+        categoryId, // categoryId가 일치하는 게시글을 조회한다.
+      },
+      include: [{
+        model: Category,
+        as: 'category',
+      }]
+    });
+    res.json(posts)// 조회 결과를 JSON 형태로 반환한다.
+  } catch(error) {
+    console.error(error);
+    res.status(500).json({ message: '서버 오류' });
+    next(error);
+  }
+});
+// Category is not associated to Post이니까 include가 반대로 된 거 아닌가?
+
 
 
 //개시글 가져오기
@@ -128,7 +170,6 @@ router.post(`/main/posts/:id/views`, async (req, res) => {
     where: {id: postId}
   });
 
-  console.log('post', post);
   if(post) {
     //조회수를 증가시키기 위한 쿠키 값 이름과 쿠키에 담길 게시글 id의 이름 설정
     const viewedPostsName = 'viewedPosts';
@@ -195,7 +236,6 @@ router.post('/users', isNotLoggedIn, async(req, res, next) => {
 router.post("/login", isNotLoggedIn, (req, res, next) => {
 // passport.authenticate => 미들웨어
   passport.authenticate('local', (err, user, info) => {
-    console.log(info);
     if(err) {
       console.log(err);
       return next(err);

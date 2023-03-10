@@ -4,6 +4,8 @@ import { Link, Route, Router, Routes, useNavigate, useParams } from "react-route
 import { Header, MainContainer } from "./styles";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
+import Category from "../../Components/Category";
+import CategoryList from "../../Components/CategoryList";
 const Post = loadable(() => import('../../Pages/Post'));
 const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
 const PostList = loadable(() => import('../../Components/PostList'));
@@ -31,14 +33,15 @@ const MainPage = () => {
       </Header>
       <MainContainer className="main-container">
         <div className="left-side">
-          <h3>category</h3>
+          <Category />
         </div>
         <div className="main">
           Main Layout
-          {!showPost && <PostList />}
           <Routes>
+            <Route path="/posts" element={<PostList />} />
             <Route path="/posts/:id" element={<PostDetail />} />
             <Route path="/posts/:id/edit" element={<PostEdit />} />
+            <Route path="/categories/:categoryId" element={<CategoryList />} />
             {showPost && <Route path="/write" element={<Post />} />}
           </Routes>
         </div>

@@ -34,6 +34,8 @@ const PostList = () => {
     posts?.slice(startIdx, endIdx)
   );
 
+  console.log(posts, currentPagePosts, currentPage);
+
   const handlePageClick = useCallback(
     (pageNum: number) => {
       setCurrentPage(pageNum);
@@ -52,7 +54,7 @@ const PostList = () => {
       const prevPage = currentPage - 1;
       setCurrentPage(prevPage);
       navigate(`/main/posts?page=${prevPage}&search=${searchTerm}`);
-      mutate(`/api/main/posts?page=${prevPage}&search=${searchTerm}`, true); // 수정된 부분
+      mutate(`/api/main/posts?page=${prevPage}&search=${searchTerm}`, false); // 수정된 부분
     }
   }, [currentPage, setCurrentPage, mutate, navigate, searchTerm]);
 
@@ -61,7 +63,7 @@ const PostList = () => {
       const nextPage = currentPage + 1;
       setCurrentPage(nextPage);
       navigate(`/main/posts?page=${nextPage}&search=${searchTerm}`);
-      mutate(`/api/main/posts?page=${nextPage}&search=${searchTerm}`, true); // 수정된 부분
+      mutate(`/api/main/posts?page=${nextPage}&search=${searchTerm}`, false); // 수정된 부분
     }
   }, [currentPage, totalPages, setCurrentPage, mutate, navigate, searchTerm]);
 
