@@ -1,11 +1,12 @@
 import loadable from "@loadable/component";
 import React, { useCallback, useState } from "react";
-import { Link, Route, Router, Routes, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, Route, Router, Routes, useNavigate, useParams } from "react-router-dom";
 import { Header, MainContainer } from "./styles";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import Category from "../../Components/Category";
 import CategoryList from "../../Components/CategoryList";
+import axios from "axios";
 const Post = loadable(() => import('../../Pages/Post'));
 const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
 const PostList = loadable(() => import('../../Components/PostList'));
@@ -13,15 +14,27 @@ const PostDetail = loadable(() => import('../../Components/PostDetail'));
 const PostEdit = loadable(() => import('../../Components/PostEdit'));
 
 const MainPage = () => {
-    const { data: userData } = useSWR("/api/users", fetcher, {
+    const { data: userData, mutate } = useSWR("/api/users", fetcher, {
       dedupingInterval: 5000,
     });
   const [showPost, setShowPost] = useState(false);
+
+  const onLogout = useCallback(() => {
+    axios.post('/api/logout', null, {
+      withCredentials: true
+    })
+    .then(() => {
+      mutate(false, false);
+    });
+  }, [mutate])
 
   const onClickShowPost = useCallback(() => {
     setShowPost((prev) => !prev);
   }, []);
   
+  if(!userData){
+    return <Navigate to="/login" />
+  }
 
   return (
     <div>
@@ -30,6 +43,7 @@ const MainPage = () => {
         <Link to="/main/write" onClick={onClickShowPost}>
           포스트 작성
         </Link>
+        <button onClick={onLogout}>로그아웃</button>
       </Header>
       <MainContainer className="main-container">
         <div className="left-side">

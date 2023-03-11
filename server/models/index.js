@@ -2,6 +2,7 @@
 const Sequelize = require('sequelize');
 const User = require('./user');
 const Post = require('./post');
+const PostTag = require("./postTag");
 const Tag = require('./tag');
 const Comment = require('./comment');
 const Like = require('./like');
@@ -38,6 +39,7 @@ const sequelize = new Sequelize(
 
     db.User = User;
     db.Post = Post;
+    db.PostTag = PostTag;
     db.Tag = Tag;
     db.Comment = Comment;
     db.Like = Like;
@@ -47,6 +49,7 @@ const sequelize = new Sequelize(
 
     User.initiate(sequelize);
     Post.initiate(sequelize);
+    PostTag.initiate(sequelize);
     Tag.initiate(sequelize);
     Comment.initiate(sequelize);
     Like.initiate(sequelize);

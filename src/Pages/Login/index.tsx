@@ -32,15 +32,7 @@ const Login = () => {
       setLogInError(err.res?.data?.statusCode === 401);
     });
   }, [email, password, mutate]);
-
-  const onLogout = useCallback(() => {
-    axios.post('/api/logout', null, {
-      withCredentials: true
-    })
-    .then(() => {
-      mutate(false, false);
-    });
-  }, [mutate])
+  
 
   if (data === undefined) {
     return <div>로딩중...</div>;

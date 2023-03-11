@@ -64,12 +64,11 @@ router.get('/categories/:categoryId/posts', async(req, res, next) => {
     next(error);
   }
 });
-// Category is not associated to Post이니까 include가 반대로 된 거 아닌가?
 
 
 
 //개시글 가져오기
-router.get("/main/posts", async (req, res) => {
+router.get("/main/posts", isLoggedIn, async (req, res) => {
   const { page, search } = req.query;
   const limit = 10; // 한 페이지에 보여줄 게시글 수
   const offset = (page - 1) * limit;
@@ -263,13 +262,10 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
 
 // 로그아웃
 router.post("/logout", isLoggedIn, (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
+    req.logout(() => {
     req.session.destroy();
-    res.redirect("/");
+    res.send('ok');
+    });
   });
-});
 
 module.exports = router;

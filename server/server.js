@@ -35,7 +35,11 @@ app.use(express.urlencoded({ extended: true }));//form 파싱을 해줌
 //     httpOnly: true,
 //   },
 // };
-app.use(session({secret: 'myblog'}));
+app.use(session({
+  secret: 'myblog',
+  resave: false, 
+  saveUninitialized: false,
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
