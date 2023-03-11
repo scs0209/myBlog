@@ -5,6 +5,7 @@ import fetcher from "../../utils/fetcher";
 import { CategoryLi } from "./styles";
 
 const Category = () => {
+  const [edit, setEdit] = useState(false);
   const {data, error} = useSWR('/api/categories', fetcher);
 
   if(error) return <div>에러가 발생했습니다</div>
@@ -15,6 +16,7 @@ const Category = () => {
       <Link to={`/main/posts`}>
         <h2>전체 게시글</h2>
       </Link>
+        <button>edit</button>
       <CategoryLi>
         {data.map((category: any) => (
           <li key={category.id}>

@@ -29,7 +29,6 @@ const CategoryList = () => {
           <div>dates</div>
         </div>
         {postData.map((post: any) => {
-          // postData에 Data는 들어오는데 렌더링이 안됨
           const createdDate = new Date(post.createdAt);
           const dateString = `${createdDate.getFullYear()} - ${
             createdDate.getMonth() + 1

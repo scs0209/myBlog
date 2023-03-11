@@ -18,7 +18,13 @@ const CreateCategoryModal: FC<Props> = ({ show, onCloseModal, setShowCreateCateg
   const onCreateCategory = useCallback(
     (e: any) => {
       e.preventDefault();
-      if (!newCategory || !newCategory.trim()) return; //중복된 이름 못 만들게하기
+      // 중복 확인
+      if (
+        categories?.some((category: any) => category.name === newCategory.trim())
+      ) {
+        alert("이미 존재하는 카테고리입니다.");
+        return;
+      }
       axios
         .post("/api/categories", {
           name: newCategory,
@@ -27,7 +33,7 @@ const CreateCategoryModal: FC<Props> = ({ show, onCloseModal, setShowCreateCateg
           setShowCreateCategoryModal(false);
           setNewCategory("");
           alert("카테고리가 추가되었습니다.");
-          mutate([...(categories ?? []), newCategory], false);// 생성한 카테고리를 화면에 바로 반영
+          mutate([...(categories ?? []), newCategory], false); // 생성한 카테고리를 화면에 바로 반영
         })
         .catch((err) => {
           console.error(err);

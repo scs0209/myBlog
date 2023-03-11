@@ -38,7 +38,43 @@ router.post("/categories", isLoggedIn, async(req, res, next) => {
     res.status(500).json({ message: '서버 오류' });
     next(err);
   }
-})
+});
+
+// 카테고리 삭제
+router.delete("/categories/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.category.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    res.status(204).send("");
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+});
+
+// 카테고리 수정
+router.put("/categories/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const updatedCategory = await prisma.category.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name,
+      },
+    });
+    res.json(updatedCategory);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+});
 
 router.get("/categories/:categoryId", async (req, res) => {
   const { categoryId } = req.params;
