@@ -16,7 +16,7 @@ router.get("/", (req, res, next) => {
 });
 
 // 카테고리 목록 가져오기
-router.get("/categories", async (req, res, next) => {
+router.get("/categories", isLoggedIn, async (req, res, next) => {
   try {
     const categories = await Category.findAll();
     res.json(categories);
@@ -26,6 +26,19 @@ router.get("/categories", async (req, res, next) => {
     next(err);
   }
 });
+
+//카테고리 목록 추가하기
+router.post("/categories", isLoggedIn, async(req, res, next) => {
+  const { name } = req.body;
+  try{
+    const newCategory = await Category.create({ name });
+    res.json(newCategory);
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({ message: '서버 오류' });
+    next(err);
+  }
+})
 
 router.get("/categories/:categoryId", async (req, res) => {
   const { categoryId } = req.params;

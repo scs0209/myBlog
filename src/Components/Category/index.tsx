@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
@@ -6,7 +6,6 @@ import { CategoryLi } from "./styles";
 
 const Category = () => {
   const {data, error} = useSWR('/api/categories', fetcher);
-  console.log(data);
 
   if(error) return <div>에러가 발생했습니다</div>
   if(!data) return <div>로딩중...</div>

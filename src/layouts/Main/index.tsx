@@ -7,6 +7,7 @@ import fetcher from "../../utils/fetcher";
 import Category from "../../Components/Category";
 import CategoryList from "../../Components/CategoryList";
 import axios from "axios";
+import CreateCategoryModal from "Components/onCreateCategoryModal";
 const Post = loadable(() => import('../../Pages/Post'));
 const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
 const PostList = loadable(() => import('../../Components/PostList'));
@@ -14,9 +15,10 @@ const PostDetail = loadable(() => import('../../Components/PostDetail'));
 const PostEdit = loadable(() => import('../../Components/PostEdit'));
 
 const MainPage = () => {
-    const { data: userData, mutate } = useSWR("/api/users", fetcher, {
-      dedupingInterval: 5000,
-    });
+  const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
+  const { data: userData, mutate } = useSWR("/api/users", fetcher, {
+    dedupingInterval: 5000,
+  });
   const [showPost, setShowPost] = useState(false);
 
   const onLogout = useCallback(() => {
@@ -30,6 +32,14 @@ const MainPage = () => {
 
   const onClickShowPost = useCallback(() => {
     setShowPost((prev) => !prev);
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    setShowCreateCategoryModal(false);
+  }, []);
+
+  const onClickCreateCategory = useCallback(() => {
+    setShowCreateCategoryModal(true);
   }, []);
   
   if(!userData){
@@ -48,6 +58,7 @@ const MainPage = () => {
       <MainContainer className="main-container">
         <div className="left-side">
           <Category />
+          <button onClick={onClickCreateCategory}>+</button>
         </div>
         <div className="main">
           Main Layout
@@ -64,6 +75,11 @@ const MainPage = () => {
           {showPost && <PostSubmit />}
         </div>
       </MainContainer>
+      <CreateCategoryModal
+        show={showCreateCategoryModal}
+        onCloseModal={onCloseModal}
+        setShowCreateCategoryModal={setShowCreateCategoryModal}
+      />
     </div>
   );
 }
