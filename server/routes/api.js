@@ -44,9 +44,9 @@ router.post("/categories", isLoggedIn, async(req, res, next) => {
 router.delete("/categories/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.category.delete({
+    await Category.delete({
       where: {
-        id: Number(id),
+        id,
       },
     });
     res.status(204).send("");
@@ -61,9 +61,9 @@ router.put("/categories/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
-    const updatedCategory = await prisma.category.update({
+    const updatedCategory = await Category.update({
       where: {
-        id: Number(id),
+        id,
       },
       data: {
         name,
