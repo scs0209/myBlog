@@ -44,12 +44,18 @@ router.post("/categories", isLoggedIn, async(req, res, next) => {
 router.delete("/categories/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    await Category.delete({
+    await Post.destroy({
+      where: {
+        categoryId: id,
+      },
+    });
+    await Category.destroy({
       where: {
         id,
       },
     });
-    res.status(204).send("");
+    console.log(`카테고리 ${id}와 연결된 포스트 삭제 완료`);
+    res.json({ message: "삭제가 완료되었습니다!" });
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
@@ -61,14 +67,16 @@ router.put("/categories/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
-    const updatedCategory = await Category.update({
-      where: {
-        id,
-      },
-      data: {
+    const updatedCategory = await Category.update(
+      {
         name,
-      },
-    });
+      }, {
+        where: {
+          id,
+        },
+        returning: true,
+      }
+    );
     res.json(updatedCategory);
   } catch (e) {
     console.log(e);

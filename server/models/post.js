@@ -44,6 +44,7 @@ class Post extends Sequelize.Model {
     db.Post.belongsTo(db.Category, {
       as: "category",
       foreignKey: "categoryId",
+      onDelete: "CASCADE",
     });
     db.Post.hasMany(db.Like);
     db.Post.hasMany(db.Comment);

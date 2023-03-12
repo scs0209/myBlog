@@ -27,7 +27,7 @@ class Category extends Sequelize.Model {
     db.Category.belongsTo(db.User);
     db.Category.belongsToMany(db.Tag, { through: 'CategoryTag' });
     db.Category.belongsToMany(db.Comment, { through: 'CommentCategory' });
-    db.Category.hasMany(db.Post, { as: "posts", foreignKey: "categoryId" });
+    db.Category.hasMany(db.Post, { as: "posts", foreignKey: "categoryId", onDelete: "CASCADE" });
   }
 };
 
