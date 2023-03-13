@@ -25,6 +25,11 @@ const CreateCategoryModal: FC<Props> = ({ show, onCloseModal, setShowCreateCateg
         alert("이미 존재하는 카테고리입니다.");
         return;
       }
+      // 입력창 비우면 생성 x
+      if(!newCategory) {
+        alert("제목을 입력해주세요!");
+        return;
+      }
       axios
         .post("/api/categories", {
           name: newCategory,
