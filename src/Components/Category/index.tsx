@@ -20,6 +20,10 @@ const Category = () => {
   const onSubmitEdit = useCallback(
     (e: any) => {
       e.preventDefault();
+      if(!editedCategoryName) {
+        alert("글자를 입력해주세요.")
+        return;
+      }
       axios
         .put(`/api/categories/${editedCategoryId}`, { name: editedCategoryName })
         .then(() => {
@@ -61,14 +65,16 @@ const Category = () => {
       <Link to="/main/posts">
         <h2>전체 게시글</h2>
       </Link>
-      <button onClick={() => toggleEdit(null)}>{edit ? "취소" : "편집"}</button>
+      <button onClick={() => toggleEdit(null)}>
+        {edit ? "취소" : "편집모드"}
+      </button>
       <CategoryLi>
         {data.map((category: any) => (
           <li key={category.id}>
             {editedCategoryId === category.id ? (
               <form onSubmit={onSubmitEdit}>
                 <input
-                  value={editedCategoryName || category.name}
+                  value={editedCategoryName}
                   onChange={onChangeCategoryName}
                 />
                 <button type="submit">수정</button>
@@ -80,10 +86,10 @@ const Category = () => {
             )}
             {edit && (
               <div>
-              <button onClick={() => toggleEdit(category.id)}>편집</button>
-              <button onClick={() => onDeleteCategory(category.id)}>
+                <button onClick={() => toggleEdit(category.id)}>편집</button>
+                <button onClick={() => onDeleteCategory(category.id)}>
                   삭제
-              </button>
+                </button>
               </div>
             )}
           </li>
