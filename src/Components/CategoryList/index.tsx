@@ -31,10 +31,9 @@ const CategoryList = () => {
     [pageNumber, setPageNumber]
   );
   const pageCount = !postData ? 0 : Math.ceil(postData.length / 10);
-  console.log(postData.length, pageCount);
 
   // 현재 페이지에 해당하는 데이터만 추출
-  const currentPageData = postData.slice(pageNumber * 10, (pageNumber + 1) * 10);
+  const currentPageData = postData?.slice(pageNumber * 10, (pageNumber + 1) * 10);
   console.log(postData, pageNumber * 10, (pageNumber + 1) * 10, pageNumber)
 
   if (categoryError || postError) return <div>에러가 발생했습니다.</div>;
@@ -77,7 +76,7 @@ const CategoryList = () => {
           nextClassName="pagination_item pagination_item_next"
           disabledClassName="pagination_item_disabled"
           breakClassName="pagination_item pagination_item_break"
-          previousLabel="< previous"
+          previousLabel="< prev"
           nextLabel="next >"
           marginPagesDisplayed={1}
           pageRangeDisplayed={5}

@@ -21,7 +21,7 @@ const PostDetail = () => {
           withCredentials: true,
         })
         .then(() => {
-          mutate('/api/main/posts');
+          mutate('/api/main/posts', false);
           navigate("/");
         })
         .catch((error) => {

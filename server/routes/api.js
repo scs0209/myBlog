@@ -8,12 +8,14 @@ const { isNotLoggedIn, isLoggedIn } = require('./middlewares');
 const User = require('../models/user');
 const Post = require('../models/post');
 const Category = require('../models/category');
+const Comment = require('../models/comment');
 
 
 
 router.get("/", (req, res, next) => {
   res.sendFile(path.join(__dirname, "..", "public"));
 });
+
 
 // 카테고리 목록 가져오기
 router.get("/categories", isLoggedIn, async (req, res, next) => {
@@ -165,6 +167,81 @@ router.get('/main/posts/:id', async(req, res) => {
   }
 });
 
+//댓글 조회하기
+router.get('/posts/:postId/comments', async(req, res) => {
+  try{
+    const postId = req.params.postId;
+    const comments = await Comment.findAll({
+      where: { PostId: postId},
+      order: [["createdAt", "ASC"]],
+      include: {
+        model: User,
+        attributes: ["id", "name"],
+      },
+    });
+    res.json(comments);
+  } catch(err) {
+    console.error(err);
+    res.status(500).send("서버 오류");
+  }
+});
+
+//댓글 작성하기
+router.post('/comments', isLoggedIn, async(req, res) => {
+  try{
+    const comment = await Comment.create({
+      content: req.body.content,
+      PostId: req.body.postId,
+      UserId: req.user.id
+    });
+    // fullComment는 작성 후애 작성자의 정보까지 함께 보내주기 위해 사용
+    // User의 id와 name을 가져와 함께 보내주면 클라이언트 측에서 댓글을 작성한 사용자의 정보를 확인할 수 있다. 또한 attributes를 통해 불필요한 정보는 빼고 필요한 컬럼 정보만 가져올 수 있다.
+    const fullComment = await Comment.findOne({
+      where: { id: comment.id },
+      include: {
+        model: User,
+        attributes: ["id", "name"],
+      },
+    });
+    res.status(201).json(fullComment);
+  } catch(err){
+    console.error(err);
+    res.status(500).send("서버 오류");
+  }
+})
+
+//댓글 수정하기
+// put 대신 patch를 사용하는 이유는 put 메소드는 전체 데이터를 업데이트 할 때 사용하고, patch 메소드는 일부 업데이트 할 때 사용한다. 따라서 댓글 수정에는 일부 데이터를 업데이트 하므로 patch 메소드가 적절하다.
+router.patch('/comments/:commentId', isLoggedIn, async(req, res) => {
+  try{
+    const commentId = req.params.commentId;
+    const editedComment = await Comment.update(
+      { content: req.body.content },
+      {
+        where: { id: commentId, UserId: req.user.id },
+      }
+    );
+    res.status(200).json(editedComment);
+  } catch(err) {
+    console.error(err);
+    res.status(500).send("서버 오류");
+  }
+});
+
+//댓글 삭제하기
+router.delete('/comments/:commentId', isLoggedIn, async(req, res) => {
+  try{
+    const commentId = req.params.commentId;
+    const deletedComment = await Comment.destroy({
+      where: { id: commentId, UserId: req.user.id },
+    });
+    res.status(204).json(deletedComment);
+  } catch(err){
+    console.error(err);
+    res.status(500).send("서버 오류");
+  }
+});
+
 // 글 입력
 router.post("/posts", async (req, res) => {
   try{
@@ -172,7 +249,9 @@ router.post("/posts", async (req, res) => {
       title: req.body.title,
       content: req.body.content, // content 필드에 값을 설정
       UserId: req.body.UserId,
+      categoryId: req.body.categoryId,
     });
+    console.log("post: ", post)
     res.json(post);
   } catch(err) {
     console.error(err);

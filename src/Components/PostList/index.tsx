@@ -34,7 +34,7 @@ const PostList = () => {
     posts?.slice(startIdx, endIdx)
   );
 
-  console.log(posts, currentPagePosts, currentPage);
+  console.log(posts, currentPagePosts, currentPage, totalPages);
 
   const handlePageClick = useCallback(
     (pageNum: number) => {
@@ -46,8 +46,10 @@ const PostList = () => {
   );
 
   const handleFirstPageClick = useCallback(() => {
-    handlePageClick(1);
-  }, [handlePageClick]);
+    if (totalPages > 0) {
+      handlePageClick(1);
+    }
+  }, [handlePageClick, totalPages]);
 
   const handlePrevPageClick = useCallback(() => {
     if (currentPage > 1) {
@@ -68,7 +70,9 @@ const PostList = () => {
   }, [currentPage, totalPages, setCurrentPage, mutate, navigate, searchTerm]);
 
   const handleLastPageClick = useCallback(() => {
-    handlePageClick(totalPages);
+    if (totalPages > 0) {
+      handlePageClick(totalPages);
+    }
   }, [handlePageClick, totalPages]);
 
   const handleSearch = useCallback(

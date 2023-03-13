@@ -3,47 +3,58 @@ import { Input, Textarea } from "./styles";
 import autosize from 'autosize'
 import axios from "axios";
 import useSWR from 'swr';
-import useInput from "../../utils/useInput";
 import fetcher from "../../utils/fetcher";
 import PostSubmit from "../../Components/PostSubmit";
-import { useParams } from "react-router";
+import { Select } from "antd";
+
+const { Option } = Select;
 
 
 const Post = () => {
-  const { data: currentUser } = useSWR('/api/users', fetcher, {
+  const { data: currentUser } = useSWR("/api/users", fetcher, {
     dedupingInterval: 5000,
   });
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [category, setCategory] = useState(""); // 카테고리 추가
   const textareaRef = useRef(null);
 
   const { data: postData, mutate } = useSWR("/api/posts", fetcher, {
     revalidateOnMount: true,
   });
 
-  const onChangeTitle = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setTitle(e.target.value);
+  const { data: categoryData } = useSWR("/api/categories", fetcher);
+
+  const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  }, []);
+
+  const onChangeContents = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      setContent(e.target.value);
     },
     []
   );
 
-  const onChangeContents = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
-  }, [])
-
   useEffect(() => {
-    if(textareaRef.current){
+    if (textareaRef.current) {
       autosize(textareaRef.current);
-    }   
+    }
   });
+
+  const onChangeCategory = useCallback(
+    (value: string) => {
+      setCategory(value);
+    },
+    []
+  );
 
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
       console.log(content);
-      if (!title || !content) {
-        alert("제목과 내용을 입력해주세요!");
+      if (!title || !content || !category) {
+        alert("제목과 내용, 카테고리를 입력해주세요!");
         return;
       }
       axios
@@ -52,6 +63,7 @@ const Post = () => {
           {
             title,
             content,
+            categoryId: category,
             UserId: currentUser.id,
           },
           {
@@ -62,13 +74,14 @@ const Post = () => {
           alert("게시글이 작성되었습니다.");
           setTitle("");
           setContent("");
+          setCategory("");
           mutate((cachedData: any) => [...cachedData, res.data], false);
         })
         .catch((err) => {
           console.error(err);
         });
     },
-    [title, content, mutate, setTitle, setContent, currentUser.id]
+    [title, content, category, mutate, setTitle, setContent, setContent, currentUser.id]
   );
 
   return (
@@ -91,6 +104,17 @@ const Post = () => {
             ref={textareaRef}
             onChange={onChangeContents}
           ></Textarea>
+        </div>
+        <div>
+          <Select value={category} onChange={onChangeCategory}>
+            <Option value="">카테고리 선택</Option>
+            {categoryData &&
+              categoryData.map((category: any) => (
+                <Option key={category.id} value={category.id}>
+                  {category.name}
+                </Option>
+              ))}
+          </Select>
         </div>
         <PostSubmit />
       </form>

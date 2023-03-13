@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 
 export const PaginationContainer = styled.div`
   display: flex;
+  position: relative;
+  right: 20px;
   justify-content: center;
   margin-top: 2rem;
 
