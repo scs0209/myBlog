@@ -19,7 +19,7 @@ const Modal: FC<Props> = ({ children, show, onCloseModal }) => {
   return(
     <div onClick={onCloseModal}>
       <div onClick={stopPropagation}>
-        <button onClick={onCloseModal}>&time;</button>
+        <button onClick={onCloseModal}>&times;</button>
         {children}
       </div>
     </div>
