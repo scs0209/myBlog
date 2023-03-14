@@ -187,7 +187,7 @@ router.get('/posts/:postId/comments', async(req, res) => {
 });
 
 //댓글 작성하기
-router.post('/comments', isLoggedIn, async(req, res) => {
+router.post('/posts/:postId/comments', isLoggedIn, async(req, res) => {
   try{
     const comment = await Comment.create({
       content: req.body.content,
@@ -212,7 +212,7 @@ router.post('/comments', isLoggedIn, async(req, res) => {
 
 //댓글 수정하기
 // put 대신 patch를 사용하는 이유는 put 메소드는 전체 데이터를 업데이트 할 때 사용하고, patch 메소드는 일부 업데이트 할 때 사용한다. 따라서 댓글 수정에는 일부 데이터를 업데이트 하므로 patch 메소드가 적절하다.
-router.patch('/comments/:commentId', isLoggedIn, async(req, res) => {
+router.patch('/posts/comments/:commentId', isLoggedIn, async(req, res) => {
   try{
     const commentId = req.params.commentId;
     const editedComment = await Comment.update(
@@ -229,7 +229,7 @@ router.patch('/comments/:commentId', isLoggedIn, async(req, res) => {
 });
 
 //댓글 삭제하기
-router.delete('/comments/:commentId', isLoggedIn, async(req, res) => {
+router.delete('/posts/comments/:commentId', isLoggedIn, async(req, res) => {
   try{
     const commentId = req.params.commentId;
     const deletedComment = await Comment.destroy({
@@ -279,13 +279,13 @@ router.put('/main/posts/:id', async (req, res) => {
 });
 
 //글 삭제
-router.delete('/main/posts/:id', async (req, res) => {
+router.delete("/main/posts/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const post = await Post.findByPk(id);
     if (!post) {
       return res.status(404).send({
-        error: '게시글이 존재하지 않습니다.'
+        error: "게시글이 존재하지 않습니다.",
       });
     }
     await post.destroy();
@@ -293,7 +293,7 @@ router.delete('/main/posts/:id', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send({
-      error: '서버 에러'
+      error: "서버 에러",
     });
   }
 });
