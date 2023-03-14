@@ -1,7 +1,7 @@
 import axios from "axios";
 import CommentForm from "../../Components/CommentForm";
 import CommentList from "../../Components/CommentList";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
@@ -131,4 +131,4 @@ const PostDetail = () => {
   );
 };
 
-export default PostDetail;
+export default memo(PostDetail);

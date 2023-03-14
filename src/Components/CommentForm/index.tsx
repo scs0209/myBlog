@@ -1,4 +1,5 @@
-import React, { FormEvent, useCallback, useState, VFC } from "react";
+import React, { FormEvent, memo, useCallback, useState, VFC } from "react";
+import { Button, Form, Textarea } from "./styles";
 
 interface Props {
   onSubmit: (content: string) => void;
@@ -21,16 +22,12 @@ const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
   if(content === undefined) return <div>로딩중...</div>
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="content">
-          <textarea name="content" id="content" onChange={onChangeContent} />
-        </label>
-      </div>
-      <button type="submit">작성하기</button>
+    <Form onSubmit={handleSubmit}>
+      <Textarea name="content" id="content" onChange={onChangeContent} />
+      <Button type="submit">작성하기</Button>
       {error && <div>{error}</div>}
-    </form>
+    </Form>
   );
 }
 
-export default CommentForm;
+export default memo(CommentForm);

@@ -1,5 +1,6 @@
-import React, { useCallback, VFC } from "react";
+import React, { memo, useCallback, VFC } from "react";
 import { Comment } from "../../typings/db";
+import { Comments, Container, Content, DeleteButton, List, Name, Title } from "./styles";
 
 interface Props {
   comments: Comment[];
@@ -11,17 +12,20 @@ const CommentList: VFC<Props> = ({ comments, onDelete }) => {
     onDelete(commentId);
   }, [onDelete]);
 
-  return(
-    <div>
-      <h3>댓글 목록</h3>
-      {comments?.map((comment) => (
-        <div key={comment?.id}>
-          <span>{comment?.content}</span>
-          <button onClick={() => handleDeleteClick(comment?.id)}>삭제</button>
-        </div>
-      ))}
-    </div>
-  )
+  return (
+    <Container>
+      <Title>댓글</Title>
+      <List>
+        {comments?.map((comment) => (
+          <Comments key={comment?.id}>
+            <Name>{comment?.User?.name}</Name>
+            <Content>{comment?.content}</Content>
+            <DeleteButton onClick={() => handleDeleteClick(comment?.id)}>삭제</DeleteButton>
+          </Comments>
+        ))}
+      </List>
+    </Container>
+  );
 }
 
-export default CommentList;
+export default memo(CommentList);
