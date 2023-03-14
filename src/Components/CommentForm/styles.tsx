@@ -8,8 +8,8 @@ export const Form = styled.form`
 `;
 
 export const Textarea = styled.textarea`
-  width: 100%;
-  height: 6rem;
+  width: 90%;
+  height: 3rem;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   font-size: 1rem;

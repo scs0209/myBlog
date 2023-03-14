@@ -8,15 +8,19 @@ export const Title = styled.h3`
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
+  border-bottom: 1px solid lightgray;
 `;
 
 export const List = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: column;
 `;
 
 export const Comments = styled.div`
   display: flex;
+  width: 70%;
+  justify-content: center;
   align-items: center;
   margin-bottom: 10px;
   font-size: 15px;
