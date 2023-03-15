@@ -47,7 +47,7 @@ class Post extends Sequelize.Model {
       onDelete: "CASCADE",
     });
     db.Post.hasMany(db.Like);
-    db.Post.hasMany(db.Comment);
+    db.Post.hasMany(db.Comment, { onDelete: "CASCADE"});
   }
 };
 

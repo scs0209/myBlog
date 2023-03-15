@@ -288,6 +288,10 @@ router.delete("/main/posts/:id", async (req, res) => {
         error: "게시글이 존재하지 않습니다.",
       });
     }
+    // 댓글 삭제
+    await Comment.destroy({
+      where: { PostId: id },
+    });
     await post.destroy();
     res.status(204).send();
   } catch (err) {

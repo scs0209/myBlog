@@ -21,6 +21,7 @@ const PostDetail = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentError, setCommentError] = useState("");
 
+  // 글 삭제
   const handleDeleteClick = useCallback(() => {
     const confirmResult = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmResult) {
