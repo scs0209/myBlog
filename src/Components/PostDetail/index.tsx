@@ -48,6 +48,10 @@ const PostDetail = () => {
 
   // 댓글 등록
   const handleCommentSubmit = useCallback((content: string) => {
+    if(!content || !content.trim()){
+      alert("내용을 입력해주세요.")
+      return;
+    };
     axios
       .post(`/api/posts/${id}/comments`,
       {
@@ -78,6 +82,45 @@ const PostDetail = () => {
       })
   }, [id, mutateComments]);
   console.log(comments);
+
+  // 댓글 수정
+  const handleCommentEdit = useCallback(
+    (commentId: number, content: string) => {
+      if(!content || !content.trim()){
+        alert("내용을 입력해주세요");
+        return;
+      }
+      axios
+        .patch(
+          `/api/posts/comments/${commentId}`,
+          {
+            content: content,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then(() => {
+          setComments((prevComments) => {
+            const newComments = [...prevComments];
+            const commentIndex = newComments.findIndex(
+              (comment) => comment.id === commentId
+            );
+            newComments[commentIndex] = {
+              ...newComments[commentIndex],
+              content,
+            };
+            return newComments;
+          });
+          setCommentError("");
+        })
+        .catch((err) => {
+          console.error(err);
+          setCommentError("댓글을 수정하는 도중 오류가 발생했습니다.");
+        });
+    },
+    [setComments, setCommentError]
+  );
 
 
   // 댓글 삭제
@@ -126,7 +169,7 @@ const PostDetail = () => {
         </div>
       )}
       <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
-      <CommentList comments={comments} onDelete={handleCommentDelete} />
+      <CommentList comments={comments} onDelete={handleCommentDelete} onEdit={handleCommentEdit} />
     </>
   );
 };
