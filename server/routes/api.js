@@ -9,6 +9,7 @@ const User = require('../models/user');
 const Post = require('../models/post');
 const Category = require('../models/category');
 const Comment = require('../models/comment');
+const Like = require('../models/like');
 
 
 
@@ -337,7 +338,71 @@ router.post(`/main/posts/:id/views`, async (req, res) => {
   } else {
     res.status(404).send({ message: '게시글을 찾을 수 없습니다.'});
   }
-})
+});
+
+
+//좋아요 갯수 조회
+router.get("/posts/:postId/like-info", async (req, res, next) => {
+  const { postId } = req.params;
+
+  try{
+    const post = await Post.findOne({ where: { id: postId }});
+    if(!post){
+      return res.status(404).json({ message: "게시물을 찾을 수 없습니다."});
+    }
+
+    //좋아요 수
+    const likeCount = await Like.count({ where: { PostId: postId }});
+    console.log("likeCount", likeCount);
+    //현재 사용자가 해당 게시물에 좋아요를 눌렀는지 여부
+    const currentUser= req.user
+    let liked = false;
+    if(currentUser){
+      const userLike = await Like.findOne({
+        where: { PostId: postId, UserId: currentUser.id },
+      });
+      liked = Boolean(userLike);
+    }
+    
+    res.status(200).json({ likeCount, liked });
+  } catch(err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+//좋아요 생성 및 삭제
+router.post("/posts/:postId/like", isLoggedIn, async (req, res, next) => {
+  try{
+    const postId = parseInt(req.params.postId, 10);
+    const { id: userId } = req.user;
+
+    //이미 좋아요를 눌렀는지 검사
+    const exLike = await Like.findOne({
+      where: {
+        PostId: postId,
+        UserId: userId,
+      },
+    });
+
+    if(exLike) {
+      //이미 좋아요를 눌렀다면 삭제
+      await exLike.destroy();
+      res.json({ liked: false });
+    } else {
+      //좋아요를 누르지 않은 경우 생성
+      await Like.create({
+        PostId: postId,
+        UserId: userId,
+      });
+      const likeCount = await Like.count({ where: { PostId: postId } });
+      res.json({ count: likeCount, liked: true });
+    }
+  } catch(err) {
+    console.error(err);
+    next(err);
+  }
+});
 
 
 

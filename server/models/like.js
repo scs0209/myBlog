@@ -5,8 +5,7 @@ class Like extends Sequelize.Model {
     Like.init(
       {
         id: {
-          //post 테이블의 Columns역할을 담당
-          type: Sequelize.INTEGER, //정수타입 데이터를 50 length까지 가질 수 있다는 의미
+          type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true,
         },
