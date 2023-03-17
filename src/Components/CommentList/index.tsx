@@ -1,6 +1,7 @@
+import RepliesButton from "../../Components/RepliesButton";
 import React, { ChangeEvent, memo, useCallback, useState, VFC } from "react";
 import { Comment, Reply } from "../../typings/db";
-import { CancelButton, Comments, CompleteButton, Container, Content, DeleteButton, EditButton, EditForm, EditInput, List, Name, Title } from "./styles";
+import { CancelButton, Comments, CompleteButton, Container, Content, DeleteButton, EditButton, EditForm, EditInput, List, Name, RepliesWrapper, Title } from "./styles";
 
 interface Props {
   comments: Comment[];
@@ -15,7 +16,16 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, replies 
   const [editContent, setEditContent] = useState<string>("");
   const [replyId, setReplyId] = useState<number | null>(null);
   const [replyContent, setReplyContent] = useState<string>("");
+  const [isRepliesVisible, setIsRepliesVisible] = useState<{[commentId: number]: boolean;}>({});
 
+  const handleRepliesClick = useCallback((commentId: number) => {
+    setIsRepliesVisible((prev) => {
+      return {
+        ...prev,
+        [commentId]: !prev[commentId],
+      };
+    });
+  }, []);
 
   const handleDeleteClick = useCallback((commentId: number) => {
     onDelete(commentId);
@@ -89,7 +99,9 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, replies 
                     value={editContent}
                     onChange={onChangeEditContent}
                   />
-                  <CompleteButton onClick={handleEditSubmit}>완료</CompleteButton>
+                  <CompleteButton onClick={handleEditSubmit}>
+                    완료
+                  </CompleteButton>
                   <CancelButton onClick={handleEditCancel}>취소</CancelButton>
                 </EditForm>
               ) : (
@@ -115,21 +127,38 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, replies 
             )}
             {replyId === comment?.id ? (
               <div>
-                <input 
+                <input
                   type="text"
                   value={replyContent}
                   onChange={onChangeReplyContent}
                 />
-                <button onClick={handleReplySubmit}>
-                  완료
-                </button>
-                <button onClick={handleReplyCancel}>
-                  취소
-                </button>
+                <button onClick={handleReplySubmit}>완료</button>
+                <button onClick={handleReplyCancel}>취소</button>
+                <RepliesWrapper>
+                  {replies
+                    ?.filter((reply) => reply.CommentId === comment?.id)
+                    .map((reply) => (
+                      <div key={reply.id}>
+                        <span>{reply?.User.name}</span>
+                        <span>{reply?.content}</span>
+                      </div>
+                    ))}
+                </RepliesWrapper>
               </div>
-            ): null}
-            <div>
-              {replies
+            ) : null}
+            <RepliesButton
+              onClick={() => handleRepliesClick(comment?.id)}
+              isRepliesVisible={isRepliesVisible[comment?.id!]}
+            >
+              답글 보기 (
+              {
+                replies?.filter((reply) => reply.CommentId === comment?.id)
+                  .length
+              }
+              )
+            </RepliesButton>
+            {isRepliesVisible[comment?.id!] &&
+              replies
                 ?.filter((reply) => reply.CommentId === comment?.id)
                 .map((reply) => (
                   <div key={reply.id}>
@@ -137,7 +166,6 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, replies 
                     <span>{reply?.content}</span>
                   </div>
                 ))}
-            </div>
           </Comments>
         ))}
       </List>

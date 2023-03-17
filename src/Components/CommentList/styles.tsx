@@ -151,3 +151,21 @@ export const CancelButton = styled.button`
     text-decoration: underline;
   }
 `;
+
+export const RepliesWrapper = styled.div`
+  margin-left: 20px;
+  border-left: 1px solid #ddd;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+
+  & > div:not(:last-child) {
+    margin-bottom: 5px;
+  }
+
+  & > div > span:first-child {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+`;
+
