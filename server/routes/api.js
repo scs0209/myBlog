@@ -174,12 +174,22 @@ router.get('/posts/:postId/comments', async(req, res) => {
   try{
     const postId = req.params.postId;
     const comments = await Comment.findAll({
-      where: { PostId: postId},
+      where: { PostId: postId },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "name"],
+        },
+        {
+          model: Replies,
+          include: {
+            model: User,
+            attributes: ["id", "name"],
+          },
+          order: [["createdAt", "ASC"]],
+        },
+      ],
       order: [["createdAt", "ASC"]],
-      include: {
-        model: User,
-        attributes: ["id", "name"],
-      },
     });
     res.json(comments);
   } catch(err) {
@@ -248,14 +258,24 @@ router.delete('/posts/comments/:commentId', isLoggedIn, async(req, res) => {
 // 답글 조회
 router.get("/posts/:postId/replies", async (req, res) => {
   try {
-    const replies = await Replies.findAll({
+    const comments = await Comment.findAll({
       where: { PostId: req.params.postId },
-      include: {
-        model: User,
-        attributes: ["id", "name"],
-      },
-      order: [["createdAt", "ASC"]],
+      include: [
+        {
+          model: Replies,
+          include: {
+            model: User,
+            attributes: ["id", "name"],
+          },
+          order: [["createdAt", "ASC"]],
+        },
+      ],
     });
+
+    const replies = comments.reduce((acc, comment) => {
+      return acc.concat(comment.Replies);
+    }, []);
+
     res.status(200).json(replies);
   } catch (err) {
     console.error(err);

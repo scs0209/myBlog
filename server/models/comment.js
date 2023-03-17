@@ -31,6 +31,7 @@ class Comment extends Sequelize.Model {
     db.Comment.belongsTo(db.Post);
     db.Comment.belongsToMany(db.Tag, { through: 'CategoryTag' });
     db.Comment.belongsToMany(db.Category, { through: 'CommentCategory' });
+    db.Comment.hasMany(db.Replies);
   }
 };
 
