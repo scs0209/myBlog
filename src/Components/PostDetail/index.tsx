@@ -5,7 +5,7 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
-import { Comment } from "../../typings/db";
+import { Comment, Reply } from "../../typings/db";
 import LikeButton from "../../Components/LikedButton";
 
 
@@ -28,10 +28,16 @@ const PostDetail = () => {
     `/api/posts/${id}/like-info`,
     fetcher
   );
+  const { data: repliesData, mutate: mutateReplies } = useSWR(
+    `/api/posts/${id}/replies`,
+    fetcher
+  );
   
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentError, setCommentError] = useState("");
+  const [replies, setReplies] = useState<Reply[]>([]);
+  const [replyContent, setReplyContent] = useState<string>("");
   const [likeCount, setLikeCount] = useState<number>(0);
   const [liked, setLiked] = useState<boolean>(false);
 
@@ -153,82 +159,110 @@ const PostDetail = () => {
       });
   }, []);
 
-const handleLikedClick = useCallback(() => {
-  if (liked) {
-    // 좋아요 취소를 눌렀을 때
-    mutateLikeInfo(
-      (prev: any) => ({
-        ...prev,
-        count: prev.count - 1,
-        liked: false,
-      }),
-      false
-    );
+  // 답글 생성
+  const handleReplySubmit = useCallback((commentId: number, replyContent: string) => {
+    if(!replyContent) {
+      alert("글을 작성해주세요!")
+      return
+    }
 
+    const newReply = {
+      content: replyContent,
+      User: { name: user.name },
+      CommentId: commentId,
+    }
+
+    // 댓글에 대한 답글 추가 API 호출
     axios
-      .post(`/api/posts/${id}/like`, {
-        withCredentials: true,
-        method: "DELETE"
+      .post(`/api/posts/comments/${commentId}/replies`, newReply, {
+      withCredentials: true,
       })
-      .then(() => {
-        // 서버 응답이 오면 다시 업데이트
-        mutateLikeInfo((prev: any) => ({
+      .then((response) => {
+        const addedReply = response.data;
+        setReplies((prev) => [...prev, addedReply]);
+        setReplyContent("");
+      })
+      .catch(error => {
+        console.error(error);
+      })
+  }, [user.name]);
+
+  //좋아요 클릭
+  const handleLikedClick = useCallback(() => {
+    if (liked) {
+      // 좋아요 취소를 눌렀을 때
+      mutateLikeInfo(
+        (prev: any) => ({
           ...prev,
           count: prev.count - 1,
           liked: false,
-        }));
-      })
-      .catch((err) => {
-        console.error(err);
-        // 에러 발생 시 UI를 롤백
-        mutateLikeInfo((prev: any) => ({
-          ...prev,
-          count: prev.count + 1,
-          liked: true,
-        }));
-      });
-  } else {
-    // 좋아요를 눌렀을 때
-    mutateLikeInfo(
-      (prev: any) => ({
-        ...prev,
-        count: prev.count + 1,
-        liked: true,
-      }),
-      false
-    );
+        }),
+        false
+      );
 
-    axios
-      .post(
-        `/api/posts/${id}/like`,
-        {
-          UserId: user.id,
-          PostID: id,
-        },
-        {
+      axios
+        .post(`/api/posts/${id}/like`, {
           withCredentials: true,
-        }
-      )
-      .then(() => {
-        // 서버 응답이 오면 다시 업데이트
-        mutateLikeInfo((prev: any) => ({
+          method: "DELETE"
+        })
+        .then(() => {
+          // 서버 응답이 오면 다시 업데이트
+          mutateLikeInfo((prev: any) => ({
+            ...prev,
+            count: prev.count - 1,
+            liked: false,
+          }));
+        })
+        .catch((err) => {
+          console.error(err);
+          // 에러 발생 시 UI를 롤백
+          mutateLikeInfo((prev: any) => ({
+            ...prev,
+            count: prev.count + 1,
+            liked: true,
+          }));
+        });
+    } else {
+      // 좋아요를 눌렀을 때
+      mutateLikeInfo(
+        (prev: any) => ({
           ...prev,
           count: prev.count + 1,
           liked: true,
-        }));
-      })
-      .catch((err) => {
-        console.error(err);
-        // 에러 발생 시 UI를 롤백
-        mutateLikeInfo((prev: any) => ({
-          ...prev,
-          count: prev.count - 1,
-          liked: false,
-        }));
-      });
-  }
-}, [id, liked, mutateLikeInfo, user.id]);
-console.log(likeCount);
+        }),
+        false
+      );
+
+      axios
+        .post(
+          `/api/posts/${id}/like`,
+          {
+            UserId: user.id,
+            PostID: id,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then(() => {
+          // 서버 응답이 오면 다시 업데이트
+          mutateLikeInfo((prev: any) => ({
+            ...prev,
+            count: prev.count + 1,
+            liked: true,
+          }));
+        })
+        .catch((err) => {
+          console.error(err);
+          // 에러 발생 시 UI를 롤백
+          mutateLikeInfo((prev: any) => ({
+            ...prev,
+            count: prev.count - 1,
+            liked: false,
+          }));
+        });
+    }
+  }, [id, liked, mutateLikeInfo, user.id]);
 
   //post 객체가 변경될 때마다 실행되며, post 객체가 존재하면 해당 게시물의 댓글들을 comments 상태로 업데이트 함
   // 따라서 이 코드는 게시물의 댓글들을 표시하기 위한 코드이다. post 객체가 변경될 때마다 댓글 목록이 업데이트 되기때문에, 댓글이 추가되거나 삭제될 때도 자동으로 반영된다.
@@ -236,14 +270,14 @@ console.log(likeCount);
     if (commentsData) {
       setComments(commentsData);
     }
-  }, [commentsData]);
-
-  useEffect(() => {
-    if(likeInfo){
+    if (likeInfo) {
       setLikeCount(likeInfo.likeCount);
-      setLiked(likeInfo.liked)
+      setLiked(likeInfo.liked);
     }
-  }, [likeInfo]);
+    if (repliesData) {
+      setReplies(repliesData);
+    }
+  }, [commentsData, likeInfo, repliesData]);
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!post) return <div>로딩 중...</div>;
@@ -285,8 +319,10 @@ console.log(likeCount);
       <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
       <CommentList
         comments={comments}
+        replies={replies}
         onDelete={handleCommentDelete}
         onEdit={handleCommentEdit}
+        onReply={handleReplySubmit}
       />
     </>
   );

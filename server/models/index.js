@@ -9,6 +9,7 @@ const Like = require('./like');
 const Category = require('./category');
 const CategoryTag = require('./categoryTag');
 const CommentCategory = require('./commentCategory');
+const Replies = require('./reply');
 
 const env = process.env.NODE_ENV || 'development';
 // path 모듈을 사용할 때 여러개의 인자값이 들어간다.
@@ -46,6 +47,7 @@ const sequelize = new Sequelize(
     db.Category = Category;
     db.CommentCategory = CommentCategory;
     db.CategoryTag = CategoryTag;
+    db.Replies = Replies;
 
     User.initiate(sequelize);
     Post.initiate(sequelize);
@@ -56,6 +58,7 @@ const sequelize = new Sequelize(
     Category.initiate(sequelize);
     CategoryTag.initiate(sequelize);
     CommentCategory.initiate(sequelize);
+    Replies.initiate(sequelize);
 
     // db.User.hasMany(db.Post);
     // db.Post.belongsTo(db.User);

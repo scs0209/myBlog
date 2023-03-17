@@ -1,16 +1,20 @@
 import React, { ChangeEvent, memo, useCallback, useState, VFC } from "react";
-import { Comment } from "../../typings/db";
+import { Comment, Reply } from "../../typings/db";
 import { CancelButton, Comments, CompleteButton, Container, Content, DeleteButton, EditButton, EditForm, EditInput, List, Name, Title } from "./styles";
 
 interface Props {
   comments: Comment[];
+  replies: Reply[];
   onDelete: (commentId: number) => void;
   onEdit: (commentId: number, content: string) => void;
+  onReply: (commentId: number, content: string) => void;
 }
 
-const CommentList: VFC<Props> = ({ comments, onDelete, onEdit }) => {
+const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, replies }) => {
   const [editId, setEditId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState<string>("");
+  const [replyId, setReplyId] = useState<number | null>(null);
+  const [replyContent, setReplyContent] = useState<string>("");
 
 
   const handleDeleteClick = useCallback((commentId: number) => {
@@ -39,7 +43,36 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit }) => {
 
   const onChangeEditContent = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setEditContent(e.target.value);
-  }, [])
+  }, []);
+
+
+  
+  const handleReplyClick = useCallback((commentId: number) => {
+    setReplyId(commentId);
+    setReplyContent("");
+  }, []);
+
+  const handleReplyCancel = useCallback(() => {
+    setReplyId(null);
+    setReplyContent("");
+  }, []);
+
+  const handleReplySubmit = useCallback(() => {
+    if (replyId === null) {
+      return;
+    }
+
+    onReply(replyId, replyContent);
+    setReplyId(null);
+    setReplyContent("");
+  }, [replyId, replyContent, onReply]);
+
+  const onChangeReplyContent = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setReplyContent(e.target.value);
+    },
+    []
+  );
 
   return (
     <Container>
@@ -75,8 +108,36 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit }) => {
                 <DeleteButton onClick={() => handleDeleteClick(comment?.id)}>
                   삭제
                 </DeleteButton>
+                <button onClick={() => handleReplyClick(comment?.id)}>
+                  답글
+                </button>
               </div>
             )}
+            {replyId === comment?.id ? (
+              <div>
+                <input 
+                  type="text"
+                  value={replyContent}
+                  onChange={onChangeReplyContent}
+                />
+                <button onClick={handleReplySubmit}>
+                  완료
+                </button>
+                <button onClick={handleReplyCancel}>
+                  취소
+                </button>
+              </div>
+            ): null}
+            <div>
+              {replies
+                ?.filter((reply) => reply.CommentId === comment?.id)
+                .map((reply) => (
+                  <div key={reply.id}>
+                    <span>{reply?.User.name}</span>
+                    <span>{reply?.content}</span>
+                  </div>
+                ))}
+            </div>
           </Comments>
         ))}
       </List>

@@ -10,6 +10,7 @@ const Post = require('../models/post');
 const Category = require('../models/category');
 const Comment = require('../models/comment');
 const Like = require('../models/like');
+const Replies = require('../models/reply');
 
 
 
@@ -238,6 +239,48 @@ router.delete('/posts/comments/:commentId', isLoggedIn, async(req, res) => {
     });
     res.status(204).json(deletedComment);
   } catch(err){
+    console.error(err);
+    res.status(500).send("서버 오류");
+  }
+});
+
+
+// 답글 조회
+router.get("/posts/:postId/replies", async (req, res) => {
+  try {
+    const replies = await Replies.findAll({
+      where: { PostId: req.params.postId },
+      include: {
+        model: User,
+        attributes: ["id", "name"],
+      },
+      order: [["createdAt", "ASC"]],
+    });
+    res.status(200).json(replies);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("서버 오류");
+  }
+});
+
+// 답글 작성하기
+router.post('/posts/comments/:commentId/replies', isLoggedIn, async(req, res) => {
+  try {
+    const reply = await Replies.create({
+      content: req.body.content,
+      CommentId: req.params.commentId,
+      UserId: req.user.id,
+    });
+
+    const fullReply = await Replies.findOne({
+      where: { id: reply.id },
+      include: {
+        model: User,
+        attributes: ["id", "name"],
+      },
+    });
+    res.status(201).json(fullReply);
+  } catch (err) {
     console.error(err);
     res.status(500).send("서버 오류");
   }

@@ -6,3 +6,12 @@ export interface Comment {
     name: string;
   };
 }
+
+export interface Reply {
+  id: number;
+  content: string;
+  User: {
+    name: string;
+  };
+  CommentId: number;
+}
