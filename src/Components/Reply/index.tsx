@@ -5,9 +5,10 @@ import { Reply as ReplyType } from "typings/db";
 interface Props{
   reply: ReplyType;
   onEdit: (commentId: number, replyId: number, content: string) => void
+  onDelete: (commentId: number, replyId: number) => void
 }
 
-const ReplyComp: VFC<Props> = ({ reply, onEdit }) => {
+const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(reply.content);
 
@@ -28,12 +29,21 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit }) => {
     setEditContent(e.target.value);
   }, []);
 
+  const handleDelete = useCallback(() => {
+    onDelete(reply.CommentId, reply.id);
+  }, [onDelete, reply])
+
   return(
     <div>
       <div>
         <span>{reply.User.name}</span>
         <span>{reply.content}</span>
-        {!isEditing && <button onClick={handleEdit}>수정</button>}
+        {!isEditing && (
+          <div>
+            <button onClick={handleEdit}>수정</button>
+            <button onClick={handleDelete}>삭제</button>
+          </div>
+        )}
       </div>
       {isEditing && (
         <ReplyEdit

@@ -10,10 +10,11 @@ interface Props {
   onDelete: (commentId: number) => void;
   onEdit: (commentId: number, content: string) => void;
   onReply: (commentId: number, content: string) => void;
+  onDeleteReply: (commentId: number, replyId: number) => void;
   onReplyEdit: (commentId: number, replyId: number, content: string) => void;
 }
 
-const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyEdit, replies }) => {
+const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyEdit, onDeleteReply, replies }) => {
   const [editId, setEditId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState<string>("");
   const [replyId, setReplyId] = useState<number | null>(null);
@@ -152,11 +153,8 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
                     key={reply.id}
                     reply={reply}
                     onEdit={onReplyEdit}
+                    onDelete={onDeleteReply}
                   />
-                  // <div key={reply.id}>
-                  //   <span>{reply?.User.name}</span>
-                  //   <span>{reply?.content}</span>
-                  // </div>
                 ))}
           </Comments>
         ))}

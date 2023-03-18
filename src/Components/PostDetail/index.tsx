@@ -222,6 +222,25 @@ const PostDetail = () => {
     []
   );
 
+  // 답글 삭제
+  const handleReplyDelete = useCallback(
+    (commentId: number, replyId: number) => {
+      if (window.confirm("정말 삭제하시겠습니까?")) {
+        axios
+          .delete(`/api/posts/comments/${commentId}/replies/${replyId}`, {
+            withCredentials: true,
+          })
+          .then(() => {
+            setReplies((prev) => prev.filter((reply) => reply.id !== replyId));
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    },
+    []
+  );
+
   //좋아요 클릭
   const handleLikedClick = useCallback(() => {
     if (liked) {
@@ -359,6 +378,7 @@ const PostDetail = () => {
         onDelete={handleCommentDelete}
         onEdit={handleCommentEdit}
         onReply={handleReplySubmit}
+        onDeleteReply={handleReplyDelete}
         onReplyEdit={handleReplyEdit}
       />
     </>

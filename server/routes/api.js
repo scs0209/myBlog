@@ -339,6 +339,33 @@ router.put('/posts/comments/:commentId/replies/:replyId', isLoggedIn, async (req
   }
 });
 
+// 답글 삭제하기
+router.delete('/posts/comments/:commentId/replies/:replyId', isLoggedIn, async (req, res, next) => {
+  try {
+    const { commentId, replyId } = req.params;
+
+    const reply = await Replies.findOne({
+      where: { id: replyId, CommentId: commentId },
+      include: [{ model: User, attributes: ['id', 'name', 'email'] }],
+    });
+
+    if (!reply) {
+      return res.status(404).send('해당하는 답글을 찾을 수 없습니다.');
+    }
+
+    if (reply.UserId !== req.user.id) {
+      return res.status(403).send('삭제 권한이 없습니다.');
+    }
+
+    await reply.destroy();
+
+    res.status(200).send('삭제되었습니다.');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // 글 입력
 router.post("/posts", async (req, res) => {
   try{
