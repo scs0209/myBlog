@@ -11,7 +11,7 @@ interface Props {
 const RepliesButton:FC<Props> = ({ onClick, isRepliesVisible, children }) => {
   return (
     <Button onClick={onClick}>
-      {children} {isRepliesVisible ? `숨기기` : `보기`}
+      {isRepliesVisible ? `숨기기` : `보기`} {children}
     </Button>
   );
 };

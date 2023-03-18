@@ -187,6 +187,41 @@ const PostDetail = () => {
       })
   }, [user.name]);
 
+
+  // 답글 수정
+  const handleReplyEdit = useCallback(
+    (commentId: number, replyId: number, editedContent: string) => {
+      if (!editedContent.trim()) {
+        alert("글을 작성해주세요!");
+        return;
+      }
+
+      axios
+        .put(
+          `/api/posts/comments/${commentId}/replies/${replyId}`,
+          { content: editedContent },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          const editedReply = res.data;
+          setReplies((prev) =>
+            prev.map((reply) => {
+              if (reply.id === replyId) {
+                return editedReply;
+              }
+              return reply;
+            })
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    []
+  );
+
   //좋아요 클릭
   const handleLikedClick = useCallback(() => {
     if (liked) {
@@ -324,6 +359,7 @@ const PostDetail = () => {
         onDelete={handleCommentDelete}
         onEdit={handleCommentEdit}
         onReply={handleReplySubmit}
+        onReplyEdit={handleReplyEdit}
       />
     </>
   );

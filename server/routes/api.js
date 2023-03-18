@@ -306,6 +306,39 @@ router.post('/posts/comments/:commentId/replies', isLoggedIn, async(req, res) =>
   }
 });
 
+//답글 수정하기
+router.put('/posts/comments/:commentId/replies/:replyId', isLoggedIn, async (req, res, next) => {
+  try {
+    const { commentId, replyId } = req.params;
+    const reply = await Replies.findOne({
+      where: { id: replyId },
+      include: [
+        { model: User, attributes: ['id', 'name', 'email'] },
+        {
+          model: Comment,
+          where: { id: commentId },
+          include: [{ model: User, attributes: ['id', 'name', 'email'] }],
+        },
+      ],
+    });
+    if (!reply) {
+      return res.status(404).send('해당하는 답글을 찾을 수 없습니다.');
+    }
+
+    if (reply.UserId !== req.user.id) {
+      return res.status(403).send('수정 권한이 없습니다.');
+    }
+
+    reply.content = req.body.content;
+    await reply.save();
+
+    res.status(200).json(reply);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // 글 입력
 router.post("/posts", async (req, res) => {
   try{
