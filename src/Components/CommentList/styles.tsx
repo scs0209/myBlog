@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 
 export const Container = styled.div`
-  margin-top: 20px;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
 `;
 
 export const Title = styled.h3`
@@ -20,9 +22,10 @@ export const List = styled.div`
 export const Comments = styled.div`
   display: flex;
   width: 70%;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
   font-size: 15px;
   color: gray;
 
@@ -34,6 +37,12 @@ export const Comments = styled.div`
   & > div > button:first-of-type {
     margin-right: 5px;
   }
+`;
+
+export const CommentActions = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const Content = styled.span`
@@ -96,6 +105,7 @@ export const DeleteButton = styled.button`
   color: #fff;
   min-width: 35px;
   min-height: 20px;
+  margin-left: 0.1rem;
   background-color: black;
   border: none;
   border-radius: 5px;
@@ -131,6 +141,27 @@ export const CompleteButton = styled.button`
   }
 `;
 
+export const ReplyButton = styled.button`
+  color: #fff;
+  min-width: 35px;
+  min-height: 20px;
+  margin-left: 0.1rem;
+  margin-top: 0.5rem;
+  background-color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 5px;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: gray;
+    border-color: #bd2130;
+    text-decoration: underline;
+  }
+`;
+
+
 export const CancelButton = styled.button`
   position: relative;
   top: -6px;
@@ -152,20 +183,7 @@ export const CancelButton = styled.button`
   }
 `;
 
-export const RepliesWrapper = styled.div`
-  margin-left: 20px;
-  border-left: 1px solid #ddd;
-  padding-left: 20px;
+export const ButtonWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-
-  & > div:not(:last-child) {
-    margin-bottom: 5px;
-  }
-
-  & > div > span:first-child {
-    font-weight: bold;
-    margin-right: 5px;
-  }
 `;
 

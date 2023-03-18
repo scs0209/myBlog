@@ -1,6 +1,7 @@
 import ReplyEdit from "../../Components/ReplyEdit";
 import React, { ChangeEvent, useCallback, useState, VFC } from "react";
 import { Reply as ReplyType } from "typings/db";
+import { Content, DeleteButton, EditButton, Name } from "./styles";
 
 interface Props{
   reply: ReplyType;
@@ -36,13 +37,13 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
   return(
     <div>
       <div>
-        <span>{reply.User.name}</span>
-        <span>{reply.content}</span>
+        <Name>{reply.User.name}</Name>
+        <Content>{reply.content}</Content>
         {!isEditing && (
-          <div>
-            <button onClick={handleEdit}>수정</button>
-            <button onClick={handleDelete}>삭제</button>
-          </div>
+          <span>
+            <EditButton onClick={handleEdit}>✏</EditButton>
+            <DeleteButton onClick={handleDelete}>🗑</DeleteButton>
+          </span>
         )}
       </div>
       {isEditing && (

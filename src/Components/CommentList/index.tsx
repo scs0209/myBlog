@@ -1,7 +1,7 @@
 import RepliesButton from "../../Components/RepliesButton";
 import React, { ChangeEvent, memo, useCallback, useState, VFC } from "react";
 import { Comment, Reply } from "../../typings/db";
-import { CancelButton, Comments, CompleteButton, Container, Content, DeleteButton, EditButton, EditForm, EditInput, List, Name, Title } from "./styles";
+import { ButtonWrapper, CancelButton, Comments, CompleteButton, Container, Content, DeleteButton, EditButton, EditForm, EditInput, List, Name, ReplyButton, Title } from "./styles";
 import ReplyComp from "Components/Reply";
 
 interface Props {
@@ -111,45 +111,52 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
                 <Content>{comment?.content}</Content>
               )}
             </div>
-            {editId === comment?.id ? null : (
-              <div>
-                <EditButton
-                  onClick={() =>
-                    handleEditClick(comment?.id!, comment?.content!)
-                  }
-                >
-                  수정
-                </EditButton>
-                <DeleteButton onClick={() => handleDeleteClick(comment?.id)}>
-                  삭제
-                </DeleteButton>
-                <button onClick={() => handleReplyClick(comment?.id)}>
-                  답글
-                </button>
-              </div>
-            )}
-            {replyId === comment?.id ? (
-              <div>
-                <input
-                  type="text"
-                  value={replyContent}
-                  onChange={onChangeReplyContent}
-                />
-                <button onClick={handleReplySubmit}>완료</button>
-                <button onClick={handleReplyCancel}>취소</button>
-              </div>
-            ) : null}
-            <RepliesButton
-              onClick={() => handleRepliesClick(comment?.id)}
-              isRepliesVisible={isRepliesVisible[comment?.id!]}
-            >
-              ({replies?.filter((reply) => reply.CommentId === comment?.id).length})
-            </RepliesButton>
+            <ButtonWrapper>
+              {editId === comment?.id ? null : (
+                <div>
+                  <EditButton
+                    onClick={() =>
+                      handleEditClick(comment?.id!, comment?.content!)
+                    }
+                  >
+                    수정
+                  </EditButton>
+                  <DeleteButton onClick={() => handleDeleteClick(comment?.id)}>
+                    삭제
+                  </DeleteButton>
+                  <ReplyButton onClick={() => handleReplyClick(comment?.id)}>
+                    답글
+                  </ReplyButton>
+                </div>
+              )}
+              {replyId === comment?.id ? (
+                <div>
+                  <input
+                    type="text"
+                    value={replyContent}
+                    onChange={onChangeReplyContent}
+                  />
+                  <button onClick={handleReplySubmit}>완료</button>
+                  <button onClick={handleReplyCancel}>취소</button>
+                </div>
+              ) : null}
+              <RepliesButton
+                onClick={() => handleRepliesClick(comment?.id)}
+                isRepliesVisible={isRepliesVisible[comment?.id!]}
+              >
+                (
+                {
+                  replies?.filter((reply) => reply.CommentId === comment?.id)
+                    .length
+                }
+                )
+              </RepliesButton>
+            </ButtonWrapper>
             {isRepliesVisible[comment?.id!] &&
               replies
                 ?.filter((reply) => reply.CommentId === comment?.id)
                 .map((reply) => (
-                  <ReplyComp 
+                  <ReplyComp
                     key={reply.id}
                     reply={reply}
                     onEdit={onReplyEdit}
