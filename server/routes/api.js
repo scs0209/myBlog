@@ -20,7 +20,7 @@ router.get("/", (req, res, next) => {
 
 
 // 카테고리 목록 가져오기
-router.get("/categories", isLoggedIn, async (req, res, next) => {
+router.get("/categories", async (req, res, next) => {
   try {
     const categories = await Category.findAll();
     res.json(categories);
@@ -129,7 +129,7 @@ router.get('/categories/:categoryId/posts', async(req, res, next) => {
 
 
 //개시글 가져오기
-router.get("/main/posts", isLoggedIn, async (req, res) => {
+router.get("/main/posts", async (req, res) => {
   const { page, search } = req.query;
   const limit = 10; // 한 페이지에 보여줄 게시글 수
   const offset = (page - 1) * limit;
