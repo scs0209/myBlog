@@ -413,9 +413,24 @@ router.delete("/main/posts/:id", async (req, res) => {
       });
     }
     // 댓글 삭제
+    const comments = await Comment.findAll({
+      where: { PostId: id },
+      include: {
+        model: Replies,
+      },
+    });
+
+    // 댓글에 연결된 대댓글 삭제
+    for (const comment of comments) {//해당 게시글에 연결된 모든 댓글을 가져온다.
+      for (const reply of comment.Replies) {//가져온 댓글들 각각의 Replies(대댓글)을 순회하면 대댓글을 삭제한다.
+        await reply.destroy();
+      }
+    }
+
     await Comment.destroy({
       where: { PostId: id },
     });
+
     await post.destroy();
     res.status(204).send();
   } catch (err) {
