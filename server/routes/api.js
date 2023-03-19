@@ -542,9 +542,23 @@ router.post("/posts/:postId/like", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 이메일 찾기
+router.post("/users/findId", async (req, res) => {
+  const { name } = req.body;
+  try {
+    const user = await User.findOne({ where: { name } });
+    if (!user) {
+      return res.status(404).json({ message: "일치하는 계정이 없습니다." });
+    }
+    return res.status(200).json({ email: user.email });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "서버 에러입니다." });
+  }
+});
 
-
-//주소와 get, post 등 메서드가 있는 것을 라우터라고 부른다.
+// 주소와 get, post 등 메서드가 있는 것을 라우터라고 부른다.
+// 현재 유저 정보 불러오기
 router.get('/users', (req, res, next) => {
   console.log(req.user);
   return res.json(req.user || false);

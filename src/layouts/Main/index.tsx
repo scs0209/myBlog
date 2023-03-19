@@ -15,6 +15,7 @@ const PostDetail = loadable(() => import('../../Components/PostDetail'));
 const PostEdit = loadable(() => import('../../Components/PostEdit'));
 const Login = loadable(() => import("../../Pages/Login"));
 const SignUp = loadable(() => import("../../Pages/SignUp"));
+const FindId = loadable(() => import("../../Pages/FindId"));
 
 const MainPage = () => {
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
@@ -59,9 +60,9 @@ const MainPage = () => {
           </Link>
         )}
         <div>
-          <Link to="/main/login" onClick={onClickShowPost}>
+          {!userData && <Link to="/main/login" onClick={onClickShowPost}>
             <button>로그인</button>
-          </Link>
+          </Link>}
           <button onClick={onLogout}>로그아웃</button>
         </div>
       </Header>
@@ -76,6 +77,7 @@ const MainPage = () => {
             <Route path="/posts" element={<PostList />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/findId" element={<FindId />} />
             <Route path="/posts/:id" element={<PostDetail />} />
             <Route path="/posts/:id/edit" element={<PostEdit />} />
             <Route path="/categories/:categoryId" element={<CategoryList />} />
