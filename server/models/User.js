@@ -19,7 +19,12 @@ class User extends Sequelize.Model {
       password: {
         type: Sequelize.STRING,
         allowNull: false
-      } 
+      },
+      role: {
+        type: Sequelize.ENUM('user', 'admin'),
+        allowNull: false,
+        defaultValue: 'user',
+      }
     },
     // createAt => 생성할 때 시간이 자동으로 저장, updatedAt => update될 때 시간이 자동으로 저장(timestamps true 일 경우);
     // paranoid가 true이면 deletedAt 까지 사용가능 deletedAt => 삭제 했을 때의 시간

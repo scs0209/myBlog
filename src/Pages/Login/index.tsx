@@ -42,8 +42,6 @@ const Login = () => {
     return <Navigate to="/main/posts" />
   }
 
-
-
   return (
     <div>
       <h2>LogIn</h2>
@@ -77,7 +75,7 @@ const Login = () => {
       </form>
       <p>
         아직 회원이 아니신가요?&nbsp;
-        <Link to="/signup">회원가입 하러가기</Link>
+        <Link to="/main/signup">회원가입 하러가기</Link>
       </p>
     </div>
   );

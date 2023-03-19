@@ -550,6 +550,7 @@ router.get('/users', (req, res, next) => {
   return res.json(req.user || false);
 });
 
+// 회원가입
 router.post('/users', isNotLoggedIn, async(req, res, next) => {
   try {
     const user = await User.findOne({ where: { email: req.body.email } });
@@ -565,6 +566,7 @@ router.post('/users', isNotLoggedIn, async(req, res, next) => {
       email: req.body.email,
       name: req.body.name,
       password: hashedPassword,
+      role: req.body.role || 'user', //role 값이 지정되지 않으면 기본값으로 user 설정
     });
     return res.status(201).json({
       message: "회원가입이 완료되었습니다."
@@ -573,8 +575,9 @@ router.post('/users', isNotLoggedIn, async(req, res, next) => {
     console.log(error);
     return next(error);
   }
-})
+});
 
+// 로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
 // passport.authenticate => 미들웨어
   passport.authenticate('local', (err, user, info) => {
@@ -592,7 +595,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         }
         const fullUser = await User.findOne({
           where: {id: user.id },
-          attributes: ['id', 'name', 'email'],
+          attributes: ['id', 'name', 'email', 'role'],
         });
         return res.status(200).json(fullUser);
       } catch(e) {

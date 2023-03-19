@@ -13,6 +13,8 @@ const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
 const PostList = loadable(() => import('../../Components/PostList'));
 const PostDetail = loadable(() => import('../../Components/PostDetail'));
 const PostEdit = loadable(() => import('../../Components/PostEdit'));
+const Login = loadable(() => import("../../Pages/Login"));
+const SignUp = loadable(() => import("../../Pages/SignUp"));
 
 const MainPage = () => {
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
@@ -42,18 +44,26 @@ const MainPage = () => {
     setShowCreateCategoryModal(true);
   }, []);
   
-  if(!userData){
-    return <Navigate to="/login" />
-  }
+  // if(!userData){
+  //   return <Navigate to="/main/login" />
+  // }
+  console.log(userData);
 
   return (
     <div>
       <Header>
         SCS's Blog!
-        <Link to="/main/write" onClick={onClickShowPost}>
-          포스트 작성
-        </Link>
-        <button onClick={onLogout}>로그아웃</button>
+        {userData?.role === "admin" && (
+          <Link to="/main/write" onClick={onClickShowPost}>
+            포스트 작성
+          </Link>
+        )}
+        <div>
+          <Link to="/main/login" onClick={onClickShowPost}>
+            <button>로그인</button>
+          </Link>
+          <button onClick={onLogout}>로그아웃</button>
+        </div>
       </Header>
       <MainContainer className="main-container">
         <div className="left-side">
@@ -64,6 +74,8 @@ const MainPage = () => {
           Main Layout
           <Routes>
             <Route path="/posts" element={<PostList />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/posts/:id" element={<PostDetail />} />
             <Route path="/posts/:id/edit" element={<PostEdit />} />
             <Route path="/categories/:categoryId" element={<CategoryList />} />
