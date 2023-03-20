@@ -1,5 +1,7 @@
-const express = require('express');
 const dotenv = require('dotenv');
+dotenv.config();
+console.log("SECRET_KEY:", process.env.COOKIE_SECRET);
+const express = require('express');
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
 const morgan = require('morgan');
@@ -7,7 +9,7 @@ const path = require('path');
 const apiRouter = require('./routes/api');
 const passport = require('passport');
 
-dotenv.config();
+
 const app = express();
 
 const passportConfig = require('./passport');
@@ -24,22 +26,18 @@ sequelize.sync({ force: false })
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cookieParser('myblog'));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));//form 파싱을 해줌
-// const sessionOption = {
-//   resave: false,
-//   saveUninitialized: false,
-//   secret: 'myblog',
-//   cookie: {
-//     httpOnly: true,
-//   },
-// };
-app.use(session({
-  secret: 'myblog',
-  resave: false, 
+const sessionOption = {
+  resave: false,
   saveUninitialized: false,
-}));
+  secret: process.env.COOKIE_SECRET,
+  cookie: {
+    httpOnly: true,
+  },
+};
+app.use(session(sessionOption));
 app.use(passport.initialize());
 app.use(passport.session());
 

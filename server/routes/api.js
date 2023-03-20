@@ -624,10 +624,46 @@ router.post('/users', isNotLoggedIn, async(req, res, next) => {
   }
 });
 
+// 비밀번호 변경
+router.put("/users/password", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (!user) {
+      return res.status(404).json({
+        message: "사용자를 찾을 수 없습니다.",
+      });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    // 입력된 현재 비밀번호와 DB의 비밀번호 비교
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        message: "현재 비밀번호가 일치하지 않습니다.",
+      });
+    }
+
+    // 새로운 비밀번호 암호화 후 업데이트
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    await User.update(
+      { password: hashedPassword },
+      { where: { id: req.user.id } }
+    );
+
+    return res.status(200).json({
+      message: "비밀번호가 성공적으로 변경되었습니다.",
+    });
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+
 // 로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
 // passport.authenticate => 미들웨어
-  passport.authenticate('local', (err, user, info) => {
+  passport.authenticate("local", (err, user, info) => {
     if(err) {
       console.log(err);
       return next(err);
