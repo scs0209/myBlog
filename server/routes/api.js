@@ -569,9 +569,10 @@ router.post('/users/findPassword', async(req, res) => {
     
     // 임시 비밀번호 생헝
     const tempPassword = Math.random().toString(36).slice(-8);
+    const hashedPassword = await bcrypt.hash(tempPassword, 12);
 
     // 비밀번호 업데이트
-    await User.update({ password: tempPassword }, { where: { email } });
+    await User.update({ password: hashedPassword }, { where: { email } });
 
     // 이메일 발송
     const mailOptions = {
