@@ -76,7 +76,12 @@ const Login = () => {
       <p>
         아직 회원이 아니신가요?&nbsp;
         <Link to="/main/signup">회원가입 하러가기</Link>
-        <Link to="/main/findId">email이 생각이 안난다면?</Link>
+        <div>
+          <Link to="/main/find-id">email 찾기</Link>
+        </div>
+        <div>
+          <Link to="/main/find-password">비밀번호 찾기</Link>
+        </div>
       </p>
     </div>
   );

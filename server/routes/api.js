@@ -5,6 +5,7 @@ const router = express.Router();
 const passport = require('passport');
 const path = require('path');
 const { isNotLoggedIn, isLoggedIn } = require('./middlewares');
+const transporter = require('../config/emailConfig')
 const User = require('../models/user');
 const Post = require('../models/post');
 const Category = require('../models/category');
@@ -554,6 +555,37 @@ router.post("/users/findId", async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "서버 에러입니다." });
+  }
+});
+
+// 비밀번호 찾기
+router.post('/users/findPassword', async(req, res) => {
+  const { email } = req.body;
+  try{
+    const user = await User.findOne({ where: { email }});
+    if(!user) {
+      return res.status(404).json({ message: "일치하는 계정이 없습니다 "});
+    }
+    
+    // 임시 비밀번호 생헝
+    const tempPassword = Math.random().toString(36).slice(-8);
+
+    // 비밀번호 업데이트
+    await User.update({ password: tempPassword }, { where: { email } });
+
+    // 이메일 발송
+    const mailOptions = {
+      from: process.env.EMAIL_ADDRESS, // 발신자 이메일 주소
+      to: email, // 수신자 이메일 주소
+      subject: "새로운 비밀번호 발급", // 이메일 제목
+      text: `새로운 비밀번호: ${tempPassword}`, // 이메일 내용
+    };
+    await transporter.sendMail(mailOptions);
+
+    return res.status(200).json({ message: "임시 비밀번호가 발급되었습니다." });
+  } catch(err) {
+    console.error(err);
+    return res.status(500).json({ message: '서버 에러입니다.' });
   }
 });
 

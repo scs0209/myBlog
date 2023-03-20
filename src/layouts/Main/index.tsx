@@ -16,6 +16,7 @@ const PostEdit = loadable(() => import('../../Components/PostEdit'));
 const Login = loadable(() => import("../../Pages/Login"));
 const SignUp = loadable(() => import("../../Pages/SignUp"));
 const FindId = loadable(() => import("../../Pages/FindId"));
+const FindPassword = loadable(() => import("../../Pages/FindPassword"));
 
 const MainPage = () => {
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
@@ -77,7 +78,8 @@ const MainPage = () => {
             <Route path="/posts" element={<PostList />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/findId" element={<FindId />} />
+            <Route path="/find-id" element={<FindId />} />
+            <Route path="/find-password" element={<FindPassword />} />
             <Route path="/posts/:id" element={<PostDetail />} />
             <Route path="/posts/:id/edit" element={<PostEdit />} />
             <Route path="/categories/:categoryId" element={<CategoryList />} />
