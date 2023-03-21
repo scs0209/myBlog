@@ -9,6 +9,9 @@ const Category = () => {
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, setEditedCategoryName] = useState("");
+  const { data: userData, mutate: mutateUserData } = useSWR("/api/users", fetcher, {
+    dedupingInterval: 5000,
+  });
   const {data, error, mutate} = useSWR('/api/categories', fetcher);
 
   const toggleEdit = useCallback((categoryId: any) => {
@@ -35,6 +38,7 @@ const Category = () => {
     [editedCategoryName, toggleEdit, mutate, editedCategoryId]
   );
 
+  // 카테고리 삭제
   const onDeleteCategory = useCallback(
     (categoryId: any) => {
       axios
@@ -42,7 +46,13 @@ const Category = () => {
         .then(() => {
           mutate();
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+          if (error.response && error.response.status === 403) {
+            alert("권한이 없습니다.");
+          } else {
+            console.error(error);
+          }
+        });
     },
     [mutate]
   );
@@ -65,9 +75,9 @@ const Category = () => {
       <Link to="/main/posts">
         <h2>전체 게시글</h2>
       </Link>
-      <button onClick={() => toggleEdit(null)}>
+      {userData?.role === 'admin' && <button onClick={() => toggleEdit(null)}>
         {edit ? "취소" : "편집모드"}
-      </button>
+      </button>}
       <CategoryLi>
         {data.map((category: any) => (
           <li key={category.id}>

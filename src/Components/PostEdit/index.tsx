@@ -43,11 +43,14 @@ const PostEdit = () => {
       navigate(`/main/posts/${id}`)
     })
     .catch((error) => {
-      console.error(error)
+      console.error(error);
+      if (error.response && error.response.status === 403) {
+        alert("게시글 작성자만 수정할 수 있습니다.");
+      } else {
+        alert("게시글을 수정하는 도중 오류가 발생했습니다.");
+      }
     })
   }, [id, title, content, navigate, mutate]);
-
-  console.log(title);
 
 
   return (

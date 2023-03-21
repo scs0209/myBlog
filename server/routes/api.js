@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 const passport = require('passport');
 const path = require('path');
-const { isNotLoggedIn, isLoggedIn } = require('./middlewares');
+const { isNotLoggedIn, isLoggedIn, isAdmin } = require('./middlewares');
 const transporter = require('../config/emailConfig')
 const User = require('../models/user');
 const Post = require('../models/post');
@@ -46,7 +46,7 @@ router.post("/categories", isLoggedIn, async(req, res, next) => {
 });
 
 // 카테고리 삭제
-router.delete("/categories/:id", async (req, res) => {
+router.delete("/categories/:id", isLoggedIn, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     await Post.destroy({
@@ -68,7 +68,7 @@ router.delete("/categories/:id", async (req, res) => {
 });
 
 // 카테고리 수정
-router.put("/categories/:id", async (req, res) => {
+router.put("/categories/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
@@ -228,6 +228,10 @@ router.post('/posts/:postId/comments', isLoggedIn, async(req, res) => {
 router.patch('/posts/comments/:commentId', isLoggedIn, async(req, res) => {
   try{
     const commentId = req.params.commentId;
+    const comment = await Comment.findOne({ where: { id: commentId }});
+    if(comment.UserId !== req.user.id){//댓글 작성자와 로그인한 유저의 id가 일치하지 않으면 에러메세지와 함께 Forbidden 상태 코드를 응답
+      return res.status(403).send("댓글 작성자가 아니므로 수정할 수 없습니다.")
+    }
     const editedComment = await Comment.update(
       { content: req.body.content },
       {
@@ -248,6 +252,9 @@ router.delete('/posts/comments/:commentId', isLoggedIn, async(req, res) => {
     const deletedComment = await Comment.destroy({
       where: { id: commentId, UserId: req.user.id },
     });
+    if(!deletedComment) {
+      return res.status(403).send('댓글 작성자만 댓글을 삭제할 수 있습니다');
+    }
     res.status(204).json(deletedComment);
   } catch(err){
     console.error(err);
@@ -368,7 +375,7 @@ router.delete('/posts/comments/:commentId/replies/:replyId', isLoggedIn, async (
 });
 
 // 글 입력
-router.post("/posts", async (req, res) => {
+router.post("/posts", isLoggedIn, async (req, res) => {
   try{
     const post = await Post.create({
       title: req.body.title,
@@ -385,7 +392,7 @@ router.post("/posts", async (req, res) => {
 });
 
 //글 수정
-router.put('/main/posts/:id', async (req, res) => {
+router.put('/main/posts/:id', isLoggedIn, async (req, res) => {
   // 라우팅 경로에서 :id를 지정했기 때문에 req.params 객체에 id 프로퍼티가 들어가게 된다. 따라서 req.params.id와 req.params는 모두 id값을 가져올 수 있다. req.params 객체에는 라우팅 경로에서 지정한 다른 매개변수들도 포함된다. 여기서 req.params.id를 사용하면 서버에러가 난다.
   const { id } = req.params;
   const { title, content } = req.body;
@@ -393,6 +400,8 @@ router.put('/main/posts/:id', async (req, res) => {
     const post = await Post.findOne({ where: { id }});
     if(!post){
       res.status(404).send("해당 게시글이 없습니다.");
+    } else if(post.UserId !== req.user.id) {
+      res.status(403).send("게시글 작성자만 게시글을 수정할 수 있습니다.")
     } else {
       await post.update({ title, content });
       res.status(200).json(post);
@@ -404,7 +413,7 @@ router.put('/main/posts/:id', async (req, res) => {
 });
 
 //글 삭제
-router.delete("/main/posts/:id", async (req, res) => {
+router.delete("/main/posts/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
     const post = await Post.findByPk(id);
@@ -413,6 +422,13 @@ router.delete("/main/posts/:id", async (req, res) => {
         error: "게시글이 존재하지 않습니다.",
       });
     }
+    if (post.UserId !== req.user.id) {
+      //해당 게시글의 작성자와 현재 로그인한 사용자가 다르면 삭제하지 못하도록 에러 처리한다.
+      return res.status(403).send({
+        error: "작성자만 삭제할 수 있습니다.",
+      });
+    }
+
     // 댓글 삭제
     const comments = await Comment.findAll({
       where: { PostId: id },

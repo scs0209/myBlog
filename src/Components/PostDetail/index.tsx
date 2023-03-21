@@ -54,7 +54,11 @@ const PostDetail = () => {
           navigate("/");
         })
         .catch((error) => {
-          console.error(error);
+          if (error.response.status === 403) {
+            alert("삭제 권한이 없습니다.");
+          } else {
+            console.error(error);
+          }
         });
     }
   }, [id, navigate, mutatePost]);
@@ -135,7 +139,11 @@ const PostDetail = () => {
         })
         .catch((err) => {
           console.error(err);
-          setCommentError("댓글을 수정하는 도중 오류가 발생했습니다.");
+          if (err.response && err.response.status === 403) {
+            alert("댓글 작성자만 수정할 수 있습니다.");
+          } else {
+            setCommentError("댓글을 수정하는 도중 오류가 발생했습니다.");
+          }
         });
     },
     [setComments, setCommentError]
@@ -155,7 +163,11 @@ const PostDetail = () => {
       })
       .catch((err) => {
         console.error(err);
-        setCommentError("댓글을 삭제하는 도중 오류가 발생했습니다.");
+        if (err.response && err.response.status === 403) {
+          alert("댓글 작성자만 댓글을 삭제할 수 있습니다");
+        } else {
+          setCommentError("댓글을 삭제하는 도중 오류가 발생했습니다.");
+        }
       });
   }, []);
 
@@ -216,9 +228,13 @@ const PostDetail = () => {
           );
         })
         .catch((err) => {
-          console.error(err);
+          if (err.response && err.response.status === 403) {
+            alert("댓글 작성자만 수정할 수 있습니다.");
+          } else {
+            console.log(err);
+          }
         });
-    },
+      },
     []
   );
 
@@ -234,7 +250,11 @@ const PostDetail = () => {
             setReplies((prev) => prev.filter((reply) => reply.id !== replyId));
           })
           .catch((err) => {
-            console.error(err);
+            if (err.response && err.response.status === 403) {
+              alert("삭제 권한이 없습니다.");
+            } else {
+              console.log(err);
+            }
           });
       }
     },
