@@ -21,9 +21,7 @@ const ChangePassword = loadable(() => import("../../Pages/ChangePassword"));
 
 const MainPage = () => {
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
-  const { data: userData, mutate } = useSWR("/api/users", fetcher, {
-    dedupingInterval: 5000,
-  });
+  const { data: userData, mutate } = useSWR("/api/users", fetcher);
   const [showPost, setShowPost] = useState(false);
 
   const onLogout = useCallback(() => {
@@ -75,7 +73,8 @@ const MainPage = () => {
       <MainContainer className="main-container">
         <div className="left-side">
           <Category />
-          {userData?.role === "admin" && <button onClick={onClickCreateCategory}>+</button>}
+          {userData?.role === "admin" && 
+          <button onClick={onClickCreateCategory}>+</button>}
         </div>
         <div className="main">
           Main Layout

@@ -40,8 +40,12 @@ const CreateCategoryModal: FC<Props> = ({ show, onCloseModal, setShowCreateCateg
           alert("카테고리가 추가되었습니다.");
           mutate([...(categories ?? []), newCategory], false); // 생성한 카테고리를 화면에 바로 반영
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((error) => {
+          if (error.response && error.response.status === 403) {
+            alert("권한이 없습니다.");
+          } else {
+            console.error(error);
+          }
         });
     },
     [newCategory, setNewCategory, setShowCreateCategoryModal, categories, mutate]

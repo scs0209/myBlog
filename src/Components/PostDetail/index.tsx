@@ -12,9 +12,7 @@ import LikeButton from "../../Components/LikedButton";
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: user } = useSWR("/api/users", fetcher, {
-    dedupingInterval: 5000,
-  });
+  const { data: user } = useSWR("/api/users", fetcher);
   const {
     data: post,
     error,

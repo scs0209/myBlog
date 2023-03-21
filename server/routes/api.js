@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 const passport = require('passport');
 const path = require('path');
-const { isNotLoggedIn, isLoggedIn, isAdmin } = require('./middlewares');
+const { isNotLoggedIn, isLoggedIn } = require('./middlewares');
 const transporter = require('../config/emailConfig')
 const User = require('../models/user');
 const Post = require('../models/post');
@@ -46,7 +46,7 @@ router.post("/categories", isLoggedIn, async(req, res, next) => {
 });
 
 // 카테고리 삭제
-router.delete("/categories/:id", isLoggedIn, isAdmin, async (req, res) => {
+router.delete("/categories/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
     await Post.destroy({
@@ -608,9 +608,31 @@ router.post('/users/findPassword', async(req, res) => {
 
 // 주소와 get, post 등 메서드가 있는 것을 라우터라고 부른다.
 // 현재 유저 정보 불러오기
-router.get('/users', (req, res, next) => {
-  console.log(req.user);
-  return res.json(req.user || false);
+router.get("/users", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.json(false);
+    }
+
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+    });
+
+    if (!user) {
+      return res.json(false);
+    }
+
+    // add role to the user object
+    req.user.role = user.role;
+
+    // return user object
+    return res.json(req.user);
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 // 회원가입

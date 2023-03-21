@@ -25,7 +25,7 @@ const PostList = () => {
   );
 
   const posts = postData?.posts;
-  const totalPosts = postData?.count;
+  const totalPosts = postData?.count ?? 0;
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
 
   const startIdx = 0;
@@ -34,7 +34,6 @@ const PostList = () => {
     posts?.slice(startIdx, endIdx)
   );
 
-  console.log(posts, currentPagePosts, currentPage, totalPages);
 
   const handlePageClick = useCallback(
     (pageNum: number) => {
@@ -128,8 +127,8 @@ const PostList = () => {
   useEffect(() => {
     setCurrentPagePosts(posts?.slice(startIdx, endIdx));
   }, [currentPage, posts]);
-  console.log(currentPage, currentPagePosts)
 
+  console.log(Array.isArray(posts), totalPosts, totalPages);
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
   if (currentPagePosts === undefined) return <div>로딩중...</div>;

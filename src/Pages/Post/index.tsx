@@ -11,9 +11,7 @@ const { Option } = Select;
 
 
 const Post = () => {
-  const { data: currentUser } = useSWR("/api/users", fetcher, {
-    dedupingInterval: 5000,
-  });
+  const { data: currentUser } = useSWR("/api/users", fetcher);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState(""); // 카테고리 추가

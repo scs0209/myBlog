@@ -9,9 +9,7 @@ const Category = () => {
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, setEditedCategoryName] = useState("");
-  const { data: userData, mutate: mutateUserData } = useSWR("/api/users", fetcher, {
-    dedupingInterval: 5000,
-  });
+  const { data: userData, mutate: mutateUserData } = useSWR("/api/users", fetcher);
   const {data, error, mutate} = useSWR('/api/categories', fetcher);
 
   const toggleEdit = useCallback((categoryId: any) => {
@@ -23,20 +21,33 @@ const Category = () => {
   const onSubmitEdit = useCallback(
     (e: any) => {
       e.preventDefault();
-      if(!editedCategoryName) {
-        alert("글자를 입력해주세요.")
+      if (!editedCategoryName || !editedCategoryName.trim()) {
+        alert("글자를 입력해주세요.");
+        return;
+      }
+      if (userData?.role !== "admin") {
+        alert("관리자만 카테고리를 수정할 수 있습니다.");
         return;
       }
       axios
-        .put(`/api/categories/${editedCategoryId}`, { name: editedCategoryName })
+        .put(`/api/categories/${editedCategoryId}`, {
+          name: editedCategoryName,
+        }, {
+          withCredentials: true,
+        })
         .then(() => {
           mutate();
           toggleEdit(null);
         })
-        .catch((error) => console.error(error));
-    },
-    [editedCategoryName, toggleEdit, mutate, editedCategoryId]
+        .catch((error) => {
+          console.error(error);
+          alert("카테고리 수정에 실패했습니다.");
+        });
+      },
+    [editedCategoryName, toggleEdit, mutate, editedCategoryId, userData]
   );
+
+  console.log(userData?.role);
 
   // 카테고리 삭제
   const onDeleteCategory = useCallback(
