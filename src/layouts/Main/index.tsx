@@ -75,7 +75,7 @@ const MainPage = () => {
       <MainContainer className="main-container">
         <div className="left-side">
           <Category />
-          <button onClick={onClickCreateCategory}>+</button>
+          {userData?.role === "admin" && <button onClick={onClickCreateCategory}>+</button>}
         </div>
         <div className="main">
           Main Layout
