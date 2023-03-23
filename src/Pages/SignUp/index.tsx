@@ -4,6 +4,7 @@ import { Link, Navigate } from "react-router-dom";
 import fetcher from "../../utils/fetcher";
 import useInput from "../../utils/useInput";
 import useSWR from 'swr';
+import { Button, Error, Input, Label, LabelDiv, LinkWrapper, Name, SignUpForm, SignUpWrapper } from "./styles";
 
 const SignUp = () => {
   const { data, error, mutate } = useSWR('/api/users', fetcher);
@@ -40,8 +41,13 @@ const SignUp = () => {
         setSignUpSuccess(true);
       })
       .catch((error)=> {
-        console.log(error.response);
-        setSignUpError(error.response.data);
+        if(error.response.status === 409){
+          alert(error.response.data.message);
+          console.log(error);
+        } else {
+          setSignUpError(error.response.data);
+          console.log(error.response);
+        }
       })
       .finally(() => {});
     }
@@ -56,67 +62,68 @@ const SignUp = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <label htmlFor="email">
-          <div>
-            <span>Email</span>
-            <input
+    <SignUpWrapper>
+      <SignUpForm onSubmit={onSubmit}>
+      <h2>회원가입</h2>
+        <Label htmlFor="email">
+          <LabelDiv>
+            <Name>Email</Name>
+            <Input
               type="email"
               id="email"
               name="email"
               value={email}
               onChange={onChangeEmail}
             />
-          </div>
-        </label>
-        <label htmlFor="name">
-          <div>
-            <span>Name</span>
-            <input
+          </LabelDiv>
+        </Label>
+        <Label htmlFor="name">
+          <LabelDiv>
+            <Name>Name</Name>
+            <Input
               type="text"
               id="name"
               name="name"
               value={name}
               onChange={onChangeName}
             />
-          </div>
-        </label>
-        <label htmlFor="password">
-          <div>
-            <span>Password</span>
-            <input
+          </LabelDiv>
+        </Label>
+        <Label htmlFor="password">
+          <LabelDiv>
+            <Name>PW</Name>
+            <Input
               type="password"
               id="password"
               name="password"
               value={password}
               onChange={onChangePassword}
             />
-          </div>
-        </label>
-        <label htmlFor="password-check">
-          <span>Password Check</span>
-          <div>
-            <input
+          </LabelDiv>
+        </Label>
+        <Label htmlFor="password-check">
+          <LabelDiv>
+          <Name>PW Check</Name>
+            <Input
               type="password"
               id="password"
               name="password"
               value={passwordCheck}
               onChange={onChangePasswordCheck}
             />
-          </div>
-          {mismatchError && <div>비밀번호가 일치하지 않습니다!</div>}
-          {!name && <div>이름을 입력해주세요!</div>}
-          {signUpError && <div>{signUpError}</div>}
-          {signUpSuccess && <div>회원가입이 완료됐습니다. 로그인해주세요.</div>}
-        </label>
-        <button type="submit">회원가입</button>
-      </form>
-      <div>
+          </LabelDiv>
+          {mismatchError && <Error>비밀번호가 일치하지 않습니다!</Error>}
+          {!name && <Error>이름을 입력해주세요!</Error>}
+          {signUpError && <Error>{signUpError}</Error>}
+          {signUpSuccess && <Error>회원가입이 완료됐습니다. 로그인해주세요.</Error>}
+        </Label>
+        <Button type="submit">회원가입</Button>
+      </SignUpForm>
+      <LinkWrapper>
         이미 회원이신가요?&nbsp;
         <Link to="/main/login">로그인 하러가기</Link>
-      </div>
-    </div>
+      </LinkWrapper>
+    </SignUpWrapper>
   );
 }
 

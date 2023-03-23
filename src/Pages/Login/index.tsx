@@ -4,6 +4,7 @@ import {Link, Navigate} from 'react-router-dom';
 import useSWR from 'swr';
 import useInput from "../../utils/useInput";
 import fetcher from "../../utils/fetcher";
+import { Button, Error, Form, Input, InputContainer, Label, Links, LoginContainer, Name, Paragraph } from "./styles";
 
 const Login = () => {
   const { data, error, mutate } = useSWR('/api/users', fetcher);
@@ -30,6 +31,7 @@ const Login = () => {
       mutate(res.data, false);
     })
     .catch((err) => {
+      console.log(err);
       setLogInError(err.response.status === 401);
       setErrorMsg(err.response.data)
     });
@@ -45,47 +47,45 @@ const Login = () => {
   }
 
   return (
-    <div>
+    <LoginContainer>
       <h2>LogIn</h2>
-      <form onSubmit={onSubmitLogin}>
-        <label htmlFor="input_email">
-          <span>Email: </span>
-          <div>
-            <input
+      <Form onSubmit={onSubmitLogin}>
+        <Label htmlFor="input_email">
+          <Name>Email: </Name>
+          <InputContainer>
+            <Input
               type="email"
               name="email"
               value={email}
               onChange={onChangeEmail}
             />
-          </div>
-        </label>
-        <label htmlFor="input_pw">
-          <span>PW: </span>
-          <div>
-            <input
+          </InputContainer>
+        </Label>
+        <Label htmlFor="input_pw">
+          <Name>PW: </Name>
+          <InputContainer>
+            <Input
               type="password"
               name="password"
               value={password}
               onChange={onChangePassword}
             />
-          </div>
-          {logInError && <div>{errorMsg}</div>}
-        </label>
+          {logInError && <Error>{errorMsg}</Error>}
+          </InputContainer>
+        </Label>
         <div>
-          <button type="submit">LogIn</button>
+          <Button type="submit">LogIn</Button>
         </div>
-      </form>
-      <p>
+      </Form>
+      <Paragraph>
         아직 회원이 아니신가요?&nbsp;
         <Link to="/main/signup">회원가입 하러가기</Link>
-        <div>
-          <Link to="/main/find-id">email 찾기</Link>
-        </div>
-        <div>
-          <Link to="/main/find-password">비밀번호 찾기</Link>
-        </div>
-      </p>
-    </div>
+      </Paragraph>
+      <Links>
+        <Link to="/main/find-id">email 찾기</Link>
+        <Link to="/main/find-password">비밀번호 찾기</Link>
+      </Links>
+    </LoginContainer>
   );
 };
 

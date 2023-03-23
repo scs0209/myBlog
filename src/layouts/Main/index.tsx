@@ -77,7 +77,6 @@ const MainPage = () => {
           <button onClick={onClickCreateCategory}>+</button>}
         </div>
         <div className="main">
-          Main Layout
           <Routes>
             <Route path="/posts" element={<PostList />} />
             <Route path="/login" element={<Login />} />
