@@ -8,6 +8,7 @@ import fetcher from "../../utils/fetcher";
 const Login = () => {
   const { data, error, mutate } = useSWR('/api/users', fetcher);
   const [logInError, setLogInError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput(''); 
 
@@ -29,7 +30,8 @@ const Login = () => {
       mutate(res.data, false);
     })
     .catch((err) => {
-      setLogInError(err.res?.data?.statusCode === 401);
+      setLogInError(err.response.status === 401);
+      setErrorMsg(err.response.data)
     });
   }, [email, password, mutate]);
   
@@ -67,7 +69,7 @@ const Login = () => {
               onChange={onChangePassword}
             />
           </div>
-          {logInError && <div>이메일이나 비밀번호를 확인해주세요!</div>}
+          {logInError && <div>{errorMsg}</div>}
         </label>
         <div>
           <button type="submit">LogIn</button>
