@@ -23,3 +23,16 @@ export const MainContainer = styled.div`
     border-left: 1px solid black;
   }
 `;
+
+export const Button = styled.button`
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 3px;
+  margin-left: 0.5rem;
+  
+  :hover{
+    background-color: gray;
+    color: white;
+  }
+`

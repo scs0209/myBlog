@@ -1,13 +1,15 @@
 import loadable from "@loadable/component";
 import React, { useCallback, useState } from "react";
-import { Link, Navigate, Route, Router, Routes, useNavigate, useParams } from "react-router-dom";
-import { Header, MainContainer } from "./styles";
+import { Link, Route, Routes } from "react-router-dom";
+import { Button, Header, MainContainer } from "./styles";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import Category from "../../Components/Category";
 import CategoryList from "../../Components/CategoryList";
 import axios from "axios";
+import Avatar from 'react-avatar';
 import CreateCategoryModal from "Components/onCreateCategoryModal";
+import Menu from "../../Components/Menu";
 const Post = loadable(() => import('../../Pages/Post'));
 const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
 const PostList = loadable(() => import('../../Components/PostList'));
@@ -23,6 +25,7 @@ const MainPage = () => {
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
   const { data: userData, mutate } = useSWR("/api/users", fetcher);
   const [showPost, setShowPost] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const onLogout = useCallback(() => {
     axios.post('/api/logout', null, {
@@ -37,6 +40,15 @@ const MainPage = () => {
     setShowPost((prev) => !prev);
   }, []);
 
+  const onClickShowProfile = useCallback(() => {
+    setShowProfile((prev) => !prev);
+  }, []);
+
+  const onCloseProfileMenu = useCallback((e: any) => {
+    e.stopPropagation();
+    setShowProfile(false);
+  }, []);
+
   const onCloseModal = useCallback(() => {
     setShowCreateCategoryModal(false);
   }, []);
@@ -45,9 +57,6 @@ const MainPage = () => {
     setShowCreateCategoryModal(true);
   }, []);
   
-  // if(!userData){
-  //   return <Navigate to="/main/login" />
-  // }
   console.log(userData);
 
   return (
@@ -62,19 +71,41 @@ const MainPage = () => {
         <div>
           {!userData ? (
             <Link to="/main/login" onClick={onClickShowPost}>
-              <button>로그인</button>
+              <Button>Log In</Button>
             </Link>
-          ) : <Link to="/main/password" onClick={onClickShowPost}>
-              <button>비밀번호 변경</button>
-            </Link>}
-          <button onClick={onLogout}>로그아웃</button>
+          ) : (
+            <span onClick={onClickShowProfile}>
+              <Avatar
+                name={userData?.name}
+                src={userData?.avatar_url}
+                size="30"
+                round="60"
+                color="gray"
+              />
+              {showProfile && (
+                <Menu
+                  show={showProfile}
+                  onCloseModal={onCloseProfileMenu}
+                  style={{ top: "80px" }}
+                >
+                  <div className="profile-menu">
+                    <Link to="/main/password" onClick={onClickShowPost}>
+                      <Button>PW Change</Button>
+                    </Link>
+                    <Button onClick={onLogout}>Logout</Button>
+                  </div>
+                </Menu>
+              )}
+            </span>
+          )}
         </div>
       </Header>
       <MainContainer className="main-container">
         <div className="left-side">
           <Category />
-          {userData?.role === "admin" && 
-          <button onClick={onClickCreateCategory}>+</button>}
+          {userData?.role === "admin" && (
+            <button onClick={onClickCreateCategory}>+</button>
+          )}
         </div>
         <div className="main">
           <Routes>
