@@ -4,7 +4,7 @@ import { Link, Navigate } from "react-router-dom";
 import fetcher from "../../utils/fetcher";
 import useInput from "../../utils/useInput";
 import useSWR from 'swr';
-import { Button, Error, Input, Label, LabelDiv, LinkWrapper, Name, SignUpForm, SignUpWrapper } from "./styles";
+import { Button, Error, Input, Label, LabelDiv, LinkWrapper, Name, SignUpForm, SignUpWrapper, Success } from "./styles";
 
 const SignUp = () => {
   const { data, error, mutate } = useSWR('/api/users', fetcher);
@@ -115,7 +115,7 @@ const SignUp = () => {
           {mismatchError && <Error>비밀번호가 일치하지 않습니다!</Error>}
           {!name && <Error>이름을 입력해주세요!</Error>}
           {signUpError && <Error>{signUpError}</Error>}
-          {signUpSuccess && <Error>회원가입이 완료됐습니다. 로그인해주세요.</Error>}
+          {signUpSuccess && <Success>회원가입이 완료됐습니다. 로그인해주세요.</Success>}
         </Label>
         <Button type="submit">회원가입</Button>
       </SignUpForm>

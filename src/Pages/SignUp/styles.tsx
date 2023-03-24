@@ -61,11 +61,22 @@ export const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: gray;
+  }
 `;
 
 export const Error = styled.div`
   margin-top: 0.5rem;
   color: red;
+  font-size: 0.8rem;
+`;
+
+export const Success = styled.div`
+  margin-top: 0.5rem;
+  color: blue;
   font-size: 0.8rem;
 `;
 

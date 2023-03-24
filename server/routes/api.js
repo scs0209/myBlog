@@ -608,31 +608,9 @@ router.post('/users/findPassword', async(req, res) => {
 
 // 주소와 get, post 등 메서드가 있는 것을 라우터라고 부른다.
 // 현재 유저 정보 불러오기
-router.get("/users", async (req, res, next) => {
-  try {
-    if (!req.user) {
-      return res.json(false);
-    }
-
-    const user = await User.findOne({
-      where: {
-        id: req.user.id,
-      },
-    });
-
-    if (!user) {
-      return res.json(false);
-    }
-
-    // add role to the user object
-    req.user.role = user.role;
-
-    // return user object
-    return res.json(req.user);
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).json({ message: "Internal server error" });
-  }
+router.get('/users', (req, res, next) => {
+  console.log(req.user);
+  return res.json(req.user || false);
 });
 
 // 회원가입
