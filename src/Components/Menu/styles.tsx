@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export const CreateMenu = styled.div`
   position: absolute;
-  top: 40px;
+  top: 70px;
   right: 0px;
   z-index: 10;
   width: 120px;

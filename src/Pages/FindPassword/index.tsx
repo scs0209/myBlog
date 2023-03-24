@@ -1,5 +1,7 @@
 import axios from "axios";
+import { Button, Form, Input, Label, LabelContainer, Message } from "../../Pages/FindId/styles";
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
+import { FindPasswordContainer, Name } from "./styles";
 
 const FindPassword = () => {
   const [email, setEmail] = useState("");
@@ -26,18 +28,20 @@ const FindPassword = () => {
   }, [email]);
 
   return (
-    <div>
+    <FindPasswordContainer>
       <h2>비밀번호 찾기</h2>
-      <form onSubmit={onSubmitForm}>
-        <label>
-          이메일:
-          <input type="email" value={email} onChange={onChangeEmail} />
-        </label>
-        <button type="submit">비밀번호 찾기</button>
-      </form>
-      {message && <div>{message}</div>}
-    </div>
-  )
+      <Form onSubmit={onSubmitForm}>
+        <Label>
+          <LabelContainer>
+            <Name>Email:</Name>
+            <Input type="email" value={email} onChange={onChangeEmail} />
+          </LabelContainer>
+        </Label>
+        <Button type="submit">비밀번호 찾기</Button>
+      </Form>
+      {message && <Message>{message}</Message>}
+    </FindPasswordContainer>
+  );
 }
 
 export default FindPassword;

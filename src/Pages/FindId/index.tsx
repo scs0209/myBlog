@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import axios from "axios";
+import { Button, Email, FindIdContainer, Form, Input, Label, LabelContainer, Message, Name } from "./styles";
 
 const FindId = () => {
   const [name, setName] = useState("");
@@ -38,18 +39,20 @@ const FindId = () => {
   );
 
   return (
-    <div>
+    <FindIdContainer>
       <h2>이메일</h2>
-      <form onSubmit={onSubmitForm}>
-        <label>
-          이름:
-          <input type="text" value={name} onChange={onChangeName} />
-        </label>
-        <button type="submit">이메일 찾기</button>
-      </form>
-      {message && <div>{message}</div>}
-      {email && <div>찾은 이메일: {email}</div>}
-    </div>
+      <Form onSubmit={onSubmitForm}>
+        <Label>
+          <LabelContainer>
+            <Name>이름: </Name>
+            <Input type="text" value={name} onChange={onChangeName} />
+          </LabelContainer>
+        </Label>
+        <Button type="submit">이메일 찾기</Button>
+      </Form>
+      {message && <Message>{message}</Message>}
+      {email && <Email>찾은 이메일: {email}</Email>}
+    </FindIdContainer>
   );
 }
 

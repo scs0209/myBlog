@@ -1,7 +1,7 @@
 import loadable from "@loadable/component";
 import React, { useCallback, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import { Button, Header, MainContainer } from "./styles";
+import { Button, Header, HomeLink, MainContainer, StyledLink } from "./styles";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import Category from "../../Components/Category";
@@ -62,11 +62,11 @@ const MainPage = () => {
   return (
     <div>
       <Header>
-        SCS's Blog!
+        <HomeLink to="/">SCS's Blog!</HomeLink>
         {userData?.role === "admin" && (
-          <Link to="/main/write" onClick={onClickShowPost}>
+          <StyledLink to="/main/write" onClick={onClickShowPost}>
             포스트 작성
-          </Link>
+          </StyledLink>
         )}
         <div>
           {!userData ? (
@@ -79,7 +79,7 @@ const MainPage = () => {
                 name={userData?.name}
                 src={userData?.avatar_url}
                 size="30"
-                round="60"
+                round
                 color="gray"
               />
               {showProfile && (
