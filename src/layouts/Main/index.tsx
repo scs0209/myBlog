@@ -1,7 +1,7 @@
 import loadable from "@loadable/component";
 import React, { useCallback, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import { Button, Header, HomeLink, MainContainer, StyledLink } from "./styles";
+import { Button, CreateCategoryButton, Header, HomeLink, MainContainer, StyledLink } from "./styles";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import Category from "../../Components/Category";
@@ -104,7 +104,7 @@ const MainPage = () => {
         <div className="left-side">
           <Category />
           {userData?.role === "admin" && (
-            <button onClick={onClickCreateCategory}>+</button>
+            <CreateCategoryButton onClick={onClickCreateCategory}>+</CreateCategoryButton>
           )}
         </div>
         <div className="main">

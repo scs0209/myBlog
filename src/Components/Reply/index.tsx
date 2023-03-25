@@ -1,7 +1,7 @@
 import ReplyEdit from "../../Components/ReplyEdit";
 import React, { ChangeEvent, useCallback, useState, VFC } from "react";
 import { Reply as ReplyType } from "typings/db";
-import { Content, DeleteButton, EditButton, Name } from "./styles";
+import { Content, DeleteButton, EditButton, Name, ReplyContainer, ReplyHeader } from "./styles";
 
 interface Props{
   reply: ReplyType;
@@ -35,8 +35,8 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
   }, [onDelete, reply])
 
   return(
-    <div>
-      <div>
+    <ReplyContainer>
+      <ReplyHeader>
         <Name>{reply.User.name}</Name>
         <Content>{reply.content}</Content>
         {!isEditing && (
@@ -45,7 +45,7 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
             <DeleteButton onClick={handleDelete}>🗑</DeleteButton>
           </span>
         )}
-      </div>
+      </ReplyHeader>
       {isEditing && (
         <ReplyEdit
           onCancel={handleEditCancel}
@@ -54,7 +54,7 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
           onChange={handleContentChange}
         />
       )}
-    </div>
+    </ReplyContainer>
   )
 }
 

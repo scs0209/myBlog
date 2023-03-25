@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
-import { CategoryLi } from "./styles";
+import { Border, Button, CategoryLi, CategoryWrapper, EditButton, HeaderLink, List, ModeButton, StyledLink } from "./styles";
 
 const Category = () => {
   const [edit, setEdit] = useState(false);
@@ -82,41 +82,44 @@ const Category = () => {
 
 
   return (
-    <div className="Category">
-      <Link to="/main/posts">
+    <CategoryWrapper className="Category">
+      <HeaderLink to="/main/posts">
         <h2>전체 게시글</h2>
-      </Link>
-      {userData?.role === 'admin' && <button onClick={() => toggleEdit(null)}>
-        {edit ? "취소" : "편집모드"}
-      </button>}
+      </HeaderLink>
+      {userData?.role === "admin" && (
+        <ModeButton onClick={() => toggleEdit(null)}>
+          {edit ? "x" : "편집 모드"}
+        </ModeButton>
+      )}
+      <Border></Border>
       <CategoryLi>
         {data.map((category: any) => (
-          <li key={category.id}>
+          <List key={category.id}>
             {editedCategoryId === category.id ? (
               <form onSubmit={onSubmitEdit}>
                 <input
                   value={editedCategoryName}
                   onChange={onChangeCategoryName}
                 />
-                <button type="submit">수정</button>
+                <EditButton type="submit">수정</EditButton>
               </form>
             ) : (
-              <Link to={`/main/categories/${category.id}`}>
+              <StyledLink to={`/main/categories/${category.id}`}>
                 {category.name}
-              </Link>
+              </StyledLink>
             )}
             {edit && (
               <div>
-                <button onClick={() => toggleEdit(category.id)}>편집</button>
-                <button onClick={() => onDeleteCategory(category.id)}>
-                  삭제
-                </button>
+                <Button onClick={() => toggleEdit(category.id)}>✏</Button>
+                <Button onClick={() => onDeleteCategory(category.id)}>
+                  🗑
+                </Button>
               </div>
             )}
-          </li>
+          </List>
         ))}
       </CategoryLi>
-    </div>
+    </CategoryWrapper>
   );
 }
 

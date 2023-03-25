@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import useInput from "../../utils/useInput";
+import { CloseButton, Content, ModalWrapper } from "./styles";
 
 interface Props{
   children: React.ReactNode;
@@ -17,12 +17,12 @@ const Modal: FC<Props> = ({ children, show, onCloseModal }) => {
   }
 
   return(
-    <div onClick={onCloseModal}>
-      <div onClick={stopPropagation}>
-        <button onClick={onCloseModal}>&times;</button>
+    <ModalWrapper show={show} onClick={onCloseModal}>
+      <Content onClick={stopPropagation}>
+        <CloseButton onClick={onCloseModal}>&times;</CloseButton>
         {children}
-      </div>
-    </div>
+      </Content>
+    </ModalWrapper>
   )
 }
 

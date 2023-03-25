@@ -16,12 +16,21 @@ export const MainContainer = styled.div`
   grid-template-columns: 19% 62% 19%;
   grid-template-rows: 100fr;
   text-align: center;
+  margin-top: 1rem;
   grid: 1;
   .left-side {
     border-right: 1px solid black;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+    border-radius: 10px;
+    box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.2);
   }
   .right-side {
     border-left: 1px solid black;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+    border-radius: 10px;
+    box-shadow: -5px 0px 5px rgba(0, 0, 0, 0.2);
   }
 `;
 
@@ -58,5 +67,19 @@ export const StyledLink = styled(Link)`
 
   &:hover {
     background-color: #6B6B84;
+  }
+`;
+
+export const CreateCategoryButton = styled.button`
+  margin-bottom: 0.5rem;
+  padding: 0.1rem 2rem 0.1rem 2rem;
+  border: none;
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+  font-weight: bold;
+
+  &:hover {
+    background-color: gray;
   }
 `;

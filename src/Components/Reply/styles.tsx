@@ -1,13 +1,27 @@
 import styled from "@emotion/styled";
 
-export const Name = styled.span`
-  font-size: 12px;
-`
+export const ReplyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+`;
 
-export const Content =styled.span`
+export const ReplyHeader = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+`;
+
+export const Name = styled.span`
+  margin-right: 0.5rem;
   font-size: 12px;
+`;
+
+export const Content = styled.span`
+  font-size: 12px;
+  margin-right: 0.5rem;
   color: black;
-`
+`;
 
 export const EditButton = styled.button`
   min-height: 1.5rem;

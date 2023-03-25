@@ -4,6 +4,7 @@ import React, { FC, useCallback } from "react";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import useInput from "../../utils/useInput";
+import { Form, Input, Label, Span, SubmitButton } from "./styles";
 
 interface Props{
   show: boolean;
@@ -53,17 +54,17 @@ const CreateCategoryModal: FC<Props> = ({ show, onCloseModal, setShowCreateCateg
 
   return (
     <Modal show={show} onCloseModal={onCloseModal}>
-      <form onSubmit={onCreateCategory}>
-        <label id="category-label">
-          <span>카테고리 이름</span>
-          <input
+      <Form onSubmit={onCreateCategory}>
+        <Label id="category-label">
+          <Span>카테고리 이름</Span>
+          <Input
             id="category"
             value={newCategory}
             onChange={onChangeNewCategory}
           />
-        </label>
-        <button type="submit">생성하기</button>
-      </form>
+        </Label>
+        <SubmitButton type="submit">생성하기</SubmitButton>
+      </Form>
     </Modal>
   );
 }

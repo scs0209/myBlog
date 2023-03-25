@@ -8,10 +8,20 @@ export const Input = styled.input`
   font-size: 22px;
   font-weight: bold;
   border-bottom: 1px solid lightgrey;
-`
+
+  &:focus {
+    outline: none;
+  }
+`;
+
 export const Textarea = styled.textarea`
   width: 91%;
   margin-top: 10px;
   color: black;
   border: 1px solid lightgrey;
-`
+  resize: none;
+
+  &:focus {
+    outline: none;
+  }
+`;

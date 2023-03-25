@@ -17,26 +17,18 @@ export const List = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  border: 1px solid #ddd;
 `;
 
 export const Comments = styled.div`
   display: flex;
-  width: 70%;
+  width: 100%;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
+  align-items: flex-start;
+  margin: 0.5rem 0 0 1rem;
   font-size: 15px;
   color: gray;
-
-  & > div {
-    display: flex;
-    align-items: center;
-  }
-
-  & > div > button:first-of-type {
-    margin-right: 5px;
-  }
 `;
 
 export const CommentActions = styled.div`
@@ -46,14 +38,16 @@ export const CommentActions = styled.div`
 `;
 
 export const Content = styled.span`
-  flex: 1;
-  margin-left: 10px;
+  flex-basis: 70%;
+  margin-left: 1rem;
 `;
 
 export const Name = styled.span`
+  font-weight: bold;
   margin-right: 5px;
+  flex-basis: 30%
   min-width: 50px;
-`
+`;
 
 export const EditForm = styled.form`
   display: flex;
@@ -83,39 +77,36 @@ export const EditInput = styled.input`
 `;
 
 export const EditButton = styled.button`
-  color: #fff;
+  color: gray;
   min-width: 35px;
   min-height: 20px;
   margin-left: 0.5rem;
-  font-size: 12px;
+  font-size: 8px;
   border: none;
   border-radius: 5px;
   padding: 5px 5px;
-  background-color: black;
+  background-color: transparent;
   cursor: pointer;
 
   &:hover {
-    background-color: gray;
-    border-color: #bd2130;
+
     text-decoration: underline;
   }
 `;
 
 export const DeleteButton = styled.button`
-  color: #fff;
+  color: gray;
   min-width: 35px;
   min-height: 20px;
   margin-left: 0.1rem;
-  background-color: black;
+  background-color: transparent;
   border: none;
-  border-radius: 5px;
-  padding: 5px 5px;
-  font-size: 12px;
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+  font-size: 8px;
   cursor: pointer;
 
   &:hover {
-    background-color: gray;
-    border-color: #bd2130;
     text-decoration: underline;
   }
 `;
@@ -142,21 +133,19 @@ export const CompleteButton = styled.button`
 `;
 
 export const ReplyButton = styled.button`
-  color: #fff;
+  color: gray;
   min-width: 35px;
   min-height: 20px;
   margin-left: 0.1rem;
   margin-top: 0.5rem;
-  background-color: black;
+  background-color: transparent;
   border: none;
   border-radius: 5px;
   padding: 5px 5px;
-  font-size: 12px;
+  font-size: 8px;
   cursor: pointer;
 
   &:hover {
-    background-color: gray;
-    border-color: #bd2130;
     text-decoration: underline;
   }
 `;

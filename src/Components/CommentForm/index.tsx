@@ -1,4 +1,5 @@
-import React, { FormEvent, memo, useCallback, useState, VFC } from "react";
+import autosize from "autosize";
+import React, { FormEvent, memo, useCallback, useEffect, useRef, useState, VFC } from "react";
 import { Button, Form, Textarea } from "./styles";
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 
 const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
   const [content, setContent] = useState("");
+  const textareaRef = useRef(null);
 
   const onChangeContent = useCallback((e: any) => {
     setContent(e.target.value);
@@ -19,11 +21,17 @@ const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
     setContent("");
   }, [content, onSubmit]);
 
+  useEffect(() => {
+    if(textareaRef.current){
+      autosize(textareaRef.current);
+    }
+  });
+
   if(content === undefined) return <div>로딩중...</div>
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Textarea name="content" id="content" onChange={onChangeContent} />
+      <Textarea name="content" id="content" ref={textareaRef} onChange={onChangeContent} />
       <Button type="submit">작성하기</Button>
       {error && <div>{error}</div>}
     </Form>
