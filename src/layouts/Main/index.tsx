@@ -104,7 +104,9 @@ const MainPage = () => {
         <div className="left-side">
           <Category />
           {userData?.role === "admin" && (
-            <CreateCategoryButton onClick={onClickCreateCategory}>+</CreateCategoryButton>
+            <CreateCategoryButton onClick={onClickCreateCategory}>
+              +
+            </CreateCategoryButton>
           )}
         </div>
         <div className="main">
@@ -123,7 +125,7 @@ const MainPage = () => {
         </div>
         <div className="right-side">
           <h3>Right Side</h3>
-          {showPost && <PostSubmit />}
+          <img src={require("../../images/banner.jpg")} alt="광고 배너" style={{ width: "90%", margin:"0 0.25rem 0 0.25rem" }} />
         </div>
       </MainContainer>
       <CreateCategoryModal

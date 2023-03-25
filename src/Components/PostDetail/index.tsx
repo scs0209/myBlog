@@ -7,6 +7,7 @@ import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import { Comment, Reply } from "../../typings/db";
 import LikeButton from "../../Components/LikedButton";
+import { LikeSpan, PostActions, PostContainer, PostContent, PostDate, PostDeleteButton, PostEditButton, PostHeader, PostTitle } from "./styles";
 
 
 const PostDetail = () => {
@@ -385,27 +386,35 @@ const PostDetail = () => {
   if (`${createdDate.getFullYear()}` === "NaN") return <div>로딩중...</div>;
 
   return (
-    <>
+    <PostContainer>
       {post && (
-        <div>
-          <h2>{title}</h2>
-          <div>{content}</div>
-          <div>{dateString}</div>
-          <div>
-            좋아요: {likeCount}
-            {user && (
-              <LikeButton
-                likeCount={likeCount}
-                liked={liked}
-                onClick={handleLikedClick}
-              />
-            )}
-          </div>
-          <button onClick={handleDeleteClick}>삭제하기</button>
-          <button>
-            <Link to={`/main/posts/${id}/edit`}>수정하기</Link>
-          </button>
-        </div>
+        <>
+          <PostHeader>
+            <PostTitle>{title}</PostTitle>
+            <PostDate>{dateString}</PostDate>
+          </PostHeader>
+          <PostContent>{content}</PostContent>
+          <PostActions>
+            <div>
+              <LikeSpan>좋아요: {likeCount}</LikeSpan>
+              {user && (
+                <LikeButton
+                  likeCount={likeCount}
+                  liked={liked}
+                  onClick={handleLikedClick}
+                />
+              )}
+            </div>
+            <div>
+              <PostDeleteButton onClick={handleDeleteClick}>
+                삭제하기
+              </PostDeleteButton>
+              <PostEditButton>
+                <Link to={`/main/posts/${id}/edit`}>수정하기</Link>
+              </PostEditButton>
+            </div>
+          </PostActions>
+        </>
       )}
       <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
       <CommentList
@@ -417,7 +426,7 @@ const PostDetail = () => {
         onDeleteReply={handleReplyDelete}
         onReplyEdit={handleReplyEdit}
       />
-    </>
+    </PostContainer>
   );
 };
 

@@ -130,7 +130,7 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
                 </div>
               )}
               {replyId === comment?.id ? (
-                <div>
+                <div style={{ position: "absolute" }}>
                   <input
                     type="text"
                     value={replyContent}

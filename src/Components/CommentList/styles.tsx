@@ -174,5 +174,6 @@ export const CancelButton = styled.button`
 
 export const ButtonWrapper = styled.div`
   display: flex;
+  position: relative;
 `;
 
