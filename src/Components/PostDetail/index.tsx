@@ -406,12 +406,16 @@ const PostDetail = () => {
               )}
             </div>
             <div>
-              <PostDeleteButton onClick={handleDeleteClick}>
-                삭제하기
-              </PostDeleteButton>
-              <PostEditButton>
-                <Link to={`/main/posts/${id}/edit`}>수정하기</Link>
-              </PostEditButton>
+              {user && user.role === "admin" && (
+                <>
+                  <PostDeleteButton onClick={handleDeleteClick}>
+                    삭제하기
+                  </PostDeleteButton>
+                  <PostEditButton>
+                    <Link to={`/main/posts/${id}/edit`}>수정하기</Link>
+                  </PostEditButton>
+                </>
+              )}
             </div>
           </PostActions>
         </>
