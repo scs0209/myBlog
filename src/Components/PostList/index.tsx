@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState, VFC } from "react";
 import fetcher from "utils/fetcher";
 import useSWR from 'swr';
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { PostLi, StyledPagination } from "./styles";
+import { Dates, ListContainer, ListHeader, PaginationContainer, PostLi, View } from "./styles";
+import Pagination from "react-js-pagination";
 import Search from "../../Components/Search";
 import axios from "axios";
 
@@ -103,7 +104,7 @@ const PostList = () => {
 
 
   return (
-    <div className="List">
+    <ListContainer className="List">
       <h2>게시글 목록</h2>
       <PostLi>
         <div className="list_grid list_title">
@@ -117,7 +118,7 @@ const PostList = () => {
             createdDate.getMonth() + 1
           } - ${createdDate.getDate()}`;
           return (
-            <div
+            <ListHeader
               className="list_grid"
               key={post.id}
               onClick={() => handlePostClick(post.id)}
@@ -125,24 +126,30 @@ const PostList = () => {
               <Link to={`/main/posts/${post.id}`}>
                 <div>{post.title}</div>
               </Link>
-              <div>{post.views}</div>
-              <div>{dateString}</div>
-            </div>
+              <View>{post.views}</View>
+              <Dates>{dateString}</Dates>
+            </ListHeader>
           );
         })}
       </PostLi>
-      <StyledPagination
-        activePage={currentPage}
-        itemsCountPerPage={PAGE_SIZE}
-        totalItemsCount={totalPosts}
-        pageRangeDisplayed={5}
-        onChange={handlePageChange}
-        activeClass="active"
-        prevPageText="<"
-        nextPageText=">"
-      />
+      <PaginationContainer>
+        <Pagination
+          activePage={currentPage}
+          itemsCountPerPage={PAGE_SIZE}
+          totalItemsCount={totalPosts}
+          pageRangeDisplayed={5}
+          onChange={handlePageChange}
+          itemClass="page-item"
+          linkClass="page-link"
+          activeLinkClass="active"
+          firstPageText="<<"
+          lastPageText=">>"
+          prevPageText="<"
+          nextPageText=">"
+        />
+      </PaginationContainer>
       <Search onSearch={handleSearch} />
-    </div>
+    </ListContainer>
   );
 }
 
