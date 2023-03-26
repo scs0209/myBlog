@@ -1,5 +1,7 @@
 import axios from "axios";
+import { FindPasswordContainer, Name } from "../../Pages/FindPassword/styles";
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
+import { Button, Form, Input, Label, LabelContainer, Message } from "Pages/FindId/styles";
 
 const ChangePassword = () => {
   const [password, setPassword] = useState("");
@@ -32,23 +34,35 @@ const ChangePassword = () => {
       })
   }, [password, newPassword])
 
-  return(
-    <div>
+  return (
+    <FindPasswordContainer>
       <h2>비밀번호 변경</h2>
-      <form onSubmit={onSubmitForm}>
-        <label>
-          현재 비밀번호:
-          <input type="password" value={password} onChange={onChangePassword} />
-        </label>
-        <label>
-          새비밀번호:
-          <input type="password" value={newPassword} onChange={onChangeNewPassword} />
-        </label>
-        <button type="submit">비밀번호 변경</button>
-      </form>
-      {message && <div>{message}</div>}
-    </div>
-  )
+      <Form onSubmit={onSubmitForm}>
+        <Label>
+          <LabelContainer>
+            <Name>현재 PW:</Name>
+            <Input
+              type="password"
+              value={password}
+              onChange={onChangePassword}
+            />
+          </LabelContainer>
+        </Label>
+        <Label>
+          <LabelContainer>
+            <Name>새 PW:</Name>
+            <Input
+              type="password"
+              value={newPassword}
+              onChange={onChangeNewPassword}
+            />
+          </LabelContainer>
+        </Label>
+        <Button type="submit">비밀번호 변경</Button>
+      </Form>
+      {message && <Message>{message}</Message>}
+    </FindPasswordContainer>
+  );
 }
 
 export default ChangePassword

@@ -576,7 +576,7 @@ router.post("/users/findId", async (req, res) => {
 
 // 비밀번호 찾기
 router.post('/users/findPassword', async(req, res) => {
-  const { email } = req.body;
+  const { email, receiveEmail } = req.body;
   try{
     const user = await User.findOne({ where: { email }});
     if(!user) {
@@ -593,7 +593,7 @@ router.post('/users/findPassword', async(req, res) => {
     // 이메일 발송
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS, // 발신자 이메일 주소
-      to: email, // 수신자 이메일 주소
+      to: receiveEmail, // 수신자 이메일 주소
       subject: "새로운 비밀번호 발급", // 이메일 제목
       text: `새로운 비밀번호: ${tempPassword}`, // 이메일 내용
     };
