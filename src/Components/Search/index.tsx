@@ -1,4 +1,5 @@
 import React, { useCallback, useState, VFC } from "react";
+import { Button, Form, Input, SearchContainer } from "./styles";
 
 interface Props {
   onSearch: (keyword: string) => void;
@@ -19,12 +20,12 @@ const Search: VFC<Props> = ({onSearch}) => {
 
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={keyword} onChange={onChangeInput} placeholder="검색어를 입력하세요." />
-        <button type="submit">검색</button>
-      </form>
-    </div>
+    <SearchContainer>
+      <Form onSubmit={handleSubmit}>
+        <Input type="text" value={keyword} onChange={onChangeInput} placeholder="검색어를 입력하세요." />
+        <Button type="submit">검색</Button>
+      </Form>
+    </SearchContainer>
   );
 }
 

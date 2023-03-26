@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState, VFC } from "react";
 import fetcher from "utils/fetcher";
 import useSWR from 'swr';
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { PostLi } from "./styles";
-import Pagination from "../../Components/Pagination";
+import { PostLi, StyledPagination } from "./styles";
 import Search from "../../Components/Search";
 import axios from "axios";
 
@@ -27,7 +26,6 @@ const PostList = () => {
   const posts = postData?.posts;
   const totalPosts = postData?.count ?? 0;
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
-
   const startIdx = 0;
   const endIdx = PAGE_SIZE;
   const [currentPagePosts, setCurrentPagePosts] = useState(
@@ -35,44 +33,14 @@ const PostList = () => {
   );
 
 
-  const handlePageClick = useCallback(
+  const handlePageChange = useCallback(
     (pageNum: number) => {
       setCurrentPage(pageNum);
-      navigate(`/main/posts?page=${pageNum}&search=${searchTerm}`);
-      mutate(`/api/main/posts?page=${pageNum}&search=${searchTerm}`, false);
+      setSearchTerm("");
+      mutate();
     },
-    [setCurrentPage, mutate, navigate, searchTerm]
+    [setCurrentPage, setSearchTerm, mutate]
   );
-
-  const handleFirstPageClick = useCallback(() => {
-    if (totalPages > 0) {
-      handlePageClick(1);
-    }
-  }, [handlePageClick, totalPages]);
-
-  const handlePrevPageClick = useCallback(() => {
-    if (currentPage > 1) {
-      const prevPage = currentPage - 1;
-      setCurrentPage(prevPage);
-      navigate(`/main/posts?page=${prevPage}&search=${searchTerm}`);
-      mutate(`/api/main/posts?page=${prevPage}&search=${searchTerm}`, false); // 수정된 부분
-    }
-  }, [currentPage, setCurrentPage, mutate, navigate, searchTerm]);
-
-  const handleNextPageClick = useCallback(() => {
-    if (currentPage < totalPages) {
-      const nextPage = currentPage + 1;
-      setCurrentPage(nextPage);
-      navigate(`/main/posts?page=${nextPage}&search=${searchTerm}`);
-      mutate(`/api/main/posts?page=${nextPage}&search=${searchTerm}`, false); // 수정된 부분
-    }
-  }, [currentPage, totalPages, setCurrentPage, mutate, navigate, searchTerm]);
-
-  const handleLastPageClick = useCallback(() => {
-    if (totalPages > 0) {
-      handlePageClick(totalPages);
-    }
-  }, [handlePageClick, totalPages]);
 
   const handleSearch = useCallback(
     (keyword: string) => {
@@ -126,12 +94,13 @@ const PostList = () => {
   //currentPagePosts 변경 될 때마다 업데이트 해줘서 페이지네이션할 때 오류 안나게 해주기 위해 사용
   useEffect(() => {
     setCurrentPagePosts(posts?.slice(startIdx, endIdx));
-  }, [currentPage, posts]);
+  }, [postData, startIdx, endIdx]);
 
-  console.log(Array.isArray(posts), totalPosts, totalPages);
+
+  console.log(Array.isArray(posts), startIdx, endIdx, currentPagePosts);
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
-  if (currentPagePosts === undefined) return <div>로딩중...</div>;
+
 
   return (
     <div className="List">
@@ -162,14 +131,15 @@ const PostList = () => {
           );
         })}
       </PostLi>
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        handlePageClick={handlePageClick}
-        handleFirstPageClick={handleFirstPageClick}
-        handlePrevPageClick={handlePrevPageClick}
-        handleNextPageClick={handleNextPageClick}
-        handleLastPageClick={handleLastPageClick}
+      <StyledPagination
+        activePage={currentPage}
+        itemsCountPerPage={PAGE_SIZE}
+        totalItemsCount={totalPosts}
+        pageRangeDisplayed={5}
+        onChange={handlePageChange}
+        activeClass="active"
+        prevPageText="<"
+        nextPageText=">"
       />
       <Search onSearch={handleSearch} />
     </div>
