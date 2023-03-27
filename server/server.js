@@ -4,8 +4,11 @@ console.log("SECRET_KEY:", process.env.COOKIE_SECRET);
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const morgan = require('morgan');
 const path = require('path');
+const hpp = require("hpp");
+const helmet = require("helmet");
 const apiRouter = require('./routes/api');
 const passport = require('passport');
 
@@ -23,8 +26,23 @@ sequelize.sync({ force: false })
   .catch((err) => {
     console.log(err);
   });
+  const prod = process.env.NODE_ENV === "production";
 
-app.use(morgan('dev'));
+
+if (prod) {
+  app.enable("trust proxy");
+  app.use(morgan("combined"));
+  app.use(helmet({ contentSecurityPolicy: false }));
+  app.use(hpp());
+} else {
+  app.use(morgan("dev"));
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    })
+  );
+} 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
@@ -37,6 +55,10 @@ const sessionOption = {
     httpOnly: true,
   },
 };
+if (prod) {
+  sessionOption.cookie.secure = true;
+  sessionOption.cookie.proxy = true;
+}
 app.use(session(sessionOption));
 app.use(passport.initialize());
 app.use(passport.session());

@@ -28,7 +28,7 @@ const FindPassword = () => {
         setReceiveEmail("");
       })
       .catch((err) => {
-        setMessage(err.response.data.messages);
+        setMessage(err.response.data.message);
         setEmail("");
         setReceiveEmail("");
       })
