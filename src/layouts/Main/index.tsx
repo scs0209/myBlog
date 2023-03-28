@@ -22,13 +22,14 @@ const FindPassword = loadable(() => import("../../Pages/FindPassword"));
 const ChangePassword = loadable(() => import("../../Pages/ChangePassword"));
 
 const MainPage = () => {
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
-  const { data: userData, mutate } = useSWR("/api/users", fetcher);
+  const { data: userData, mutate } = useSWR(`${backUrl}/users`, fetcher);
   const [showPost, setShowPost] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
   const onLogout = useCallback(() => {
-    axios.post('/api/logout', null, {
+    axios.post(`${backUrl}/logout`, null, {
       withCredentials: true
     })
     .then(() => {

@@ -6,11 +6,15 @@ import fetcher from "../../utils/fetcher";
 import { Border, Button, CategoryLi, CategoryWrapper, EditButton, HeaderLink, List, ModeButton, StyledLink } from "./styles";
 
 const Category = () => {
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, setEditedCategoryName] = useState("");
-  const { data: userData, mutate: mutateUserData } = useSWR("/api/users", fetcher);
-  const {data, error, mutate} = useSWR('/api/categories', fetcher);
+  const { data: userData, mutate: mutateUserData } = useSWR(
+    `${backUrl}/users`,
+    fetcher
+  );
+  const { data, error, mutate } = useSWR(`${backUrl}/categories`, fetcher);
 
   const toggleEdit = useCallback((categoryId: any) => {
     setEdit((prev) => !prev);
@@ -30,7 +34,7 @@ const Category = () => {
         return;
       }
       axios
-        .put(`/api/categories/${editedCategoryId}`, {
+        .put(`${backUrl}/categories/${editedCategoryId}`, {
           name: editedCategoryName,
         }, {
           withCredentials: true,
@@ -53,7 +57,7 @@ const Category = () => {
   const onDeleteCategory = useCallback(
     (categoryId: any) => {
       axios
-        .delete(`/api/categories/${categoryId}`)
+        .delete(`${backUrl}/categories/${categoryId}`)
         .then(() => {
           mutate();
         })

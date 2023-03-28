@@ -8,16 +8,17 @@ import ReactPaginate from 'react-paginate';
 import { PaginationContainer } from "./styles";
 
 const CategoryList = () => {
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
   const { categoryId } = useParams<{ categoryId: string }>();
   const [pageNumber, setPageNumber] = useState(0);
 
   const { data: categoryData, error: categoryError } = useSWR(
-    `/api/categories/${categoryId}`,
+    `${backUrl}/categories/${categoryId}`,
     fetcher
   );
 
   const { data: postData, error: postError } = useSWR(
-    `/api/categories/${categoryId}/posts`,
+    `${backUrl}/categories/${categoryId}/posts`,
     fetcher
   );
 

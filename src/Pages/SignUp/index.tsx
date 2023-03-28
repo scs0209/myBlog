@@ -7,7 +7,8 @@ import useSWR from 'swr';
 import { Button, Error, Input, Label, LabelDiv, LinkWrapper, Name, SignUpForm, SignUpWrapper, Success } from "./styles";
 
 const SignUp = () => {
-  const { data, error, mutate } = useSWR('/api/users', fetcher);
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const { data, error, mutate } = useSWR(`${backUrl}/users`, fetcher);
   const [email, onChangeEmail] = useInput('');
   const [name, onChangeName] = useInput('');
   const [password, setPassword] = useState('');
@@ -31,7 +32,7 @@ const SignUp = () => {
     if(!mismatchError && name){
       setSignUpError('');
       setSignUpSuccess(false);
-      axios.post('/api/users', {
+      axios.post(`${backUrl}/users`, {
         email, name, password
       },{
         withCredentials: true,

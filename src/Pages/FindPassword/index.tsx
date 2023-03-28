@@ -4,6 +4,7 @@ import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { FindPasswordContainer, Name } from "./styles";
 
 const FindPassword = () => {
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
   const [email, setEmail] = useState("");
   const [receiveEmail, setReceiveEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -19,7 +20,7 @@ const FindPassword = () => {
   const onSubmitForm = useCallback((e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post(`/api/users/findPassword`, { email, receiveEmail }, {
+      .post(`${backUrl}/users/findPassword`, { email, receiveEmail }, {
         withCredentials: true,
       })
       .then((res) => {

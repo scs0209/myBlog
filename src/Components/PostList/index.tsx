@@ -9,6 +9,7 @@ import axios from "axios";
 
 
 const PostList = () => {
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
   const navigate = useNavigate();
   const location = useLocation(); // 현재 경로(location) 정보 가져오기
   const queryParams = new URLSearchParams(location.search);
@@ -20,7 +21,7 @@ const PostList = () => {
     error,
     mutate,
   } = useSWR(
-    `/api/main/posts?page=${currentPage}&search=${searchTerm}`,
+    `${backUrl}/main/posts?page=${currentPage}&search=${searchTerm}`,
     fetcher
   );
 
@@ -48,7 +49,7 @@ const PostList = () => {
       setSearchTerm(keyword);
       setCurrentPage(1);
       navigate(`/main/posts?page=1&search=${keyword}`);
-      mutate(`/api/main/posts?page=1&search=${keyword}`, false);
+      mutate(`${backUrl}/main/posts?page=1&search=${keyword}`, false);
     },
     [setSearchTerm, setCurrentPage, navigate, mutate]
   );
@@ -56,7 +57,7 @@ const PostList = () => {
   const handlePostClick = useCallback(
     (postId: any) => {
       axios
-        .post(`/api/main/posts/${postId}/views`)
+        .post(`${backUrl}/main/posts/${postId}/views`)
         .then((response) => {
           console.log(response.data.message);
           const updatedPosts = currentPagePosts.map((post: any) => {

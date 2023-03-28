@@ -6,9 +6,10 @@ import autosize from "autosize";
 import axios from "axios";
 
 const PostEdit = () => {
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: post, mutate } = useSWR(`/api/main/posts/${id}`, fetcher);
+  const { data: post, mutate } = useSWR(`${backUrl}/main/posts/${id}`, fetcher);
   const [title, setTitle] = useState(post?.title || "");
   const [content, setContent] = useState(post?.content || "");
   const textareaRef = useRef(null);
@@ -31,27 +32,32 @@ const PostEdit = () => {
 
   const handleSubmit = useCallback((e: any) => {
     e.preventDefault();
-    axios.put(`/api/main/posts/${id}`, {
-      title,
-      content
-    }, {
-      withCredentials: true,
-    })
-    .then(() => {
-      mutate('api/main/posts');
-      // 수정하고 나면 내가 수정한 내용을 보기 위해 그 페이지로 가게 해주기!
-      navigate(`/main/posts/${id}`)
-    })
-    .catch((error) => {
-      console.error(error);
-      if (error.response && error.response.status === 403) {
-        alert("게시글 작성자만 수정할 수 있습니다.");
-      } else if (error.response && error.response.status === 401) {
-        alert(error.response.data);
-      } else {
-        alert("게시글을 수정하는 도중 오류가 발생했습니다.");
-      }
-    })
+    axios
+      .put(
+        `${backUrl}/main/posts/${id}`,
+        {
+          title,
+          content,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then(() => {
+        mutate(`${backUrl}/main/posts`);
+        // 수정하고 나면 내가 수정한 내용을 보기 위해 그 페이지로 가게 해주기!
+        navigate(`/main/posts/${id}`);
+      })
+      .catch((error) => {
+        console.error(error);
+        if (error.response && error.response.status === 403) {
+          alert("게시글 작성자만 수정할 수 있습니다.");
+        } else if (error.response && error.response.status === 401) {
+          alert(error.response.data);
+        } else {
+          alert("게시글을 수정하는 도중 오류가 발생했습니다.");
+        }
+      });
   }, [id, title, content, navigate, mutate]);
 
 

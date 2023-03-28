@@ -7,7 +7,8 @@ import fetcher from "../../utils/fetcher";
 import { Button, Error, Form, Input, InputContainer, Label, Links, LoginContainer, Name, Paragraph } from "./styles";
 
 const Login = () => {
-  const { data, error, mutate } = useSWR('/api/users', fetcher);
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const { data, error, mutate } = useSWR(`${backUrl}/users`, fetcher);
   const [logInError, setLogInError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [email, onChangeEmail] = useInput('');
@@ -18,7 +19,7 @@ const Login = () => {
     e.preventDefault();
     setLogInError(false);
     axios.post(
-      '/api/login',
+      `${backUrl}/login`,
       { 
         email, password
       },

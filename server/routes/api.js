@@ -15,11 +15,6 @@ const Replies = require('../models/reply');
 
 
 
-router.get("/", (req, res, next) => {
-  res.sendFile(path.join(__dirname, "..", "public"));
-});
-
-
 // 카테고리 목록 가져오기
 router.get("/categories", async (req, res, next) => {
   try {
