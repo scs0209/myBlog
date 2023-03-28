@@ -4,7 +4,7 @@ import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { Button, Form, Input, Label, LabelContainer, Message } from "Pages/FindId/styles";
 
 const ChangePassword = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");

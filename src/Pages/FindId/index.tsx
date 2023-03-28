@@ -3,7 +3,7 @@ import axios from "axios";
 import { Button, Email, FindIdContainer, Form, Input, Label, LabelContainer, Message, Name } from "./styles";
 
 const FindId = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");

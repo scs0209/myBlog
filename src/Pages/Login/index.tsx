@@ -7,7 +7,7 @@ import fetcher from "../../utils/fetcher";
 import { Button, Error, Form, Input, InputContainer, Label, Links, LoginContainer, Name, Paragraph } from "./styles";
 
 const Login = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const { data, error, mutate } = useSWR(`${backUrl}/users`, fetcher);
   const [logInError, setLogInError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");

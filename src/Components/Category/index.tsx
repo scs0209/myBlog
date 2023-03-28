@@ -6,7 +6,7 @@ import fetcher from "../../utils/fetcher";
 import { Border, Button, CategoryLi, CategoryWrapper, EditButton, HeaderLink, List, ModeButton, StyledLink } from "./styles";
 
 const Category = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, setEditedCategoryName] = useState("");

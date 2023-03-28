@@ -11,7 +11,7 @@ const { Option } = Select;
 
 
 const Post = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const { data: currentUser } = useSWR(`${backUrl}/users`, fetcher);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

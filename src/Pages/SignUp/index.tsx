@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import { Button, Error, Input, Label, LabelDiv, LinkWrapper, Name, SignUpForm, SignUpWrapper, Success } from "./styles";
 
 const SignUp = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const { data, error, mutate } = useSWR(`${backUrl}/users`, fetcher);
   const [email, onChangeEmail] = useInput('');
   const [name, onChangeName] = useInput('');

@@ -8,7 +8,7 @@ import ReactPaginate from 'react-paginate';
 import { PaginationContainer } from "./styles";
 
 const CategoryList = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const { categoryId } = useParams<{ categoryId: string }>();
   const [pageNumber, setPageNumber] = useState(0);
 

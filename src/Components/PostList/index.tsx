@@ -9,7 +9,7 @@ import axios from "axios";
 
 
 const PostList = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const navigate = useNavigate();
   const location = useLocation(); // 현재 경로(location) 정보 가져오기
   const queryParams = new URLSearchParams(location.search);

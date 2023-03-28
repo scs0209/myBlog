@@ -11,7 +11,7 @@ import { LikeSpan, PostActions, PostContainer, PostContent, PostDate, PostDelete
 
 
 const PostDetail = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: user } = useSWR(`${backUrl}/users`, fetcher);

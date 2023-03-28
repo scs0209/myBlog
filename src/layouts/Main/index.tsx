@@ -22,7 +22,7 @@ const FindPassword = loadable(() => import("../../Pages/FindPassword"));
 const ChangePassword = loadable(() => import("../../Pages/ChangePassword"));
 
 const MainPage = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/";
+  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
   const { data: userData, mutate } = useSWR(`${backUrl}/users`, fetcher);
   const [showPost, setShowPost] = useState(false);
