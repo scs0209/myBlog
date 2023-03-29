@@ -6,8 +6,11 @@ import useInput from "../../utils/useInput";
 import useSWR from 'swr';
 import { Button, Error, Input, Label, LabelDiv, LinkWrapper, Name, SignUpForm, SignUpWrapper, Success } from "./styles";
 
+const backUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const SignUp = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const { data, error, mutate } = useSWR(`${backUrl}/users`, fetcher);
   const [email, onChangeEmail] = useInput('');
   const [name, onChangeName] = useInput('');

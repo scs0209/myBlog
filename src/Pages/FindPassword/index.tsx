@@ -3,8 +3,11 @@ import { Button, Form, Input, Label, LabelContainer, Message } from "../../Pages
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { FindPasswordContainer, Name } from "./styles";
 
+const backUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const FindPassword = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const [email, setEmail] = useState("");
   const [receiveEmail, setReceiveEmail] = useState("");
   const [message, setMessage] = useState("");

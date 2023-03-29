@@ -12,8 +12,11 @@ interface Props{
   setShowCreateCategoryModal: (flag: boolean) => void;
 }
 
+const backUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const CreateCategoryModal: FC<Props> = ({ show, onCloseModal, setShowCreateCategoryModal }) => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const [newCategory, onChangeNewCategory, setNewCategory] = useInput('');
   const { data: categories, error, mutate } = useSWR(`${backUrl}/categories`, fetcher)
 

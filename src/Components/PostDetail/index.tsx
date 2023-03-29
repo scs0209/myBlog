@@ -10,8 +10,11 @@ import LikeButton from "../../Components/LikedButton";
 import { LikeSpan, PostActions, PostContainer, PostContent, PostDate, PostDeleteButton, PostEditButton, PostHeader, PostTitle } from "./styles";
 
 
+const backUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const PostDetail = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: user } = useSWR(`${backUrl}/users`, fetcher);

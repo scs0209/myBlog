@@ -76,6 +76,3 @@ app.listen(PORT, () => {
   console.log(`Server On : http://localhost:${PORT}/`);
 });
 
-app.get("/", (req, res) => {
-  res.send("SCS 서버 구동 완료");
-});

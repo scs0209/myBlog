@@ -5,8 +5,11 @@ import useSWR from 'swr';
 import autosize from "autosize";
 import axios from "axios";
 
+const backUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const PostEdit = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: post, mutate } = useSWR(`${backUrl}/main/posts/${id}`, fetcher);

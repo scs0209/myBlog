@@ -3,8 +3,11 @@ import { FindPasswordContainer, Name } from "../../Pages/FindPassword/styles";
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { Button, Form, Input, Label, LabelContainer, Message } from "Pages/FindId/styles";
 
+const backUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const ChangePassword = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");

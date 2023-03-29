@@ -10,8 +10,11 @@ import { Select } from "antd";
 const { Option } = Select;
 
 
+const backUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const Post = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const { data: currentUser } = useSWR(`${backUrl}/users`, fetcher);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

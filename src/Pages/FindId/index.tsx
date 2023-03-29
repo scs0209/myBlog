@@ -2,8 +2,11 @@ import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import axios from "axios";
 import { Button, Email, FindIdContainer, Form, Input, Label, LabelContainer, Message, Name } from "./styles";
 
+const backUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const FindId = () => {
-  const backUrl = "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
