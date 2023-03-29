@@ -64,7 +64,9 @@ const Category = () => {
   const onDeleteCategory = useCallback(
     (categoryId: any) => {
       axios
-        .delete(`${backUrl}/api/categories/${categoryId}`)
+        .delete(`${backUrl}/api/categories/${categoryId}`, {
+          withCredentials: true,
+        })
         .then(() => {
           mutate();
         })
