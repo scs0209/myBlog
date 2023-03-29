@@ -31,13 +31,15 @@ const CreateCategoryModal: FC<Props> = ({ show, onCloseModal, setShowCreateCateg
         return;
       }
       // 입력창 비우면 생성 x
-      if(!newCategory) {
+      if (!newCategory || !newCategory.trim()) {
         alert("제목을 입력해주세요!");
         return;
       }
       axios
         .post(`${backUrl}/api/categories`, {
           name: newCategory,
+        }, {
+          withCredentials: true,
         })
         .then(() => {
           setShowCreateCategoryModal(false);

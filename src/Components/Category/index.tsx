@@ -64,7 +64,7 @@ const Category = () => {
   const onDeleteCategory = useCallback(
     (categoryId: any) => {
       axios
-        .delete(`${backUrl}/categories/${categoryId}`)
+        .delete(`${backUrl}/api/categories/${categoryId}`)
         .then(() => {
           mutate();
         })
