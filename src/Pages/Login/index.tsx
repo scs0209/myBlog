@@ -11,7 +11,7 @@ const backUrl =
     ? "http://localhost:5000"
     : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const Login = () => {
-  const { data, error, mutate } = useSWR(`${backUrl}/users`, fetcher);
+  const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
   const [logInError, setLogInError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [email, onChangeEmail] = useInput('');
@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     setLogInError(false);
     axios.post(
-      `${backUrl}/login`,
+      `${backUrl}/api/login`,
       { 
         email, password
       },

@@ -20,7 +20,7 @@ const FindId = () => {
       e.preventDefault();
       axios
         .post(
-          `${backUrl}/users/findId`,
+          `${backUrl}/api/users/findId`,
           { name },
           {
             withCredentials: true,

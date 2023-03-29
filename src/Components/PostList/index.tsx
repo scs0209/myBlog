@@ -24,7 +24,7 @@ const PostList = () => {
     error,
     mutate,
   } = useSWR(
-    `${backUrl}/main/posts?page=${currentPage}&search=${searchTerm}`,
+    `${backUrl}/api/main/posts?page=${currentPage}&search=${searchTerm}`,
     fetcher
   );
 
@@ -52,7 +52,7 @@ const PostList = () => {
       setSearchTerm(keyword);
       setCurrentPage(1);
       navigate(`/main/posts?page=1&search=${keyword}`);
-      mutate(`${backUrl}/main/posts?page=1&search=${keyword}`, false);
+      mutate(`${backUrl}/api/main/posts?page=1&search=${keyword}`, false);
     },
     [setSearchTerm, setCurrentPage, navigate, mutate]
   );
@@ -60,7 +60,7 @@ const PostList = () => {
   const handlePostClick = useCallback(
     (postId: any) => {
       axios
-        .post(`${backUrl}/main/posts/${postId}/views`)
+        .post(`${backUrl}/api/main/posts/${postId}/views`)
         .then((response) => {
           console.log(response.data.message);
           const updatedPosts = currentPagePosts.map((post: any) => {

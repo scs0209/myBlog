@@ -16,12 +16,12 @@ const CategoryList = () => {
   const [pageNumber, setPageNumber] = useState(0);
 
   const { data: categoryData, error: categoryError } = useSWR(
-    `${backUrl}/categories/${categoryId}`,
+    `${backUrl}/api/categories/${categoryId}`,
     fetcher
   );
 
   const { data: postData, error: postError } = useSWR(
-    `${backUrl}/categories/${categoryId}/posts`,
+    `${backUrl}/api/categories/${categoryId}/posts`,
     fetcher
   );
 

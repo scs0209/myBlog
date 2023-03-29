@@ -14,10 +14,10 @@ const Category = () => {
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, setEditedCategoryName] = useState("");
   const { data: userData, mutate: mutateUserData } = useSWR(
-    `${backUrl}/users`,
+    `${backUrl}/api/users`,
     fetcher
   );
-  const { data, error, mutate } = useSWR(`${backUrl}/categories`, fetcher);
+  const { data, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
 
   const toggleEdit = useCallback((categoryId: any) => {
     setEdit((prev) => !prev);
@@ -37,11 +37,15 @@ const Category = () => {
         return;
       }
       axios
-        .put(`${backUrl}/categories/${editedCategoryId}`, {
-          name: editedCategoryName,
-        }, {
-          withCredentials: true,
-        })
+        .put(
+          `${backUrl}/api/categories/${editedCategoryId}`,
+          {
+            name: editedCategoryName,
+          },
+          {
+            withCredentials: true,
+          }
+        )
         .then(() => {
           mutate();
           toggleEdit(null);

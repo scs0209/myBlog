@@ -18,7 +18,7 @@ const backUrl =
     : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const CreateCategoryModal: FC<Props> = ({ show, onCloseModal, setShowCreateCategoryModal }) => {
   const [newCategory, onChangeNewCategory, setNewCategory] = useInput('');
-  const { data: categories, error, mutate } = useSWR(`${backUrl}/categories`, fetcher)
+  const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher)
 
   const onCreateCategory = useCallback(
     (e: any) => {
@@ -36,7 +36,7 @@ const CreateCategoryModal: FC<Props> = ({ show, onCloseModal, setShowCreateCateg
         return;
       }
       axios
-        .post(`${backUrl}/categories`, {
+        .post(`${backUrl}/api/categories`, {
           name: newCategory,
         })
         .then(() => {

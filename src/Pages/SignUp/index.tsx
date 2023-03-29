@@ -11,7 +11,7 @@ const backUrl =
     ? "http://localhost:5000"
     : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const SignUp = () => {
-  const { data, error, mutate } = useSWR(`${backUrl}/users`, fetcher);
+  const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
   const [email, onChangeEmail] = useInput('');
   const [name, onChangeName] = useInput('');
   const [password, setPassword] = useState('');
@@ -35,7 +35,7 @@ const SignUp = () => {
     if(!mismatchError && name){
       setSignUpError('');
       setSignUpSuccess(false);
-      axios.post(`${backUrl}/users`, {
+      axios.post(`${backUrl}/api/users`, {
         email, name, password
       },{
         withCredentials: true,

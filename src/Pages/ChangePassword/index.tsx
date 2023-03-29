@@ -23,7 +23,7 @@ const ChangePassword = () => {
   const onSubmitForm = useCallback((e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .put(`${backUrl}/users/password`, { currentPassword: password, newPassword }, {
+      .put(`${backUrl}/api/users/password`, { currentPassword: password, newPassword }, {
         withCredentials: true,
       })
       .then((res) => {

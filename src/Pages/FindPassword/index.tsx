@@ -23,7 +23,7 @@ const FindPassword = () => {
   const onSubmitForm = useCallback((e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post(`${backUrl}/users/findPassword`, { email, receiveEmail }, {
+      .post(`${backUrl}/api/users/findPassword`, { email, receiveEmail }, {
         withCredentials: true,
       })
       .then((res) => {

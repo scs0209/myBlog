@@ -17,22 +17,22 @@ const backUrl =
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: user } = useSWR(`${backUrl}/users`, fetcher);
+  const { data: user } = useSWR(`${backUrl}/api/users`, fetcher);
   const {
     data: post,
     error,
     mutate: mutatePost,
-  } = useSWR(`${backUrl}/main/posts/${id}`, fetcher);
+  } = useSWR(`${backUrl}/api/main/posts/${id}`, fetcher);
   const { data: commentsData, mutate: mutateComments } = useSWR(
-    `${backUrl}/posts/${id}/comments`,
+    `${backUrl}/api/posts/${id}/comments`,
     fetcher
   );
   const { data: likeInfo, mutate: mutateLikeInfo } = useSWR(
-    `${backUrl}/posts/${id}/like-info`,
+    `${backUrl}/api/posts/${id}/like-info`,
     fetcher
   );
   const { data: repliesData, mutate: mutateReplies } = useSWR(
-    `${backUrl}/posts/${id}/replies`,
+    `${backUrl}/api/posts/${id}/replies`,
     fetcher
   );
   
@@ -49,11 +49,11 @@ const PostDetail = () => {
     const confirmResult = window.confirm("정말로 삭제하시겠습니까?");
     if (confirmResult) {
       axios
-        .delete(`${backUrl}/main/posts/${id}`, {
+        .delete(`${backUrl}/api/main/posts/${id}`, {
           withCredentials: true,
         })
         .then(() => {
-          mutatePost(`${backUrl}/main/posts`, false);
+          mutatePost(`${backUrl}/api/main/posts`, false);
           navigate("/");
         })
         .catch((error) => {
@@ -77,7 +77,7 @@ const PostDetail = () => {
       }
       axios
         .post(
-          `${backUrl}/posts/${id}/comments`,
+          `${backUrl}/api/posts/${id}/comments`,
           {
             content,
             postId: id,
@@ -125,7 +125,7 @@ const PostDetail = () => {
       }
       axios
         .patch(
-          `${backUrl}/posts/comments/${commentId}`,
+          `${backUrl}/api/posts/comments/${commentId}`,
           {
             content: content,
           },
@@ -164,7 +164,7 @@ const PostDetail = () => {
   // 댓글 삭제
   const handleCommentDelete = useCallback((commentId: number) => {
     axios
-      .delete(`${backUrl}/posts/comments/${commentId}`, {
+      .delete(`${backUrl}/api/posts/comments/${commentId}`, {
         withCredentials: true,
       })
       .then(() => {
@@ -200,7 +200,7 @@ const PostDetail = () => {
 
     // 댓글에 대한 답글 추가 API 호출
     axios
-      .post(`${backUrl}/posts/comments/${commentId}/replies`, newReply, {
+      .post(`${backUrl}/api/posts/comments/${commentId}/replies`, newReply, {
       withCredentials: true,
       })
       .then((response) => {
@@ -227,7 +227,7 @@ const PostDetail = () => {
 
       axios
         .put(
-          `${backUrl}/posts/comments/${commentId}/replies/${replyId}`,
+          `${backUrl}/api/posts/comments/${commentId}/replies/${replyId}`,
           { content: editedContent },
           {
             withCredentials: true,
@@ -262,7 +262,7 @@ const PostDetail = () => {
     (commentId: number, replyId: number) => {
       if (window.confirm("정말 삭제하시겠습니까?")) {
         axios
-          .delete(`${backUrl}/posts/comments/${commentId}/replies/${replyId}`, {
+          .delete(`${backUrl}/api/posts/comments/${commentId}/replies/${replyId}`, {
             withCredentials: true,
           })
           .then(() => {
@@ -330,7 +330,7 @@ const PostDetail = () => {
 
       axios
         .post(
-          `${backUrl}/posts/${id}/like`,
+          `${backUrl}/api/posts/${id}/like`,
           {
             UserId: user.id,
             PostID: id,

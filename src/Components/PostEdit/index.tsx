@@ -12,7 +12,7 @@ const backUrl =
 const PostEdit = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: post, mutate } = useSWR(`${backUrl}/main/posts/${id}`, fetcher);
+  const { data: post, mutate } = useSWR(`${backUrl}/api/main/posts/${id}`, fetcher);
   const [title, setTitle] = useState(post?.title || "");
   const [content, setContent] = useState(post?.content || "");
   const textareaRef = useRef(null);
@@ -37,7 +37,7 @@ const PostEdit = () => {
     e.preventDefault();
     axios
       .put(
-        `${backUrl}/main/posts/${id}`,
+        `${backUrl}/api/main/posts/${id}`,
         {
           title,
           content,
@@ -47,7 +47,7 @@ const PostEdit = () => {
         }
       )
       .then(() => {
-        mutate(`${backUrl}/main/posts`);
+        mutate(`${backUrl}/api/main/posts`);
         // 수정하고 나면 내가 수정한 내용을 보기 위해 그 페이지로 가게 해주기!
         navigate(`/main/posts/${id}`);
       })

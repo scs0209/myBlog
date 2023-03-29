@@ -27,12 +27,12 @@ const backUrl =
     : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const MainPage = () => {
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
-  const { data: userData, mutate } = useSWR(`${backUrl}/users`, fetcher);
+  const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
   const [showPost, setShowPost] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
   const onLogout = useCallback(() => {
-    axios.post(`${backUrl}/logout`, null, {
+    axios.post(`${backUrl}/api/logout`, null, {
       withCredentials: true
     })
     .then(() => {

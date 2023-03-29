@@ -15,17 +15,17 @@ const backUrl =
     ? "http://localhost:5000"
     : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const Post = () => {
-  const { data: currentUser } = useSWR(`${backUrl}/users`, fetcher);
+  const { data: currentUser } = useSWR(`${backUrl}/api/users`, fetcher);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState(""); // 카테고리 추가
   const textareaRef = useRef(null);
 
-  const { data: postData, mutate } = useSWR(`${backUrl}/posts`, fetcher, {
+  const { data: postData, mutate } = useSWR(`${backUrl}/api/posts`, fetcher, {
     revalidateOnMount: true,
   });
 
-  const { data: categoryData } = useSWR(`${backUrl}/categories`, fetcher);
+  const { data: categoryData } = useSWR(`${backUrl}/api/categories`, fetcher);
 
   const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -61,7 +61,7 @@ const Post = () => {
       }
       axios
         .post(
-          `${backUrl}/posts`,
+          `${backUrl}/api/posts`,
           {
             title,
             content,
