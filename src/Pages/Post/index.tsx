@@ -21,7 +21,7 @@ const Post = () => {
   const [category, setCategory] = useState(""); // 카테고리 추가
   const textareaRef = useRef(null);
 
-  const { data: postData, mutate } = useSWR(`${backUrl}/api/posts`, fetcher, {
+  const { data: postData, mutate } = useSWR(`${backUrl}/api/main/posts`, fetcher, {
     revalidateOnMount: true,
   });
 
@@ -61,7 +61,7 @@ const Post = () => {
       }
       axios
         .post(
-          `${backUrl}/api/posts`,
+          `${backUrl}/api/main/posts`,
           {
             title,
             content,

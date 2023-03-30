@@ -84,6 +84,7 @@ router.put("/categories/:id", isLoggedIn, async (req, res) => {
   }
 });
 
+//카테고리 상세 조회
 router.get("/categories/:categoryId", async (req, res) => {
   const { categoryId } = req.params;
 
@@ -122,48 +123,6 @@ router.get('/categories/:categoryId/posts', async(req, res, next) => {
   }
 });
 
-
-
-//개시글 가져오기
-router.get("/main/posts", async (req, res) => {
-  const { page, search } = req.query;
-  const limit = 10; // 한 페이지에 보여줄 게시글 수
-  const offset = (page - 1) * limit;
-  const where = search ? { title: { [Op.like]: `%${search}%` }} : {};
-
-  try {
-    const { rows:posts, count} = await Post.findAndCountAll({
-      where,
-      order: [["createdAt", "DESC"]],
-      limit,
-      offset,
-    });
-    res.json({
-      posts,
-      count
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "서버 에러가 발생했습니다.",
-    });
-  }
-});
-
-//게시글 상세 조회
-router.get('/main/posts/:id', async(req, res) => {
-  const { id } = req.params;
-  try {
-    const post = await Post.findOne({ where: { id }});
-    if(!post){
-      return res.status(404).send('해당 게시글이 존재하지 않습니다.');
-    }
-    res.json(post);
-  } catch(error) {
-    console.error(error);
-    res.status(500).send('서버 에러');
-  }
-});
 
 //댓글 조회하기
 router.get('/posts/:postId/comments', async(req, res) => {
@@ -369,8 +328,49 @@ router.delete('/posts/comments/:commentId/replies/:replyId', isLoggedIn, async (
   }
 });
 
-// 글 입력
-router.post("/posts", isLoggedIn, async (req, res) => {
+//개시글 가져오기
+router.get("/main/posts", async (req, res) => {
+  const { page, search } = req.query;
+  const limit = 10; // 한 페이지에 보여줄 게시글 수
+  const offset = (page - 1) * limit;
+  const where = search ? { title: { [Op.like]: `%${search}%` }} : {};
+
+  try {
+    const { rows:posts, count} = await Post.findAndCountAll({
+      where,
+      order: [["createdAt", "DESC"]],
+      limit,
+      offset,
+    });
+    res.json({
+      posts,
+      count
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "서버 에러가 발생했습니다.",
+    });
+  }
+});
+
+//게시글 상세 조회
+router.get('/main/posts/:id', async(req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await Post.findOne({ where: { id }});
+    if(!post){
+      return res.status(404).send('해당 게시글이 존재하지 않습니다.');
+    }
+    res.json(post);
+  } catch(error) {
+    console.error(error);
+    res.status(500).send('서버 에러');
+  }
+});
+
+// 글 작성
+router.post("/main/posts", isLoggedIn, async (req, res) => {
   try{
     const post = await Post.create({
       title: req.body.title,
@@ -378,7 +378,6 @@ router.post("/posts", isLoggedIn, async (req, res) => {
       UserId: req.body.UserId,
       categoryId: req.body.categoryId,
     });
-    console.log("post: ", post)
     res.json(post);
   } catch(err) {
     console.error(err);
@@ -444,7 +443,7 @@ router.delete("/main/posts/:id", isLoggedIn, async (req, res) => {
     });
 
     await post.destroy();
-    res.status(204).send();
+    res.status(204).send({ message: '삭제 완료'});
   } catch (err) {
     console.error(err);
     res.status(500).send({
@@ -672,7 +671,7 @@ router.put("/users/password", isLoggedIn, async (req, res, next) => {
 });
 
 // 로그인
-router.post("/login", isNotLoggedIn, (req, res, next) => {
+router.post("/users/login", isNotLoggedIn, (req, res, next) => {
 // passport.authenticate => 미들웨어
   passport.authenticate("local", (err, user, info) => {
     if(err) {
@@ -701,7 +700,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
 });
 
 // 로그아웃
-router.post("/logout", isLoggedIn, (req, res) => {
+router.post("/users/logout", isLoggedIn, (req, res) => {
     req.logout(() => {
     req.session.destroy();
     res.send('ok');

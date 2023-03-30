@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     setLogInError(false);
     axios.post(
-      `${backUrl}/api/login`,
+      `${backUrl}/api/users/login`,
       { 
         email, password
       },

@@ -32,7 +32,7 @@ const MainPage = () => {
   const [showProfile, setShowProfile] = useState(false);
 
   const onLogout = useCallback(() => {
-    axios.post(`${backUrl}/api/logout`, null, {
+    axios.post(`${backUrl}/api/users/logout`, null, {
       withCredentials: true
     })
     .then(() => {
