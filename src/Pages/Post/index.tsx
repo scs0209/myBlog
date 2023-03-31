@@ -1,14 +1,15 @@
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState, VFC } from "react";
-import { Input, Textarea } from "./styles";
-import autosize from 'autosize'
+import React, { ChangeEvent, useCallback, useState, VFC } from "react";
+import { Input } from "./styles";
 import axios from "axios";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import PostSubmit from "../../Components/PostSubmit";
 import { Select } from "antd";
+import { EditorState } from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import MyEditor from "../../Components/CustomEditor";
 
 const { Option } = Select;
-
 
 const backUrl =
   process.env.NODE_ENV === "development"
@@ -17,13 +18,13 @@ const backUrl =
 const Post = () => {
   const { data: currentUser } = useSWR(`${backUrl}/api/users`, fetcher);
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [category, setCategory] = useState(""); // 카테고리 추가
-  const textareaRef = useRef(null);
 
-  const { data: postData, mutate } = useSWR(`${backUrl}/api/main/posts`, fetcher, {
-    revalidateOnMount: true,
-  });
+  const { data: postData, mutate } = useSWR(
+    `${backUrl}/api/main/posts`,
+    fetcher
+  );
 
   const { data: categoryData } = useSWR(`${backUrl}/api/categories`, fetcher);
 
@@ -31,31 +32,18 @@ const Post = () => {
     setTitle(e.target.value);
   }, []);
 
-  const onChangeContents = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setContent(e.target.value);
-    },
-    []
-  );
+  const onChangeEditor = useCallback((editorState: EditorState) => {
+    setEditorState(editorState);
+  }, []);
 
-  useEffect(() => {
-    if (textareaRef.current) {
-      autosize(textareaRef.current);
-    }
-  });
-
-  const onChangeCategory = useCallback(
-    (value: string) => {
-      setCategory(value);
-    },
-    []
-  );
+  const onChangeCategory = useCallback((value: string) => {
+    setCategory(value);
+  }, []);
 
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
-      console.log(content);
-      if (!title || !content || !category) {
+      if (!title || !editorState.getCurrentContent().hasText() || !category) {
         alert("제목과 내용, 카테고리를 입력해주세요!");
         return;
       }
@@ -64,7 +52,7 @@ const Post = () => {
           `${backUrl}/api/main/posts`,
           {
             title,
-            content,
+            content: editorState.getCurrentContent().getPlainText(),
             categoryId: category,
             UserId: currentUser.id,
           },
@@ -75,7 +63,7 @@ const Post = () => {
         .then((res) => {
           alert("게시글이 작성되었습니다.");
           setTitle("");
-          setContent("");
+          setEditorState(EditorState.createEmpty());
           setCategory("");
           mutate((cachedData: any) => [...cachedData, res.data], false);
         })
@@ -83,29 +71,40 @@ const Post = () => {
           console.error(err);
         });
     },
-    [title, content, category, mutate, setTitle, setContent, setContent, currentUser.id]
+    [
+      title,
+      editorState,
+      category,
+      mutate,
+      setTitle,
+      setEditorState,
+      setCategory,
+      currentUser.id,
+    ]
   );
 
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <div>
-          <Input
-            type="text"
-            name="title"
-            value={title}
-            onChange={onChangeTitle}
-            placeholder="제목"
-          />
-        </div>
-        <div>
-          <Textarea
-            placeholder="내용을 입력하세요"
-            name="content"
-            value={content}
-            ref={textareaRef}
-            onChange={onChangeContents}
-          ></Textarea>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <div>
+            <Input
+              type="text"
+              name="title"
+              value={title}
+              onChange={onChangeTitle}
+              placeholder="제목"
+            />
+          </div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <MyEditor onChange={onChangeEditor} editorState={editorState} />
+          </div>
         </div>
         <div>
           <Select value={category} onChange={onChangeCategory}>

@@ -371,12 +371,13 @@ router.get('/main/posts/:id', async(req, res) => {
 
 // 글 작성
 router.post("/main/posts", isLoggedIn, async (req, res) => {
+  const { title, content, categoryId, UserId } = req.body;
   try{
     const post = await Post.create({
-      title: req.body.title,
-      content: req.body.content, // content 필드에 값을 설정
-      UserId: req.body.UserId,
-      categoryId: req.body.categoryId,
+      title,
+      content,
+      categoryId,
+      UserId,
     });
     res.json(post);
   } catch(err) {
