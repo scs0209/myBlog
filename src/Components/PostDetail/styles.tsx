@@ -26,6 +26,8 @@ export const PostContent = styled.div`
   font-size: 1rem;
   line-height: 1.5;
   margin-bottom: 1.5rem;
+  white-space: pre-wrap;
+  text-align: left
 `;
 
 export const PostActions = styled.div`

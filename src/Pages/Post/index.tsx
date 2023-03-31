@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState, VFC } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState, VFC } from "react";
 import { Input } from "./styles";
 import axios from "axios";
 import useSWR from 'swr';
@@ -83,6 +83,7 @@ const Post = () => {
     ]
   );
 
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -103,7 +104,7 @@ const Post = () => {
             />
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <MyEditor onChange={onChangeEditor} editorState={editorState} />
+            <MyEditor onChange={onChangeEditor} editorState={editorState}/>
           </div>
         </div>
         <div>

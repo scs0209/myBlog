@@ -3,7 +3,10 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 const passport = require('passport');
+const multer = require("multer");
+const fs = require("fs");
 const path = require('path');
+
 const { isNotLoggedIn, isLoggedIn } = require('./middlewares');
 const transporter = require('../config/emailConfig')
 const User = require('../models/user');
@@ -367,6 +370,34 @@ router.get('/main/posts/:id', async(req, res) => {
     console.error(error);
     res.status(500).send('서버 에러');
   }
+});
+
+try {
+  fs.readdirSync("uploads");
+} catch (error) {
+  console.error("uploads 폴더가 없어 uploads 폴더를 생성합니다.");
+  fs.mkdirSync("uploads");
+}
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, "uploads/");
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+});
+// 이미지 올리기
+router.post("/upload", upload.single("media"), (req, res) => {
+  const { file } = req;
+  console.log("req.file:", req.file);
+  if (!file) {
+    return res.status(400).send("이미지를 업로드해주세요.");
+  }
+  res.json({ url: `/uploads/${file.filename}` });
 });
 
 // 글 작성
