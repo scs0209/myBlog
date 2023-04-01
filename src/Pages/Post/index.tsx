@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState, VFC } from "react";
-import { Input } from "./styles";
+import { Input, Textarea } from "./styles";
 import axios from "axios";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import PostSubmit from "../../Components/PostSubmit";
 import { Select } from "antd";
-import { EditorState } from "draft-js";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import MyEditor from "../../Components/CustomEditor";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import QuillEditor from "../../Components/QuillEditor";
+
 
 const { Option } = Select;
 
@@ -18,22 +19,21 @@ const backUrl =
 const Post = () => {
   const { data: currentUser } = useSWR(`${backUrl}/api/users`, fetcher);
   const [title, setTitle] = useState("");
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [content, setContent] = useState("");
   const [category, setCategory] = useState(""); // 카테고리 추가
+  const quillRef = useRef<ReactQuill>(null);
 
   const { data: postData, mutate } = useSWR(
     `${backUrl}/api/main/posts`,
-    fetcher
+    fetcher, {
+      dedupingInterval: 10000,
+    }
   );
 
   const { data: categoryData } = useSWR(`${backUrl}/api/categories`, fetcher);
 
   const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
-  }, []);
-
-  const onChangeEditor = useCallback((editorState: EditorState) => {
-    setEditorState(editorState);
   }, []);
 
   const onChangeCategory = useCallback((value: string) => {
@@ -43,7 +43,8 @@ const Post = () => {
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
-      if (!title || !editorState.getCurrentContent().hasText() || !category) {
+      console.log(content);
+      if (!title || !content || !category) {
         alert("제목과 내용, 카테고리를 입력해주세요!");
         return;
       }
@@ -52,7 +53,7 @@ const Post = () => {
           `${backUrl}/api/main/posts`,
           {
             title,
-            content: editorState.getCurrentContent().getPlainText(),
+            content,
             categoryId: category,
             UserId: currentUser.id,
           },
@@ -63,7 +64,7 @@ const Post = () => {
         .then((res) => {
           alert("게시글이 작성되었습니다.");
           setTitle("");
-          setEditorState(EditorState.createEmpty());
+          setContent("");
           setCategory("");
           mutate((cachedData: any) => [...cachedData, res.data], false);
         })
@@ -73,41 +74,89 @@ const Post = () => {
     },
     [
       title,
-      editorState,
+      content,
       category,
       mutate,
       setTitle,
-      setEditorState,
-      setCategory,
+      setContent,
+      setContent,
       currentUser.id,
     ]
   );
+
+  const handleImageUpload = useCallback(() => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = () => {
+      const file = input.files?.[0];
+      if (!file) {
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onloadend = () => {
+        const image = new Image();
+        if (reader.result) {
+          image.src = reader.result as string;
+        } else {
+          image.src = "";
+        }
+        image.onload = () => {
+          const quill = quillRef.current?.getEditor();
+          if (!quill) {
+            return;
+          }
+          const range = quill.getSelection();
+          if (!range) return;
+          quillRef.current
+            ?.getEditor()
+            .insertEmbed(range.index, "image", image.src);
+        };
+      };
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      axios
+        .post(`${backUrl}/api/upload`, formData, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          // handle response
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+  }, [quillRef]);
+
 
 
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
-          <div>
-            <Input
-              type="text"
-              name="title"
-              value={title}
-              onChange={onChangeTitle}
-              placeholder="제목"
-            />
-          </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <MyEditor onChange={onChangeEditor} editorState={editorState}/>
-          </div>
-        </div>
         <div>
+          <Input
+            type="text"
+            name="title"
+            value={title}
+            onChange={onChangeTitle}
+            placeholder="제목"
+          />
+        </div>
+        <div style={{ display: "flex", justifyContent: "center"}}>
+          <QuillEditor
+            value={content}
+            onChange={setContent}
+            handleImageUpload={handleImageUpload}
+          />
+        </div>
+        <div style={{ marginTop: "0.5rem" }}>
           <Select value={category} onChange={onChangeCategory}>
             <Option value="">카테고리 선택</Option>
             {categoryData &&

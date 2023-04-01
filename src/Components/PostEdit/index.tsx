@@ -1,14 +1,13 @@
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import fetcher from "../../utils/fetcher";
-import useSWR from 'swr';
-import autosize from "autosize";
+import useSWR from "swr";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { Input } from "../../Pages/Post/styles";
-import { EditorState } from "draft-js";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import MyEditor from "../../Components/CustomEditor";
 import { PostDiv, SubmitButton } from "../../Components/PostSubmit/styles";
+import QuillEditor from "../../Components/QuillEditor";
 
 const backUrl =
   process.env.NODE_ENV === "development"
@@ -20,26 +19,16 @@ const PostEdit = () => {
   const { data: post, mutate } = useSWR(`${backUrl}/api/main/posts/${id}`, fetcher);
   const [title, setTitle] = useState(post?.title || "");
   const [content, setContent] = useState(post?.content || "");
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const textareaRef = useRef(null);
+  const quillRef = useRef<ReactQuill>(null);
 
   const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   }, []);
 
-  const onChangeEditor = useCallback((editorState: EditorState) => {
-    setEditorState(editorState);
-  }, []);
-
-  useEffect(() => {
-    if(textareaRef.current){
-      autosize(textareaRef.current);
-    }
-  });
 
   const handleSubmit = useCallback((e: any) => {
     e.preventDefault();
-    if (!title || !editorState.getCurrentContent().hasText()) {
+    if (!title || !content) {
       alert("제목과 내용, 카테고리를 입력해주세요!");
       return;
     }
@@ -48,7 +37,7 @@ const PostEdit = () => {
         `${backUrl}/api/main/posts/${id}`,
         {
           title,
-          content: editorState.getCurrentContent().getPlainText(),
+          content,
         },
         {
           withCredentials: true,
@@ -69,7 +58,58 @@ const PostEdit = () => {
           alert("게시글을 수정하는 도중 오류가 발생했습니다.");
         }
       });
-  }, [id, title, editorState, navigate, mutate, setEditorState]);
+  }, [id, title, content, navigate, mutate]);
+
+    const handleImageUpload = useCallback(() => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = () => {
+      const file = input.files?.[0];
+      if (!file) {
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onloadend = () => {
+        const image = new Image();
+        if (reader.result) {
+          image.src = reader.result as string;
+        } else {
+          image.src = "";
+        }
+        image.onload = () => {
+          const quill = quillRef.current?.getEditor();
+          if (!quill) {
+            return;
+          }
+          const range = quill.getSelection();
+          if (!range) return;
+          quillRef.current
+            ?.getEditor()
+            .insertEmbed(range.index, "image", image.src);
+        };
+      };
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      axios
+        .post(`${backUrl}/api/upload`, formData, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          // handle response
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+  }, [quillRef]);
 
 
   return (
@@ -92,9 +132,11 @@ const PostEdit = () => {
               placeholder="제목"
             />
           </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <MyEditor onChange={onChangeEditor} editorState={editorState} />
-          </div>
+          <QuillEditor
+            value={content}
+            onChange={setContent}
+            handleImageUpload={handleImageUpload}
+          />
         </div>
         <PostDiv>
           <SubmitButton type="submit">수정</SubmitButton>

@@ -391,7 +391,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 // 이미지 올리기
-router.post("/upload", upload.single("media"), (req, res) => {
+router.post("/upload", upload.single("image"), (req, res) => {
   const { file } = req;
   console.log("req.file:", req.file);
   if (!file) {

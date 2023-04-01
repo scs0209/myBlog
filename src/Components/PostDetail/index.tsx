@@ -8,6 +8,7 @@ import fetcher from "../../utils/fetcher";
 import { Comment, Reply } from "../../typings/db";
 import LikeButton from "../../Components/LikedButton";
 import { LikeSpan, PostActions, PostContainer, PostContent, PostDate, PostDeleteButton, PostEditButton, PostHeader, PostTitle } from "./styles";
+import DOMPurify from "dompurify";
 
 
 const backUrl =
@@ -397,7 +398,9 @@ const PostDetail = () => {
             <PostTitle>{title}</PostTitle>
             <PostDate>{dateString}</PostDate>
           </PostHeader>
-          <PostContent>{content}</PostContent>
+          <PostContent
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
+          ></PostContent>
           <PostActions>
             <div>
               <LikeSpan>좋아요: {likeCount}</LikeSpan>
