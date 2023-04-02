@@ -1,6 +1,9 @@
 import { VFC, useCallback, useEffect, useRef } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import {ImageResize} from "quill-image-resize-module-ts";
+
+Quill.register("modules/imageResize", ImageResize);
 
 interface Props {
   value: string;
@@ -25,7 +28,7 @@ const QuillEditor:VFC<Props> = ({ value, onChange, handleImageUpload, quillRef }
 
 
   return (
-    <div style={{ width:"91%" }}>
+    <div style={{ width: "91%" }}>
       <ReactQuill
         placeholder="내용을 입력하세요"
         value={value}
@@ -44,6 +47,11 @@ const QuillEditor:VFC<Props> = ({ value, onChange, handleImageUpload, quillRef }
             handlers: {
               image: handleImageUpload,
             },
+          },
+          imageResize: {
+            modules: ["Resize", "DisplaySize"],
+            displaySize: true,
+            parchment: Quill.import("parchment"),
           },
         }}
         ref={quillRef}
