@@ -394,7 +394,6 @@ const upload = multer({
 // 이미지 올리기
 router.post("/upload", upload.single("image"), (req, res) => {
   const { file } = req;
-  console.log("req.file:", req.file);
   if (!file) {
     return res.status(400).send("이미지를 업로드해주세요.");
   }
@@ -553,7 +552,7 @@ router.get("/posts/:postId/like-info", async (req, res, next) => {
   }
 });
 
-//좋아요 생성 및 삭제
+//좋아요 생성
 router.post("/posts/:postId/like", isLoggedIn, async (req, res, next) => {
   try{
     const postId = parseInt(req.params.postId, 10);

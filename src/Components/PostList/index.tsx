@@ -60,7 +60,9 @@ const PostList = () => {
   const handlePostClick = useCallback(
     (postId: any) => {
       axios
-        .post(`${backUrl}/api/main/posts/${postId}/views`)
+        .post(`${backUrl}/api/main/posts/${postId}/views`, null, {
+          withCredentials: true
+        })
         .then((response) => {
           console.log(response.data.message);
           const updatedPosts = currentPagePosts.map((post: any) => {
