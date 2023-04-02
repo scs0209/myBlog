@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState, VFC } from "react";
-import { Input, Textarea } from "./styles";
+import { Input } from "./styles";
 import axios from "axios";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
@@ -154,6 +154,7 @@ const Post = () => {
             value={content}
             onChange={setContent}
             handleImageUpload={handleImageUpload}
+            quillRef={quillRef}
           />
         </div>
         <div style={{ marginTop: "0.5rem" }}>

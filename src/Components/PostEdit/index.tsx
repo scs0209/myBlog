@@ -132,11 +132,14 @@ const PostEdit = () => {
               placeholder="제목"
             />
           </div>
-          <QuillEditor
-            value={content}
-            onChange={setContent}
-            handleImageUpload={handleImageUpload}
-          />
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <QuillEditor
+              value={content}
+              onChange={setContent}
+              handleImageUpload={handleImageUpload}
+              quillRef={quillRef}
+            />
+          </div>
         </div>
         <PostDiv>
           <SubmitButton type="submit">수정</SubmitButton>
