@@ -124,8 +124,9 @@ const PostDetail = () => {
         alert("내용을 입력해주세요");
         return;
       }
+      console.log(`${backUrl}`);
       axios
-        .patch(
+        .put(
           `${backUrl}/api/posts/comments/${commentId}`,
           {
             content: content,
@@ -297,9 +298,8 @@ const PostDetail = () => {
       );
 
       axios
-        .post(`${backUrl}/posts/${id}/like`, {
+        .delete(`${backUrl}/api/posts/${id}/like`, {
           withCredentials: true,
-          method: "DELETE"
         })
         .then(() => {
           // 서버 응답이 오면 다시 업데이트

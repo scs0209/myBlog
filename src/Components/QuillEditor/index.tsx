@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { VFC, useCallback, useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
@@ -8,7 +8,7 @@ interface Props {
   handleImageUpload: () => void;
 }
 
-const QuillEditor = ({ value, onChange, handleImageUpload }: Props) => {
+const QuillEditor:VFC<Props> = ({ value, onChange, handleImageUpload }) => {
   const quillRef = useRef<ReactQuill>(null);
 
   const onChangeContents = useCallback(

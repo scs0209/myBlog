@@ -38,4 +38,4 @@ const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
   );
 }
 
-export default memo(CommentForm);
+export default CommentForm;

@@ -182,7 +182,7 @@ router.post('/posts/:postId/comments', isLoggedIn, async(req, res) => {
 
 //댓글 수정하기
 // put 대신 patch를 사용하는 이유는 put 메소드는 전체 데이터를 업데이트 할 때 사용하고, patch 메소드는 일부 업데이트 할 때 사용한다. 따라서 댓글 수정에는 일부 데이터를 업데이트 하므로 patch 메소드가 적절하다.
-router.patch('/posts/comments/:commentId', isLoggedIn, async(req, res) => {
+router.put('/posts/comments/:commentId', isLoggedIn, async(req, res) => {
   try{
     const commentId = req.params.commentId;
     const comment = await Comment.findOne({ where: { id: commentId }});
@@ -196,6 +196,7 @@ router.patch('/posts/comments/:commentId', isLoggedIn, async(req, res) => {
       }
     );
     res.status(200).json(editedComment);
+    console.log(editedComment);
   } catch(err) {
     console.error(err);
     res.status(500).send("서버 오류");
@@ -578,6 +579,35 @@ router.post("/posts/:postId/like", isLoggedIn, async (req, res, next) => {
       });
       const likeCount = await Like.count({ where: { PostId: postId } });
       res.json({ count: likeCount, liked: true });
+    }
+  } catch(err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+//좋아요 삭제
+router.delete("/posts/:postId/like", isLoggedIn, async (req, res, next) => {
+  try{
+    const postId = parseInt(req.params.postId, 10);
+    const { id: userId } = req.user;
+
+    //좋아요를 눌렀는지 검사
+    const exLike = await Like.findOne({
+      where: {
+        PostId: postId,
+        UserId: userId,
+      },
+    });
+
+    if(exLike) {
+      //좋아요가 있으면 삭제
+      await exLike.destroy();
+      const likeCount = await Like.count({ where: { PostId: postId } });
+      res.json({ count: likeCount, liked: false });
+    } else {
+      //좋아요가 없으면 에러 처리
+      res.status(400).json({ message: "해당 포스트에 좋아요를 누르지 않았습니다." });
     }
   } catch(err) {
     console.error(err);

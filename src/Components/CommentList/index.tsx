@@ -170,4 +170,4 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
   );
 }
 
-export default memo(CommentList);
+export default CommentList;

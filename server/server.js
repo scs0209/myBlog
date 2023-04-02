@@ -1,6 +1,5 @@
 const dotenv = require("dotenv");
 dotenv.config();
-console.log("SECRET_KEY:", process.env.COOKIE_SECRET);
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
@@ -33,6 +32,12 @@ if (prod) {
   app.use(morgan("combined"));
   app.use(helmet({ contentSecurityPolicy: false }));
   app.use(hpp());
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    })
+  );
 } else {
   app.use(morgan("dev"));
   app.use(
