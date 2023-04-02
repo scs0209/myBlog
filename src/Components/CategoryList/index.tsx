@@ -1,4 +1,4 @@
-import { PostLi } from "../../Components/PostList/styles";
+import { Dates, ListContainer, ListHeader, PostLi, View } from "../../Components/PostList/styles";
 import React, { useCallback, useState } from "react";
 import { useParams } from "react-router";
 import useSWR from 'swr';
@@ -45,7 +45,7 @@ const CategoryList = () => {
 
 
   return (
-    <div className="Category_container">
+    <ListContainer className="Category_container">
       <h2>게시글 목록</h2>
       <PostLi>
         <div className="list_grid list_title">
@@ -59,13 +59,13 @@ const CategoryList = () => {
             createdDate.getMonth() + 1
           } - ${createdDate.getDate()}`;
           return (
-            <div className="list_grid" key={post.id}>
+            <ListHeader className="list_grid" key={post.id}>
               <Link to={`/main/posts/${post.id}`}>
                 <div>{post.title}</div>
               </Link>
-              <div>{post.views}</div>
-              <div>{dateString}</div>
-            </div>
+              <View>{post.views}</View>
+              <Dates>{dateString}</Dates>
+            </ListHeader>
           );
         })}
       </PostLi>
@@ -86,7 +86,7 @@ const CategoryList = () => {
           pageRangeDisplayed={5}
         />
       </PaginationContainer>
-    </div>
+    </ListContainer>
   );
 }
 
