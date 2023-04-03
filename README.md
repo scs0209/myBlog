@@ -1,6 +1,6 @@
 # SCS's Blog
 
-<img src="[/favicon.png](https://github.com/scs0209/myBlog/blob/master/public/favicon.png)" width:"329" height:"200" alt="image">
+<img src="https://user-images.githubusercontent.com/scs0209/myBlog/main/images/favicon.png)" width:"329" height:"200" alt="image">
 
 ## 프로젝트 정보
 
