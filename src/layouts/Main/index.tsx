@@ -1,7 +1,7 @@
 import loadable from "@loadable/component";
 import React, { useCallback, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import { Button, CreateCategoryButton, Header, HomeLink, MainContainer, StyledLink } from "./styles";
+import { Button, CreateCategoryButton, Header, HomeLink, Logo, MainContainer, StyledLink } from "./styles";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import Category from "../../Components/Category";
@@ -66,7 +66,10 @@ const MainPage = () => {
   return (
     <div>
       <Header>
-        <HomeLink to="/">SCS's Blog!</HomeLink>
+        <HomeLink to="/">
+          <Logo src="/favicon.png" alt="logo" style={{ width:"60px", height:"60px",color: "black"}}/>
+          SCS's Blog!
+        </HomeLink>
         {userData?.role === "admin" && (
           <StyledLink to="/main/write" onClick={onClickShowPost}>
             포스트 작성

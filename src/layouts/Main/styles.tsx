@@ -54,6 +54,14 @@ export const HomeLink = styled(Link)`
   text-decoration: none;
   border-bottom: 2px solid black;
   padding-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+`;
+
+export const Logo = styled.img`
+  width: 60px;
+  height: 60px;
+  margin-right: 0.5rem;
 `;
 
 export const StyledLink = styled(Link)`
