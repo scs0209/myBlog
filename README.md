@@ -1,5 +1,6 @@
 # SCS's Blog
 
+<div align="center">
 <img src="https://user-images.githubusercontent.com/110822847/229564131-388a385d-c880-4ab7-967d-d392a6dec03f.png" width="329">
 
 ## 프로젝트 정보
@@ -12,11 +13,11 @@
 
 ## 개발자 소개
 
-|                     성창수                      |
-| :---------------------------------------------: |
+|                                                              성창수                                                              |
+| :------------------------------------------------------------------------------------------------------------------------------: |
 | <img src="https://user-images.githubusercontent.com/110822847/229564340-070947f1-3f34-4cf4-b25f-ffe2d274be50.jpg" width="160px"> |
-|     [@changsu](https://github.com/scs0209)      |
-|              순천향대 화학과 졸업               |
+|                                              [@changsu](https://github.com/scs0209)                                              |
+|                                                       순천향대 화학과 졸업                                                       |
 
 ## 프로젝트 소개
 
