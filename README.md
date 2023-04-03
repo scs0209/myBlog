@@ -2,6 +2,7 @@
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/110822847/229564131-388a385d-c880-4ab7-967d-d392a6dec03f.png" width="329">
+</div>
 
 ## 프로젝트 정보
 
