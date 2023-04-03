@@ -83,41 +83,52 @@ $ npm run start
 ![Node.js](https://img.shields.io/badge/node.js-%20-%23339933.svg?&style=for-the-badge&logo=node.js&logoColor=white")
 ![TypeScript](https://img.shields.io/badge/typescript-%20-%23007ACC.svg?&style=for-the-badge&logo=typescript&logoColor=white")
 
-### `npm start`
+---
+## 화면 구성 📺
+| 메인 페이지  |  로그인 페이지   |
+| :-------------------------------------------: | :------------: |
+|  <img width="329" src= "https://user-images.githubusercontent.com/110822847/229567497-b5607bb5-5d3c-44e3-b32e-0b3edbf83564.PNG"/> |  <img width="329" src="https://user-images.githubusercontent.com/110822847/229567670-2b7d644f-4e1e-4b93-a168-89c2d32f0b68.PNG"/>|  
+| 회원가입 페이지   |  게시글 페이지   |  
+| <img width="329" src="https://user-images.githubusercontent.com/110822847/229567915-4c21d3a9-9d57-4eb5-b919-d52842b4f9f9.PNG"/>   |  <img width="329" src="https://user-images.githubusercontent.com/110822847/229568037-a07a998c-1d5a-43c2-b9a5-8caae388cb27.PNG"/>     |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
+## 주요 기능 📦
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### ⭐️ 게시글 작성
+- 관리자 계정으로 로그인 했을 시에만 가능
 
-### `npm test`
+### ⭐️ 댓글 작성
+- 댓글과, 대댓글을 작성할 수 있다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### ⭐️ 좋아요 기능
+- 게시글에 종아요를 누를 수 있도록 추가했다.
 
-### `npm run build`
+---
+## 아키텍쳐
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 디렉터리 구조
+```bash
+my-blog/
+├── server/       Node.js 서버 파일
+├── config/       서버, 데이터베이스 관련 정보 폴더
+│   └── config.js
+├── models/       db 모델 관련 정보 폴덜
+├── passport/     passposrt 라이브러리 폴더
+│   └── index.js
+│   └── local.js
+├── routes/
+│   ├── api.js
+│   └── middlewares.js
+└── server.js
+├── client/        # React, 타입스크립트 프론트엔드 파일
+│   ├── public/
+│   ├── src/
+│       ├── components/
+│       ├── images/
+│       ├── layouts/
+│       ├── Pages/
+│       ├── typings/
+│       ├── utils/
+│     └── index.tsx 
+│   ├── package.json
+│   └── ...
