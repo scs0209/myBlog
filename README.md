@@ -1,6 +1,6 @@
 # SCS's Blog
 
-<img src="https://user-images.githubusercontent.com/scs0209/myBlog/main/images/favicon.png)" width:"329" height:"200" alt="image">
+<img src="![favicon](https://user-images.githubusercontent.com/110822847/229564131-388a385d-c880-4ab7-967d-d392a6dec03f.png)" width="329">
 
 ## 프로젝트 정보
 
@@ -14,7 +14,7 @@
 
 |                     성창수                      |
 | :---------------------------------------------: |
-| <img width="160px" src="images/이력서사진.png"> |
+| <img src="![이력서사진](https://user-images.githubusercontent.com/110822847/229564340-070947f1-3f34-4cf4-b25f-ffe2d274be50.jpg)" width="160px" |
 |     [@changsu](https://github.com/scs0209)      |
 |              순천향대 화학과 졸업               |
 
