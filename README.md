@@ -1,8 +1,84 @@
 # SCS's Blog
 
+<img src="/favicon.png" width:"329" height:"200">
+
+## 프로젝트 정보
+
+> **1인 개발** <br/> **개발기간: 2023.2.25 ~ 2023.4.3**
+
+## 배포 주소
+
+> **프론트 서버** : https://web-myblog-p8xrq2mlfsc6kg2.sel3.cloudtype.app/ <br> > **백엔드 서버** : https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app/<br>
+
+## 개발자 소개
+
+| 성창수 |
+
+| :------------------------------------------------------------------------------: |
+| 순청향대 화학과(졸업) |
+
+## 프로젝트 소개
+
+제가 배웠던 기술들을 적용하고자 하는 프로젝트를 찾다가 가장 적합하게 할 수 있는 프로젝트라고 생각해서 만들었고, 주로 제가 하면서 배운 내용들을 작성하여 저와 비슷한 프로젝트를 하는 사람들에게 어려움을 조금이라도 해결할 수 있게 하고자 만들었습니다.
+
+## 시작 가이드
+
+For building and running the application you need:
+
 ## Available Scripts
 
+### Requirements
+
 In the project directory, you can run:
+
+- [Node.js 18.12.1](https://nodejs.org/ca/blog/release/v18.12.1/)
+- [Npm 8.19.2](https://www.npmjs.com/package/npm/v/8.19.2)
+
+### Installation
+
+```bash
+$ git clone https://github.com/scs0209/myBlog.git
+$ cd myBlog
+```
+
+#### Backend
+
+```
+$ cd server
+$ npm i
+$ npm run dev
+```
+
+#### Frontend
+
+```
+$ cd myBlog
+$ npm i
+$ npm run start
+```
+
+---
+
+## Stack🤡
+
+### Environment
+
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
+![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)
+
+### Config
+
+![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
+
+### Development
+
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Express](https://img.shields.io/badge/express-v4.18.2-green.svg)
+![Styled Components](https://img.shields.io/badge/styled--components-v5.3.3-pink.svg)
+![Node.js](https://img.shields.io/badge/node.js-v18.12.1-green.svg)
+![TypeScript](https://img.shields.io/badge/typescript-v4.9.5-blue.svg)
 
 ### `npm start`
 
