@@ -75,10 +75,10 @@ $ npm run start
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Express](https://img.shields.io/badge/express-v4.18.2-green.svg)
-![Styled Components](https://img.shields.io/badge/styled--components-v5.3.3-pink.svg)
-![Node.js](https://img.shields.io/badge/node.js-v18.12.1-green.svg)
-![TypeScript](https://img.shields.io/badge/typescript-v4.9.5-blue.svg)
+![Express](https://img.shields.io/badge/express-%20-%23000.svg?&style=for-the-badge&logo=express&logoColor=white")
+![Styled Components](https://img.shields.io/badge/styled--components-%20-%23DB7093.svg?&style=for-the-badge&logo=styled-components&logoColor=white")
+![Node.js](https://img.shields.io/badge/node.js-%20-%23339933.svg?&style=for-the-badge&logo=node.js&logoColor=white")
+![TypeScript](https://img.shields.io/badge/typescript-%20-%23007ACC.svg?&style=for-the-badge&logo=typescript&logoColor=white")
 
 ### `npm start`
 
