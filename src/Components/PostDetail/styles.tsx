@@ -27,7 +27,19 @@ export const PostContent = styled.div`
   line-height: 1.5;
   margin-bottom: 1.5rem;
   white-space: pre-wrap;
-  text-align: left
+  text-align: left; 
+  .ql-syntax {
+    background-color: #f8f8f8;
+    color: #333;
+    font-size: 13px;
+    font-family: "Monaco", "Menlo", "Consolas", monospace;
+    white-space: pre-wrap;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+  }
 `;
 
 export const PostActions = styled.div`

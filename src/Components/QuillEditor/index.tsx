@@ -13,6 +13,7 @@ CodeBlock.tagName = "PRE"; // 태그명 변경
 CodeBlock.className = "ql-syntax"; // 클래스명 추가
 Quill.register(CodeBlock, true);
 
+
 interface Props {
   value: string;
   onChange: (value: string) => void;
