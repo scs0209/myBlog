@@ -1,19 +1,16 @@
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import axios from "axios";
 import { Button, Email, FindIdContainer, Form, Input, Label, LabelContainer, Message, Name } from "./styles";
+import useInput from "../../utils/useInput";
 
 const backUrl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:5000"
     : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const FindId = () => {
-  const [name, setName] = useState("");
+  const [name, onChangeName] = useInput("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-
-  const onChangeName = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  }, [])
 
   const onSubmitForm = useCallback(
     (e: FormEvent<HTMLFormElement>) => {

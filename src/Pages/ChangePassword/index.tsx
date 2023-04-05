@@ -2,23 +2,16 @@ import axios from "axios";
 import { FindPasswordContainer, Name } from "../../Pages/FindPassword/styles";
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { Button, Form, Input, Label, LabelContainer, Message } from "Pages/FindId/styles";
+import useInput from "../../utils/useInput";
 
 const backUrl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:5000"
     : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const ChangePassword = () => {
-  const [password, setPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [password, onChangePassword, setPassword] = useInput("");
+  const [newPassword, onChangeNewPassword, setNewPassword] = useInput("");
   const [message, setMessage] = useState("");
-
-  const onChangePassword = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  }, []);
-
-  const onChangeNewPassword = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(e.target.value);
-  }, []);
 
   const onSubmitForm = useCallback((e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

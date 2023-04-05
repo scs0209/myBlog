@@ -1,9 +1,9 @@
 import axios from "axios";
-import React, { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import { Border, Button, CategoryLi, CategoryWrapper, EditButton, HeaderLink, List, ModeButton, StyledLink } from "./styles";
+import useInput from "../../utils/useInput";
 
 const backUrl =
   process.env.NODE_ENV === "development"
@@ -12,7 +12,7 @@ const backUrl =
 const Category = () => {
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
-  const [editedCategoryName, setEditedCategoryName] = useState("");
+  const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput("");
   const { data: userData, mutate: mutateUserData } = useSWR(
     `${backUrl}/api/users`,
     fetcher
@@ -24,6 +24,7 @@ const Category = () => {
     setEditedCategoryName("");
     setEditedCategoryId(categoryId);
   }, []);
+
 
   const onSubmitEdit = useCallback(
     (e: any) => {
@@ -58,8 +59,6 @@ const Category = () => {
     [editedCategoryName, toggleEdit, mutate, editedCategoryId, userData]
   );
 
-  console.log(userData?.role);
-
   // 카테고리 삭제
   const onDeleteCategory = useCallback(
     (categoryId: any) => {
@@ -81,13 +80,15 @@ const Category = () => {
     [mutate]
   );
 
-
-  const onChangeCategoryName = useCallback(
-    (e: any) => {
-      setEditedCategoryName(e.target.value);
-    },
-    [setEditedCategoryName]
-  );
+    useEffect(() => {
+      // 수정할 카테고리가 선택되면 해당 카테고리의 이름으로 editedCategoryName 상태를 설정합니다.
+      if (editedCategoryId !== null) {
+        const editedCategory = data.find(
+          (category: any) => category.id === editedCategoryId
+        );
+        setEditedCategoryName(editedCategory.name);
+      }
+    }, [editedCategoryId, data]);
 
 
   if(error) return <div>에러가 발생했습니다</div>

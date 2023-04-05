@@ -1,6 +1,7 @@
 import autosize from "autosize";
 import React, { FormEvent, memo, useCallback, useEffect, useRef, useState, VFC } from "react";
 import { Button, Form, Textarea } from "./styles";
+import useInput from "../../utils/useInput";
 
 interface Props {
   onSubmit: (content: string) => void;
@@ -8,12 +9,8 @@ interface Props {
 }
 
 const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
-  const [content, setContent] = useState("");
+  const [content, onChangeContent, setContent] = useInput("");
   const textareaRef = useRef(null);
-
-  const onChangeContent = useCallback((e: any) => {
-    setContent(e.target.value);
-  }, []);
 
   const handleSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,7 +28,7 @@ const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Textarea name="content" id="content" ref={textareaRef} onChange={onChangeContent} />
+      <Textarea name="content" id="content" ref={textareaRef} onChange={onChangeContent} value={content} />
       <Button type="submit">작성하기</Button>
       {error && <div>{error}</div>}
     </Form>

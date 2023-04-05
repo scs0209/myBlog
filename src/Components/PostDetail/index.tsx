@@ -115,7 +115,6 @@ const PostDetail = () => {
     },
     [id, mutateComments]
   );
-  console.log(comments);
 
   // 댓글 수정
   const handleCommentEdit = useCallback(
@@ -124,7 +123,6 @@ const PostDetail = () => {
         alert("내용을 입력해주세요");
         return;
       }
-      console.log(`${backUrl}`);
       axios
         .put(
           `${backUrl}/api/posts/comments/${commentId}`,

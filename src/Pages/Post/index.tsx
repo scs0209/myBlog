@@ -8,6 +8,7 @@ import { Select } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import QuillEditor from "../../Components/QuillEditor";
+import useInput from "../../utils/useInput";
 
 
 const { Option } = Select;
@@ -18,7 +19,7 @@ const backUrl =
     : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const Post = () => {
   const { data: currentUser } = useSWR(`${backUrl}/api/users`, fetcher);
-  const [title, setTitle] = useState("");
+  const [title, onChangeTitle, setTitle] = useInput("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState(""); // 카테고리 추가
   const quillRef = useRef<ReactQuill>(null);
@@ -31,10 +32,6 @@ const Post = () => {
   );
 
   const { data: categoryData } = useSWR(`${backUrl}/api/categories`, fetcher);
-
-  const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  }, []);
 
   const onChangeCategory = useCallback((value: string) => {
     setCategory(value);

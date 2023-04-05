@@ -11,7 +11,6 @@ import Avatar from 'react-avatar';
 import CreateCategoryModal from "Components/onCreateCategoryModal";
 import Menu from "../../Components/Menu";
 const Post = loadable(() => import('../../Pages/Post'));
-const PostSubmit = loadable(() => import('../../Components/PostSubmit'));
 const PostList = loadable(() => import('../../Components/PostList'));
 const PostDetail = loadable(() => import('../../Components/PostDetail'));
 const PostEdit = loadable(() => import('../../Components/PostEdit'));
@@ -60,8 +59,6 @@ const MainPage = () => {
   const onClickCreateCategory = useCallback(() => {
     setShowCreateCategoryModal(true);
   }, []);
-  
-  console.log(userData);
 
   return (
     <div>
@@ -131,7 +128,6 @@ const MainPage = () => {
           </Routes>
         </div>
         <div className="right-side">
-          <h3>Right Side</h3>
           <img src={require("../../images/banner.jpg")} alt="광고 배너" style={{ width: "90%", margin:"0 0.25rem 0 0.25rem" }} />
         </div>
       </MainContainer>

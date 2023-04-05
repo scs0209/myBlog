@@ -3,6 +3,7 @@ import React, { ChangeEvent, memo, useCallback, useState, VFC } from "react";
 import { Comment, Reply } from "../../typings/db";
 import { ButtonWrapper, CancelButton, Comments, CompleteButton, Container, Content, DeleteButton, EditButton, EditForm, EditInput, List, Name, ReplyButton, Title } from "./styles";
 import ReplyComp from "Components/Reply";
+import useInput from "../../utils/useInput";
 
 interface Props {
   comments: Comment[];
@@ -18,7 +19,7 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
   const [editId, setEditId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState<string>("");
   const [replyId, setReplyId] = useState<number | null>(null);
-  const [replyContent, setReplyContent] = useState<string>("");
+  const [replyContent, onChangeReplyContent, setReplyContent] = useInput<string>("");
   const [isRepliesVisible, setIsRepliesVisible] = useState<{[commentId: number]: boolean;}>({});
 
   const handleRepliesClick = useCallback((commentId: number) => {
@@ -58,8 +59,6 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
     setEditContent(e.target.value);
   }, []);
 
-
-  
   const handleReplyClick = useCallback((commentId: number) => {
     setReplyId(commentId);
     setReplyContent("");
@@ -80,12 +79,7 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
     setReplyContent("");
   }, [replyId, replyContent, onReply]);
 
-  const onChangeReplyContent = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setReplyContent(e.target.value);
-    },
-    []
-  );
+
 
   return (
     <Container>
