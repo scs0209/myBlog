@@ -28,7 +28,7 @@ const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Textarea name="content" id="content" ref={textareaRef} onChange={onChangeContent} value={content} />
+      <Textarea name="content" id="content" ref={textareaRef} onChange={onChangeContent} value={content} placeholder="댓글을 입력해주세요." />
       <Button type="submit">작성하기</Button>
       {error && <div>{error}</div>}
     </Form>
