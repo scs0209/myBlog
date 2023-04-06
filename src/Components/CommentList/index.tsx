@@ -1,7 +1,7 @@
 import RepliesButton from "../../Components/RepliesButton";
 import React, { ChangeEvent, memo, useCallback, useState, VFC } from "react";
 import { Comment, Reply } from "../../typings/db";
-import { ButtonWrapper, CancelButton, Comments, CompleteButton, Container, Content, DeleteButton, EditButton, EditForm, EditInput, List, Name, ReplyButton, Title } from "./styles";
+import { ButtonWrapper, CancelButton, Comments, CompleteButton, Container, Content, DeleteButton, EditButton, EditForm, EditInput, List, Name, ReplyButton, ReplyContainer, Textarea, Title } from "./styles";
 import ReplyComp from "Components/Reply";
 import useInput from "../../utils/useInput";
 
@@ -59,25 +59,23 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
     setEditContent(e.target.value);
   }, []);
 
-  const handleReplyClick = useCallback((commentId: number) => {
-    setReplyId(commentId);
-    setReplyContent("");
-  }, []);
-
   const handleReplyCancel = useCallback(() => {
     setReplyId(null);
     setReplyContent("");
   }, []);
 
-  const handleReplySubmit = useCallback(() => {
-    if (replyId === null) {
-      return;
-    }
+  const handleReplySubmit = useCallback(
+    (commentId: number | null) => {
+      if (commentId === null) {
+        return;
+      }
 
-    onReply(replyId, replyContent);
-    setReplyId(null);
-    setReplyContent("");
-  }, [replyId, replyContent, onReply]);
+      onReply(commentId, replyContent);
+      setReplyId(null);
+      setReplyContent("");
+    },
+    [replyContent, onReply]
+  );
 
 
 
@@ -118,22 +116,8 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
                   <DeleteButton onClick={() => handleDeleteClick(comment?.id)}>
                     삭제
                   </DeleteButton>
-                  <ReplyButton onClick={() => handleReplyClick(comment?.id)}>
-                    답글
-                  </ReplyButton>
                 </div>
               )}
-              {replyId === comment?.id ? (
-                <div style={{ position: "absolute" }}>
-                  <input
-                    type="text"
-                    value={replyContent}
-                    onChange={onChangeReplyContent}
-                  />
-                  <button onClick={handleReplySubmit}>완료</button>
-                  <button onClick={handleReplyCancel}>취소</button>
-                </div>
-              ) : null}
               <RepliesButton
                 onClick={() => handleRepliesClick(comment?.id)}
                 isRepliesVisible={isRepliesVisible[comment?.id!]}
@@ -146,17 +130,31 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
                 )
               </RepliesButton>
             </ButtonWrapper>
-            {isRepliesVisible[comment?.id!] &&
-              replies
-                ?.filter((reply) => reply.CommentId === comment?.id)
-                .map((reply) => (
-                  <ReplyComp
-                    key={reply.id}
-                    reply={reply}
-                    onEdit={onReplyEdit}
-                    onDelete={onDeleteReply}
+            {isRepliesVisible[comment?.id!] && (
+              <ReplyContainer>
+                {replies
+                  ?.filter((reply) => reply.CommentId === comment?.id)
+                  .map((reply) => (
+                    <ReplyComp
+                      key={reply.id}
+                      reply={reply}
+                      onEdit={onReplyEdit}
+                      onDelete={onDeleteReply}
+                    />
+                  ))}
+                <div style={{ display: "flex", width: "100%", marginBottom: "0.6rem" }}>
+                  <Textarea
+                    placeholder="댓글을 입력해주세요."
+                    value={replyContent}
+                    onChange={onChangeReplyContent}
                   />
-                ))}
+                  <ReplyButton onClick={() => handleReplySubmit(comment?.id)}>
+                    완료
+                  </ReplyButton>
+                  <ReplyButton onClick={handleReplyCancel}>취소</ReplyButton>
+                </div>
+              </ReplyContainer>
+            )}
           </Comments>
         ))}
       </List>

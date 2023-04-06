@@ -133,20 +133,16 @@ export const CompleteButton = styled.button`
 `;
 
 export const ReplyButton = styled.button`
-  color: gray;
-  min-width: 35px;
-  min-height: 20px;
+  color: white;
   margin-left: 0.1rem;
-  margin-top: 0.5rem;
-  background-color: transparent;
+  background-color: black;
   border: none;
   border-radius: 5px;
-  padding: 5px 5px;
   font-size: 8px;
   cursor: pointer;
 
   &:hover {
-    text-decoration: underline;
+    background-color: gray;
   }
 `;
 
@@ -177,3 +173,16 @@ export const ButtonWrapper = styled.div`
   position: relative;
 `;
 
+export const ReplyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 50px;
+`;
+
+export const Textarea = styled.textarea`
+  display: flex;
+  width: 100%:
+  padding: 0.8rem;
+  resize: none;  
+`;

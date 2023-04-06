@@ -28,6 +28,10 @@ const sequelize = new Sequelize(
     
     db.sequelize = sequelize;
     db.Sequelize = Sequelize;
+    //db.sequelize는 Sequelize 인스턴스를 저장하고, db.Sequelize는 sequelize 모듈을 저장
+    //sequelize 인스턴스는 데이터베이스와 연결된 Sequelize 객체를 의미하고, Sequelize 모듈은 Sequelize 자체를 의미한다.
+    //보통 Sequelize 모듈을 사용하여 다양한 데이터 타입을 정의하고, 모델을 생성하고, 연관 관계를 정의한다. 반면, sequelize 인스턴스는 데이터베이스 연결 및 쿼리를 실행하는 데 사용한다.
+    //따라서 db.sequelize를 통해 데이터베이스에 쿼리를 실행하거나 연결을 종료하는 드의 작업을 수행할 수 있으며, db.Sequelize를 통해 Sequelize 모듈을 사용하여 데이터 타입을 정의하거나 모델을 생성할 수 있다.
 
     db.sequelize
     .authenticate()
@@ -59,27 +63,6 @@ const sequelize = new Sequelize(
     CategoryTag.initiate(sequelize);
     CommentCategory.initiate(sequelize);
     Replies.initiate(sequelize);
-
-    // db.User.hasMany(db.Post);
-    // db.Post.belongsTo(db.User);
-
-    // db.Post.belongsToMany(db.Tag, {
-    //   through : 'PostTag',
-    // });
-    // db.Tag.belongsToMany(db.Post, {
-    //   through: 'PostTag'
-    // });
-
-    // db.Comment.belongsTo(db.User);
-    // db.Comment.belongsTo(db.Post);
-    // db.User.hasMany(db.Comment);
-    // db.Post.hasMany(db.Comment);
-
-    // db.Like.belongsTo(db.User);
-    // db.Like.belongsTo(db.Post);
-    // db.User.hasMany(db.Like);
-    // db.Post.hasMany(db.Like);
-
 
     Object.values(db)
     .filter((model) => typeof model.associate === "function")
