@@ -74,39 +74,51 @@ $ npm run start
 
 ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 
+### Database
+
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white)
+
 ### Development
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Express](https://img.shields.io/badge/express-%20-%23000.svg?&style=for-the-badge&logo=express&logoColor=white")
-![Styled Components](https://img.shields.io/badge/styled--components-%20-%23DB7093.svg?&style=for-the-badge&logo=styled-components&logoColor=white")
-![Node.js](https://img.shields.io/badge/node.js-%20-%23339933.svg?&style=for-the-badge&logo=node.js&logoColor=white")
-![TypeScript](https://img.shields.io/badge/typescript-%20-%23007ACC.svg?&style=for-the-badge&logo=typescript&logoColor=white")
+![Node.js](https://img.shields.io/badge/-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Styled Components](https://img.shields.io/badge/-Styled%20Components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
+![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Express.js](https://img.shields.io/badge/-Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 
 ---
+
 ## 화면 구성 📺
-| 메인 페이지  |  로그인 페이지   |
-| :-------------------------------------------: | :------------: |
-|  <img width="329" src= "https://user-images.githubusercontent.com/110822847/229567497-b5607bb5-5d3c-44e3-b32e-0b3edbf83564.PNG"/> |  <img width="329" src="https://user-images.githubusercontent.com/110822847/229567670-2b7d644f-4e1e-4b93-a168-89c2d32f0b68.PNG"/>|  
-| 회원가입 페이지   |  게시글 페이지   |  
-| <img width="329" src="https://user-images.githubusercontent.com/110822847/229567915-4c21d3a9-9d57-4eb5-b919-d52842b4f9f9.PNG"/>   |  <img width="329" src="https://user-images.githubusercontent.com/110822847/229568037-a07a998c-1d5a-43c2-b9a5-8caae388cb27.PNG"/>     |
+
+|                                                           메인 페이지                                                            |                                                          로그인 페이지                                                          |
+| :------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: |
+| <img width="329" src= "https://user-images.githubusercontent.com/110822847/229567497-b5607bb5-5d3c-44e3-b32e-0b3edbf83564.PNG"/> | <img width="329" src="https://user-images.githubusercontent.com/110822847/229567670-2b7d644f-4e1e-4b93-a168-89c2d32f0b68.PNG"/> |
+|                                                         회원가입 페이지                                                          |                                                          게시글 페이지                                                          |
+| <img width="329" src="https://user-images.githubusercontent.com/110822847/229567915-4c21d3a9-9d57-4eb5-b919-d52842b4f9f9.PNG"/>  | <img width="329" src="https://user-images.githubusercontent.com/110822847/229568037-a07a998c-1d5a-43c2-b9a5-8caae388cb27.PNG"/> |
 
 ---
+
 ## 주요 기능 📦
 
 ### ⭐️ 게시글 작성
+
 - 관리자 계정으로 로그인 했을 시에만 가능
 
 ### ⭐️ 댓글 작성
+
 - 댓글과, 대댓글을 작성할 수 있다.
 
 ### ⭐️ 좋아요 기능
+
 - 게시글에 종아요를 누를 수 있도록 추가했다.
 
 ---
+
 ## 아키텍쳐
 
 ### 디렉터리 구조
+
 ```bash
 my-blog/
 ├── server/       Node.js 서버 파일
@@ -129,6 +141,7 @@ my-blog/
 │       ├── Pages/
 │       ├── typings/
 │       ├── utils/
-│     └── index.tsx 
+│     └── index.tsx
 │   ├── package.json
 │   └── ...
+```
