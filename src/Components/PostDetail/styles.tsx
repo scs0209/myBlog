@@ -27,7 +27,8 @@ export const PostContent = styled.div`
   line-height: 1.5;
   margin-bottom: 1.5rem;
   white-space: pre-wrap;
-  text-align: left; 
+  word-break: break-all;
+  text-align: left;
   .ql-syntax {
     background-color: #f8f8f8;
     color: #333;
