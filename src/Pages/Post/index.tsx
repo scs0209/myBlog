@@ -63,7 +63,12 @@ const Post = () => {
           setTitle("");
           setContent("");
           setCategory("");
-          mutate((cachedData: any) => [...cachedData, res.data], false);
+          mutate((cachedData: any) => {
+            if (Array.isArray(cachedData)) {
+              return [...cachedData, res.data];
+            }
+            return cachedData;
+          }, false);
         })
         .catch((err) => {
           console.error(err);
@@ -86,16 +91,13 @@ const Post = () => {
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
     input.click();
-
     input.onchange = () => {
       const file = input.files?.[0];
       if (!file) {
         return;
       }
-
       const reader = new FileReader();
       reader.readAsDataURL(file);
-
       reader.onloadend = () => {
         const image = new Image();
         if (reader.result) {
@@ -115,10 +117,8 @@ const Post = () => {
             .insertEmbed(range.index, "image", image.src);
         };
       };
-
       const formData = new FormData();
       formData.append("image", file);
-
       axios
         .post(`${backUrl}/api/upload`, formData, {
           withCredentials: true,

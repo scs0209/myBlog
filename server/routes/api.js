@@ -389,7 +389,7 @@ const upload = multer({
       cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
     },
   }),
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
 });
 // 이미지 올리기
 router.post("/upload", upload.single("image"), (req, res) => {
