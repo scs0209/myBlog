@@ -41,6 +41,9 @@ export const PostContent = styled.div`
     padding: 8px 10px;
     margin-bottom: 10px;
   }
+  img {
+    max-width: 800px;
+  }
 `;
 
 export const PostActions = styled.div`

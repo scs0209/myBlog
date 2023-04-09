@@ -68,7 +68,7 @@ const MainPage = () => {
           SCS's Blog!
         </HomeLink>
         {userData?.role === "admin" && (
-          <StyledLink to="/main/write" onClick={onClickShowPost}>
+          <StyledLink to="/main/write">
             포스트 작성
           </StyledLink>
         )}
@@ -124,7 +124,7 @@ const MainPage = () => {
             <Route path="/posts/:id" element={<PostDetail />} />
             <Route path="/posts/:id/edit" element={<PostEdit />} />
             <Route path="/categories/:categoryId" element={<CategoryList />} />
-            {showPost && <Route path="/write" element={<Post />} />}
+            <Route path="/write" element={<Post />} />
           </Routes>
         </div>
         <div className="right-side">
