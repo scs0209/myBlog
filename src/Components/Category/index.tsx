@@ -19,12 +19,13 @@ const Category = () => {
   );
   const { data, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
 
+  //categoryId를 인자로 받아서 해당 ID가 'editedCategoryId'와 같으면 편집 모드를 토글하고, 다르면
+  //editedCategoryId를 해당 ID로 변경한다.
   const toggleEdit = useCallback((categoryId: any) => {
     setEdit((prev) => !prev);
     setEditedCategoryName("");
     setEditedCategoryId(categoryId);
   }, []);
-
 
   const onSubmitEdit = useCallback(
     (e: any) => {
@@ -80,15 +81,15 @@ const Category = () => {
     [mutate]
   );
 
-    useEffect(() => {
-      // 수정할 카테고리가 선택되면 해당 카테고리의 이름으로 editedCategoryName 상태를 설정합니다.
-      if (editedCategoryId !== null) {
-        const editedCategory = data.find(
-          (category: any) => category.id === editedCategoryId
-        );
-        setEditedCategoryName(editedCategory.name);
-      }
-    }, [editedCategoryId, data]);
+  useEffect(() => {
+    // 수정할 카테고리가 선택되면 해당 카테고리의 이름으로 editedCategoryName 상태를 설정합니다.
+    if (editedCategoryId !== null) {//editCategoryId가 null이 아니라면, 'data' 배열에서 해당 id와 일치하는 카테고리를 찾아서 'editedCategoryName' 상태를 그 카테고리의 이름으로 설정한다.
+      const editedCategory = data.find(
+        (category: any) => category.id === editedCategoryId
+      );
+      setEditedCategoryName(editedCategory.name);
+    }
+  }, [editedCategoryId, data]);
 
 
   if(error) return <div>에러가 발생했습니다</div>

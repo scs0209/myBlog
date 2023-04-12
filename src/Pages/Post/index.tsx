@@ -146,7 +146,7 @@ const Post = () => {
             placeholder="제목"
           />
         </div>
-        <div style={{ display: "flex", justifyContent: "center"}}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <QuillEditor
             value={content}
             onChange={setContent}
@@ -154,7 +154,7 @@ const Post = () => {
             quillRef={quillRef}
           />
         </div>
-        <div style={{ marginTop: "0.5rem" }}>
+        <div style={{ marginTop: "4rem" }}>
           <Select value={category} onChange={onChangeCategory}>
             <Option value="">카테고리 선택</Option>
             {categoryData &&

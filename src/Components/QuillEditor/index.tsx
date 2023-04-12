@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import {ImageResize} from "quill-image-resize-module-ts";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
+import { QuillEditorWrapper } from "./styles";
 
 Quill.register("modules/imageResize", ImageResize);
 
@@ -30,42 +31,45 @@ const QuillEditor:VFC<Props> = ({ value, onChange, handleImageUpload, quillRef }
     [onChange]
   );
 
-const modules = useMemo(
-  () => ({
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, false] }],
-        ["bold", "italic", "underline", "strike"],
-        [{ color: [] }, { background: [] }],
-        [{ align: [] }],
-        [{ list: "ordered" }, { list: "bullet" }],
-        ["link", "image", "code-block"],
-        ["clean"],
-      ],
-      handlers: {
-        image: handleImageUpload,
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          [{ color: [] }, { background: [] }],
+          [{ align: [] }],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["link", "image", "code-block"],
+          ["clean"],
+        ],
+        handlers: {
+          image: handleImageUpload,
+        },
       },
-    },
-    imageResize: {
-      modules: ["Resize", "DisplaySize"],
-      displaySize: true,
-      parchment: Quill.import("parchment"),
-    },
-    syntax: {
-      highlight: (text: string) => hljs.highlightAuto(text).value, // 하이라이팅 함수 설정
-    },
-  }),
-  [handleImageUpload]
-);
+      imageResize: {
+        modules: ["Resize", "DisplaySize"],
+        displaySize: true,
+        parchment: Quill.import("parchment"),
+      },
+      syntax: {
+        highlight: (text: string) => hljs.highlightAuto(text).value, // 하이라이팅 함수 설정
+      },
+    }),
+    [handleImageUpload]
+  );
 
   useEffect(() => {
-    if (quillRef.current) {
-      quillRef.current.focus();
+    const editor = quillRef.current?.getEditor();
+    if (editor) {
+      editor.once("text-change", () => {
+        editor.root.focus();
+      });
     }
   }, [quillRef]);
 
   return (
-    <div style={{ width: "91%" }}>
+    <QuillEditorWrapper>
       <ReactQuill
         placeholder="내용을 입력하세요"
         value={value}
@@ -73,7 +77,7 @@ const modules = useMemo(
         modules={modules}
         ref={quillRef}
       />
-    </div>
+    </QuillEditorWrapper>
   );
 };
 

@@ -57,6 +57,7 @@ const PostList = () => {
     [setSearchTerm, setCurrentPage, navigate, mutate]
   );
 
+  // 게시글 조회 기능
   const handlePostClick = useCallback(
     (postId: any) => {
       axios
