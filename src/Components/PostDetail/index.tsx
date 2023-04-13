@@ -372,7 +372,6 @@ const PostDetail = () => {
       setReplies(repliesData);
     }
   }, [commentsData, likeInfo, repliesData]);
-  console.log(repliesData);
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!post) return <div>로딩 중...</div>;

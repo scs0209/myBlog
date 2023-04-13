@@ -96,16 +96,16 @@ const Post = () => {
       if (!file) {
         return;
       }
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        const image = new Image();
-        if (reader.result) {
-          image.src = reader.result as string;
-        } else {
-          image.src = "";
-        }
-        image.onload = () => {
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      axios
+        .post(`${backUrl}/api/upload`, formData, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          const imageUrl = response.data.url;
           const quill = quillRef.current?.getEditor();
           if (!quill) {
             return;
@@ -114,17 +114,7 @@ const Post = () => {
           if (!range) return;
           quillRef.current
             ?.getEditor()
-            .insertEmbed(range.index, "image", image.src);
-        };
-      };
-      const formData = new FormData();
-      formData.append("image", file);
-      axios
-        .post(`${backUrl}/api/upload`, formData, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          // handle response
+            .insertEmbed(range.index, "image", imageUrl);
         })
         .catch((error) => {
           console.error(error);
