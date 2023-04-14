@@ -8,6 +8,7 @@ const passport = require("passport");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const multerGoogleStorage = require("multer-google-storage");
 
 const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
 const transporter = require("../config/emailConfig");
@@ -394,16 +395,15 @@ try {
   fs.mkdirSync("uploads");
 }
 const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, cb) {
-      cb(null, "uploads/");
-    },
-    filename(req, file, cb) {
-      const ext = path.extname(file.originalname);
-      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+  storage: multerGoogleStorage.storageEngine({
+    bucket: process.env.GCLOUD_STORAGE_BUCKET,
+    projectId: process.env.GCLOUD_STORAGE_NAME,
+    keyFilename: process.env.GCLOUD_STORAGE_KEYFILE,
+    filename: (req, file, cb) => {
+      cb(null, `original/${Date.now()}_${file.originalname}`);
     },
   }),
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 // 이미지 올리기
 router.post("/upload", upload.single("image"), (req, res) => {
@@ -411,9 +411,7 @@ router.post("/upload", upload.single("image"), (req, res) => {
   if (!file) {
     return res.status(400).send("이미지를 업로드해주세요.");
   }
-  console.log(file.filename);
-  const baseUrl = "http://localhost:5000" || process.env.BASE_URL;
-  res.json({ url: `${baseUrl}/uploads/${file.filename}` });
+  res.json({ url: req.file.path });
 });
 
 // 글 작성
