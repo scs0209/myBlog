@@ -92,3 +92,11 @@ export const CreateCategoryButton = styled.button`
     background-color: gray;
   }
 `;
+
+export const Footer = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 2rem 0;
+`;

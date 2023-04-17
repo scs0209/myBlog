@@ -5,6 +5,7 @@ import {ImageResize} from "quill-image-resize-module-ts";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
 import { QuillEditorWrapper } from "./styles";
+import axios from "axios";
 
 Quill.register("modules/imageResize", ImageResize);
 
@@ -22,6 +23,10 @@ interface Props {
   quillRef: React.RefObject<ReactQuill>;
 }
 
+const backUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const QuillEditor:VFC<Props> = ({ value, onChange, handleImageUpload, quillRef }) => {
   
   const onChangeContents = useCallback(
@@ -30,6 +35,29 @@ const QuillEditor:VFC<Props> = ({ value, onChange, handleImageUpload, quillRef }
     },
     [onChange]
   );
+
+  const handleImagePaste = (event: any, quill: any, quillRef: any) => {
+    const clipboardData = event.clipboardData;
+    const file = clipboardData.files[0];
+    if (!file.type.includes("image/")) return;
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("image", file);
+    axios
+      .post(`${backUrl}/api/upload`, formData, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        const imageUrl = response.data.url;
+        const range = quill.getSelection();
+        quillRef.current
+          .getEditor()
+          .insertEmbed(range.index, "image", imageUrl);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const modules = useMemo(
     () => ({
@@ -54,6 +82,13 @@ const QuillEditor:VFC<Props> = ({ value, onChange, handleImageUpload, quillRef }
       },
       syntax: {
         highlight: (text: string) => hljs.highlightAuto(text).value, // 하이라이팅 함수 설정
+      },
+      clipboard: {
+        matchVisual: false,
+        // 복사 붙여넣기 이벤트 핸들러 등록
+        onPaste: (event: any, quill: any, quillRef: any) => {
+          handleImagePaste(event, quill, quillRef);
+        },
       },
     }),
     [handleImageUpload]

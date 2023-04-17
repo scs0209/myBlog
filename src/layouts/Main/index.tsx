@@ -1,7 +1,7 @@
 import loadable from "@loadable/component";
 import React, { useCallback, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import { Button, CreateCategoryButton, Header, HomeLink, Logo, MainContainer, StyledLink } from "./styles";
+import { Button, CreateCategoryButton, Footer, Header, HomeLink, Logo, MainContainer, StyledLink } from "./styles";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import Category from "../../Components/Category";
@@ -64,13 +64,15 @@ const MainPage = () => {
     <div>
       <Header>
         <HomeLink to="/">
-          <Logo src="/favicon.png" alt="logo" style={{ width:"60px", height:"60px",color: "black"}}/>
+          <Logo
+            src="/favicon.png"
+            alt="logo"
+            style={{ width: "60px", height: "60px", color: "black" }}
+          />
           SCS's Blog!
         </HomeLink>
         {userData?.role === "admin" && (
-          <StyledLink to="/main/write">
-            포스트 작성
-          </StyledLink>
+          <StyledLink to="/main/write">포스트 작성</StyledLink>
         )}
         <div>
           {!userData ? (
@@ -128,9 +130,16 @@ const MainPage = () => {
           </Routes>
         </div>
         <div className="right-side">
-          <img src={require("../../images/banner.jpg")} alt="광고 배너" style={{ width: "90%", margin:"0 0.25rem 0 0.25rem" }} />
+          <img
+            src={require("../../images/banner.jpg")}
+            alt="광고 배너"
+            style={{ width: "90%", margin: "0 0.25rem 0 0.25rem" }}
+          />
         </div>
       </MainContainer>
+      <Footer>
+        2023 SCS - All rights reserved
+      </Footer>
       <CreateCategoryModal
         show={showCreateCategoryModal}
         onCloseModal={onCloseModal}

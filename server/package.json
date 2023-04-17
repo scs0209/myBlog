@@ -15,6 +15,7 @@
   "author": "SCS",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^6.9.5",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
