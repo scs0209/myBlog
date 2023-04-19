@@ -94,9 +94,8 @@ export const CreateCategoryButton = styled.button`
 `;
 
 export const Footer = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 2rem 0;
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
 `;
