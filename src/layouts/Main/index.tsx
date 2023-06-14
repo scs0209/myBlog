@@ -1,15 +1,13 @@
 import loadable from "@loadable/component";
 import React, { useCallback, useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
-import { Button, CreateCategoryButton, Footer, Header, HomeLink, Logo, MainContainer, StyledLink } from "./styles";
+import {  Route, Routes } from "react-router-dom";
+import {  CreateCategoryButton, Footer, MainContainer } from "./styles";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import Category from "../../Components/Category";
 import CategoryList from "../../Components/CategoryList";
-import axios from "axios";
-import Avatar from 'react-avatar';
 import CreateCategoryModal from "Components/onCreateCategoryModal";
-import Menu from "../../Components/Menu";
+import Header from "../../Components/Header";
 const Post = loadable(() => import('../../Pages/Post'));
 const PostList = loadable(() => import('../../Components/PostList'));
 const PostDetail = loadable(() => import('../../Components/PostDetail'));
@@ -27,30 +25,7 @@ const backUrl =
 const MainPage = () => {
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
   const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
-  const [showPost, setShowPost] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
 
-  const onLogout = useCallback(() => {
-    axios.post(`${backUrl}/api/users/logout`, null, {
-      withCredentials: true
-    })
-    .then(() => {
-      mutate(false, false);
-    });
-  }, [mutate])
-
-  const onClickShowPost = useCallback(() => {
-    setShowPost((prev) => !prev);
-  }, []);
-
-  const onClickShowProfile = useCallback(() => {
-    setShowProfile((prev) => !prev);
-  }, []);
-
-  const onCloseProfileMenu = useCallback((e: any) => {
-    e.stopPropagation();
-    setShowProfile(false);
-  }, []);
 
   const onCloseModal = useCallback(() => {
     setShowCreateCategoryModal(false);
@@ -62,50 +37,7 @@ const MainPage = () => {
 
   return (
     <div>
-      <Header>
-        <HomeLink to="/">
-          <Logo
-            src="/favicon.png"
-            alt="logo"
-            style={{ width: "60px", height: "60px", color: "black" }}
-          />
-          SCS's Blog!
-        </HomeLink>
-        {userData?.role === "admin" && (
-          <StyledLink to="/main/write">포스트 작성</StyledLink>
-        )}
-        <div>
-          {!userData ? (
-            <Link to="/main/login" onClick={onClickShowPost}>
-              <Button>Log In</Button>
-            </Link>
-          ) : (
-            <span onClick={onClickShowProfile}>
-              <Avatar
-                name={userData?.name}
-                src={userData?.avatar_url}
-                size="30"
-                round
-                color="gray"
-              />
-              {showProfile && (
-                <Menu
-                  show={showProfile}
-                  onCloseModal={onCloseProfileMenu}
-                  style={{ top: "80px" }}
-                >
-                  <div className="profile-menu">
-                    <Link to="/main/password" onClick={onClickShowPost}>
-                      <Button>PW Change</Button>
-                    </Link>
-                    <Button onClick={onLogout}>Logout</Button>
-                  </div>
-                </Menu>
-              )}
-            </span>
-          )}
-        </div>
-      </Header>
+      <Header />
       <MainContainer className="main-container">
         <div className="left-side">
           <Category />

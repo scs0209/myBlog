@@ -1,3 +1,10 @@
+export interface User {
+  id: number;
+  email: string;
+  role: string;
+  name: string
+}
+
 export interface Comment {
   id: number;
   content: string;

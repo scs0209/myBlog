@@ -23,14 +23,18 @@ const Menu: FC<Props> = ({
   if (!show) return null;
 
   return (
-    <CreateMenu onClick={onCloseModal}>
+    <div
+      className="z-50 hidden my-4 text-base list-none bg-gray-700 divide-y divide-gray-600 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+      id="user-dropdown"
+      onClick={onCloseModal}
+    >
       <div onClick={stopPropagation} style={style}>
         {closeButton && (
           <CloseModalButton onClick={onCloseModal}>&times;</CloseModalButton>
         )}
         {children}
       </div>
-    </CreateMenu>
+    </div>
   );
 };
 
