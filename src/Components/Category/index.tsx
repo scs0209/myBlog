@@ -1,23 +1,35 @@
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { FormEvent, VFC, useCallback, useEffect, useState } from "react";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
-import { Border, Button, CategoryLi, CategoryWrapper, EditButton, HeaderLink, List, ModeButton, StyledLink } from "./styles";
 import useInput from "../../utils/useInput";
+import { backUrl } from "../../config";
+import { Link } from "react-router-dom";
+import CategoryLi from "../../Components/CategoryLi";
+import CreateCategoryModal from "../../Components/onCreateCategoryModal";
 
-const backUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
-    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
-const Category = () => {
+interface Props {
+  showSidebar: boolean;
+}
+
+const Category: VFC<Props> = ({ showSidebar }) => {
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput("");
+  const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
   const { data: userData, mutate: mutateUserData } = useSWR(
     `${backUrl}/api/users`,
     fetcher
   );
   const { data, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
+
+  const onClickCreateCategory = useCallback(() => {
+    setShowCreateCategoryModal(true);
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    setShowCreateCategoryModal(false);
+  }, []);
 
   //categoryId를 인자로 받아서 해당 ID가 'editedCategoryId'와 같으면 편집 모드를 토글하고, 다르면
   //editedCategoryId를 해당 ID로 변경한다.
@@ -28,7 +40,7 @@ const Category = () => {
   }, []);
 
   const onSubmitEdit = useCallback(
-    (e: any) => {
+    (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!editedCategoryName || !editedCategoryName.trim()) {
         alert("글자를 입력해주세요.");
@@ -62,7 +74,7 @@ const Category = () => {
 
   // 카테고리 삭제
   const onDeleteCategory = useCallback(
-    (categoryId: any) => {
+    (categoryId: number) => {
       axios
         .delete(`${backUrl}/api/categories/${categoryId}`, {
           withCredentials: true,
@@ -97,44 +109,61 @@ const Category = () => {
 
 
   return (
-    <CategoryWrapper className="Category">
-      <HeaderLink to="/main/posts">
-        <h2>전체 게시글</h2>
-      </HeaderLink>
-      {userData?.role === "admin" && (
-        <ModeButton onClick={() => toggleEdit(null)}>
-          {edit ? "x" : "편집 모드"}
-        </ModeButton>
-      )}
-      <Border></Border>
-      <CategoryLi>
-        {data.map((category: any) => (
-          <List key={category.id}>
-            {editedCategoryId === category.id ? (
-              <form onSubmit={onSubmitEdit}>
-                <input
-                  value={editedCategoryName}
-                  onChange={onChangeCategoryName}
-                />
-                <EditButton type="submit">수정</EditButton>
-              </form>
-            ) : (
-              <StyledLink to={`/main/categories/${category.id}`}>
-                {category.name}
-              </StyledLink>
+    <aside
+      id="logo-sidebar"
+      className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${
+        showSidebar ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
+      } bg-gray-800 border-gray-700`}
+      aria-label="Sidebar"
+    >
+      <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+        <ul className="space-y-2 font-medium">
+          <li>
+            <Link
+              to="/main/posts"
+              className="border-b-2 border-blue-600 flex items-center p-2 text-gray-300 rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <span className="ml-3">전체 게시글</span>
+            </Link>
+          </li>
+          <CategoryLi
+            categories={data}
+            edit={edit}
+            editedCategoryId={editedCategoryId}
+            editedCategoryName={editedCategoryName}
+            onChangeCategoryName={onChangeCategoryName}
+            onSubmitEdit={onSubmitEdit}
+            toggleEdit={toggleEdit}
+            onDeleteCategory={onDeleteCategory}
+          />
+        </ul>
+        {userData?.role === "admin" && (
+          <div>
+            {userData?.role === "admin" && (
+              <button
+                type="button"
+                className="mt-3 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                onClick={onClickCreateCategory}
+              >
+                +
+              </button>
             )}
-            {edit && (
-              <div>
-                <Button onClick={() => toggleEdit(category.id)}>✏</Button>
-                <Button onClick={() => onDeleteCategory(category.id)}>
-                  🗑
-                </Button>
-              </div>
-            )}
-          </List>
-        ))}
-      </CategoryLi>
-    </CategoryWrapper>
+            <button
+              type="button"
+              className="mt-3 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+              onClick={() => toggleEdit(null)}
+            >
+              {edit ? "x" : "편집"}
+            </button>
+          </div>
+        )}
+      </div>
+      <CreateCategoryModal
+        show={showCreateCategoryModal}
+        onCloseModal={onCloseModal}
+        setShowCreateCategoryModal={setShowCreateCategoryModal}
+      />
+    </aside>
   );
 }
 

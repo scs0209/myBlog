@@ -1,13 +1,14 @@
 import loadable from "@loadable/component";
-import React, { useCallback, useState } from "react";
 import {  Route, Routes } from "react-router-dom";
-import {  CreateCategoryButton, Footer, MainContainer } from "./styles";
+import {  MainContainer } from "./styles";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import Category from "../../Components/Category";
 import CategoryList from "../../Components/CategoryList";
-import CreateCategoryModal from "Components/onCreateCategoryModal";
-import Header from "../../Components/Header";
+import Header from "../../Components/common/Header";
+import { backUrl } from "../../config";
+import Footer from "../../Components/common/Footer";
+import { useCallback, useEffect, useState } from "react";
 const Post = loadable(() => import('../../Pages/Post'));
 const PostList = loadable(() => import('../../Components/PostList'));
 const PostDetail = loadable(() => import('../../Components/PostDetail'));
@@ -18,34 +19,42 @@ const FindId = loadable(() => import("../../Pages/FindId"));
 const FindPassword = loadable(() => import("../../Pages/FindPassword"));
 const ChangePassword = loadable(() => import("../../Pages/ChangePassword"));
 
-const backUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
-    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const MainPage = () => {
-  const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
 
-
-  const onCloseModal = useCallback(() => {
-    setShowCreateCategoryModal(false);
+  const toggleSidebar = useCallback(() => {
+    setShowSidebar((prevShowSidebar) => !prevShowSidebar);
   }, []);
 
-  const onClickCreateCategory = useCallback(() => {
-    setShowCreateCategoryModal(true);
+  const updateSidebarState = useCallback(() => {
+    // 화면 너비가 640 픽셀 이상인 경우 사이드바를 항상 열린 상태로 유지
+    if (window.innerWidth >= 640) {
+      setShowSidebar(true);
+    } else {
+      setShowSidebar(false);
+    }
   }, []);
+
+  useEffect(() => {
+    // 초기 상태 업데이트
+    updateSidebarState();
+
+    // resize 이벤트 리스너 추가
+    window.addEventListener("resize", updateSidebarState);
+
+    // 컴포넌트 해제 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("resize", updateSidebarState);
+    };
+  }, [updateSidebarState]);
 
   return (
     <div>
-      <Header />
+      <Header toggleSidebar={toggleSidebar} />
       <MainContainer className="main-container">
         <div className="left-side">
-          <Category />
-          {userData?.role === "admin" && (
-            <CreateCategoryButton onClick={onClickCreateCategory}>
-              +
-            </CreateCategoryButton>
-          )}
+          <Category showSidebar={showSidebar} />
         </div>
         <div className="main">
           <Routes>
@@ -69,14 +78,7 @@ const MainPage = () => {
           />
         </div>
       </MainContainer>
-      <Footer>
-        2023 SCS - All rights reserved
-      </Footer>
-      <CreateCategoryModal
-        show={showCreateCategoryModal}
-        onCloseModal={onCloseModal}
-        setShowCreateCategoryModal={setShowCreateCategoryModal}
-      />
+      <Footer />
     </div>
   );
 }

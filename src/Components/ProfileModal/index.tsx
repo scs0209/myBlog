@@ -1,4 +1,4 @@
-import React, { VFC, useCallback } from 'react';
+import React, { VFC } from 'react';
 import { Link } from 'react-router-dom';
 import { User } from '../../typings/db';
 
@@ -29,6 +29,16 @@ const ProfileModal: VFC<Props>= ({ userData, showProfile, onLogout }) => {
         </span>
       </div>
       <ul className="py-2" aria-labelledby="user-menu-button">
+        <li>
+          {userData?.role === "admin" && (
+            <Link
+              to="/main/write"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+            >
+                포스트 작성
+            </Link>
+          )}
+        </li>
         <li>
           <Link
             to="/main/password"
