@@ -7,14 +7,9 @@ import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import { Comment, Reply } from "../../typings/db";
 import LikeButton from "../../Components/LikedButton";
-import { LikeSpan, PostActions, PostContainer, PostContent, PostDate, PostDeleteButton, PostEditButton, PostHeader, PostTitle } from "./styles";
-import DOMPurify from "dompurify";
+import { backUrl } from "../../config";
+import MDEditor from "@uiw/react-md-editor";
 
-
-const backUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
-    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -388,19 +383,21 @@ const PostDetail = () => {
   if (`${createdDate.getFullYear()}` === "NaN") return <div>로딩중...</div>;
 
   return (
-    <PostContainer>
+    <div className="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       {post && (
         <>
-          <PostHeader>
-            <PostTitle>{title}</PostTitle>
-            <PostDate>{dateString}</PostDate>
-          </PostHeader>
-          <PostContent
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
-          ></PostContent>
-          <PostActions>
+          <div className="mb-3">
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              {title}
+            </h5>
+            <span className="text-gray-400 text-sm">{dateString}</span>
+          </div>
+          <p className="font-normal text-white" style={{ padding: 15 }}>
+            <MDEditor.Markdown style={{ padding: 10 }} source={content} />
+          </p>
+          <div className="flex w-full justify-between items-center mb-2">
             <div>
-              <LikeSpan>좋아요: {likeCount}</LikeSpan>
+              <span className="text-white text-xs">좋아요: {likeCount}</span>
               {user && (
                 <LikeButton
                   likeCount={likeCount}
@@ -412,16 +409,21 @@ const PostDetail = () => {
             <div>
               {user && user.role === "admin" && (
                 <>
-                  <PostDeleteButton onClick={handleDeleteClick}>
-                    삭제하기
-                  </PostDeleteButton>
-                  <PostEditButton>
-                    <Link to={`/main/posts/${id}/edit`}>수정하기</Link>
-                  </PostEditButton>
+                  <div className="flex items-center flex-wrap ">
+                    <span
+                      className="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-xs pr-3 py-1 border-r-2 border-gray-200 hover:text-red-600"
+                      onClick={handleDeleteClick}
+                    >
+                      삭제
+                    </span>
+                    <span className="text-gray-400 inline-flex items-center leading-none text-xs hover:text-blue-600">
+                      <Link to={`/main/posts/${id}/edit`}>수정</Link>
+                    </span>
+                  </div>
                 </>
               )}
             </div>
-          </PostActions>
+          </div>
         </>
       )}
       <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
@@ -434,7 +436,7 @@ const PostDetail = () => {
         onDeleteReply={handleReplyDelete}
         onReplyEdit={handleReplyEdit}
       />
-    </PostContainer>
+    </div>
   );
 };
 

@@ -1,18 +1,13 @@
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useCallback, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import fetcher from "../../utils/fetcher";
 import useSWR from "swr";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
-import { Input } from "../../Pages/Post/styles";
-import { PostDiv, SubmitButton } from "../../Components/PostSubmit/styles";
-import QuillEditor from "../../Components/QuillEditor";
+import { backUrl } from "../../config";
+import MDEditor from "@uiw/react-md-editor";
 
-const backUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
-    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const PostEdit = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -114,7 +109,7 @@ const PostEdit = () => {
 
   return (
     <div>
-      <h2>게시글 수정</h2>
+      <h2 className="text-4xl font-bold">게시글 수정</h2>
       <form onSubmit={handleSubmit}>
         <div
           style={{
@@ -124,7 +119,8 @@ const PostEdit = () => {
           }}
         >
           <div>
-            <Input
+            <input
+              className="w-11/12 pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none"
               type="text"
               name="title"
               value={title}
@@ -132,18 +128,27 @@ const PostEdit = () => {
               placeholder="제목"
             />
           </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <QuillEditor
-              value={content}
-              onChange={setContent}
-              handleImageUpload={handleImageUpload}
-              quillRef={quillRef}
-            />
+          <div className="markarea">
+            <div data-color-mode="light">
+              <MDEditor
+                style={{ width: "100%" }}
+                height={600}
+                value={content}
+                onChange={setContent}
+                preview="live"
+              />
+            </div>
           </div>
         </div>
-        <PostDiv>
-          <SubmitButton type="submit">수정</SubmitButton>
-        </PostDiv>
+        <div className="text-center mt-8">
+          <button
+            className="w-32 p-2 rounded-lg  bg-white cursor-pointer hover:bg-rose-400 hover:text-white"
+            style={{ border: "solid 1px lightgray" }}
+            type="submit"
+          >
+            수정
+          </button>
+        </div>
       </form>
     </div>
   );

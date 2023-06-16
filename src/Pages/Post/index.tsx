@@ -1,28 +1,20 @@
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState, VFC } from "react";
-import { Input } from "./styles";
+import React, { useCallback, useState } from "react";
 import axios from "axios";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import PostSubmit from "../../Components/PostSubmit";
 import { Select } from "antd";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import QuillEditor from "../../Components/QuillEditor";
 import useInput from "../../utils/useInput";
+import MDEditor from "@uiw/react-md-editor";
+import { backUrl } from "../../config";
 
 
 const { Option } = Select;
-
-const backUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
-    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const Post = () => {
   const { data: currentUser } = useSWR(`${backUrl}/api/users`, fetcher);
   const [title, onChangeTitle, setTitle] = useInput("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState<string | undefined>("");
   const [category, setCategory] = useState(""); // 카테고리 추가
-  const quillRef = useRef<ReactQuill>(null);
 
   const { data: postData, mutate } = useSWR(
     `${backUrl}/api/main/posts`,
@@ -36,6 +28,7 @@ const Post = () => {
   const onChangeCategory = useCallback((value: string) => {
     setCategory(value);
   }, []);
+
 
   const onSubmit = useCallback(
     (e: any) => {
@@ -86,65 +79,29 @@ const Post = () => {
     ]
   );
 
-  const handleImageUpload = useCallback(() => {
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
-    input.onchange = () => {
-      const file = input.files?.[0];
-      if (!file) {
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("image", file);
-
-      axios
-        .post(`${backUrl}/api/upload`, formData, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          const imageUrl = response.data.url;
-          const quill = quillRef.current?.getEditor();
-          if (!quill) {
-            return;
-          }
-          const range = quill.getSelection();
-          if (!range) return;
-          quillRef.current
-            ?.getEditor()
-            .insertEmbed(range.index, "image", imageUrl);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
-  }, [quillRef]);
-
-
-
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <div>
-          <Input
-            type="text"
-            name="title"
-            value={title}
-            onChange={onChangeTitle}
-            placeholder="제목"
-          />
+        <input
+          className="w-11/12 pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none"
+          type="text"
+          name="title"
+          value={title}
+          onChange={onChangeTitle}
+          placeholder="제목"
+        />
+        <div className="markarea">
+          <div data-color-mode="light">
+            <MDEditor
+              style={{ width: "100%" }}
+              height={600}
+              value={content}
+              onChange={setContent}
+              preview="live"
+            />
+          </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <QuillEditor
-            value={content}
-            onChange={setContent}
-            handleImageUpload={handleImageUpload}
-            quillRef={quillRef}
-          />
-        </div>
-        <div style={{ marginTop: "4rem" }}>
+        <div className="mt-5 text-center">
           <Select value={category} onChange={onChangeCategory}>
             <Option value="">카테고리 선택</Option>
             {categoryData &&

@@ -1,6 +1,5 @@
 import React, { VFC } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { Button } from "./styles";
 
 interface Props {
   likeCount: number;
@@ -10,9 +9,9 @@ interface Props {
 
 const LikeButton: VFC<Props> = ({ likeCount, liked, onClick }) => {
   return (
-    <Button onClick={onClick}>
+    <button className="relative top-1 ml-1 cursor-pointer bg-transparent text-red-600" onClick={onClick}>
       {liked ? <AiFillHeart color="red" /> : <AiOutlineHeart />}{" "}
-    </Button>
+    </button>
   );
 }
 

@@ -10,7 +10,7 @@ import { backUrl } from "../../config";
 import Footer from "../../Components/common/Footer";
 import { useCallback, useEffect, useState } from "react";
 const Post = loadable(() => import('../../Pages/Post'));
-const PostList = loadable(() => import('../../Components/PostList'));
+const PostList = loadable(() => import('../../Pages/PostList'));
 const PostDetail = loadable(() => import('../../Components/PostDetail'));
 const PostEdit = loadable(() => import('../../Components/PostEdit'));
 const Login = loadable(() => import("../../Pages/Login"));
@@ -50,36 +50,27 @@ const MainPage = () => {
   }, [updateSidebarState]);
 
   return (
-    <div>
+    <>
       <Header toggleSidebar={toggleSidebar} />
-      <MainContainer className="main-container">
-        <div className="left-side">
-          <Category showSidebar={showSidebar} />
+      <Category showSidebar={showSidebar} />
+      <div className="p-4 sm:ml-64">
+        <div className="p-4 dark:border-gray-700 mt-14">
+        <Routes>
+          <Route path="/posts" element={<PostList />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/find-id" element={<FindId />} />
+          <Route path="/find-password" element={<FindPassword />} />
+          <Route path="/password" element={<ChangePassword />} />
+          <Route path="/posts/:id" element={<PostDetail />} />
+          <Route path="/posts/:id/edit" element={<PostEdit />} />
+          <Route path="/categories/:categoryId" element={<CategoryList />} />
+          <Route path="/write" element={<Post />} />
+        </Routes>
         </div>
-        <div className="main">
-          <Routes>
-            <Route path="/posts" element={<PostList />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/find-id" element={<FindId />} />
-            <Route path="/find-password" element={<FindPassword />} />
-            <Route path="/password" element={<ChangePassword />} />
-            <Route path="/posts/:id" element={<PostDetail />} />
-            <Route path="/posts/:id/edit" element={<PostEdit />} />
-            <Route path="/categories/:categoryId" element={<CategoryList />} />
-            <Route path="/write" element={<Post />} />
-          </Routes>
-        </div>
-        <div className="right-side">
-          <img
-            src={require("../../images/banner.jpg")}
-            alt="광고 배너"
-            style={{ width: "90%", margin: "0 0.25rem 0 0.25rem" }}
-          />
-        </div>
-      </MainContainer>
+      </div>
       <Footer />
-    </div>
+    </>
   );
 }
 

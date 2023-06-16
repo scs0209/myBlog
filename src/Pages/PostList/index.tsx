@@ -1,17 +1,13 @@
-import React, { useCallback, useEffect, useState, VFC } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import fetcher from "utils/fetcher";
 import useSWR from 'swr';
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Dates, ListContainer, ListHeader, PaginationContainer, PostLi, View } from "./styles";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { PaginationContainer } from "./styles";
 import Pagination from "react-js-pagination";
 import Search from "../../Components/Search";
 import axios from "axios";
+import { backUrl } from "../../config";
 
-
-const backUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
-    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const PostList = () => {
   const navigate = useNavigate();
   const location = useLocation(); // 현재 경로(location) 정보 가져오기
@@ -36,7 +32,6 @@ const PostList = () => {
   const [currentPagePosts, setCurrentPagePosts] = useState(
     posts?.slice(startIdx, endIdx)
   );
-
 
   const handlePageChange = useCallback(
     (pageNum: number) => {
@@ -104,59 +99,72 @@ const PostList = () => {
     setCurrentPagePosts(posts?.slice(startIdx, endIdx));
   }, [postData, startIdx, endIdx]);
 
-
-  console.log(Array.isArray(posts), startIdx, endIdx, currentPagePosts);
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
 
 
   return (
-    <ListContainer className="List">
-      <h2>게시글 목록</h2>
-      <PostLi>
-        <div className="list_grid list_title">
-          <div>title</div>
-          <div>views</div>
-          <div>dates</div>
-        </div>
-        {currentPagePosts?.map((post: any) => {
-          const createdDate = new Date(post.createdAt);
-          const dateString = `${createdDate.getFullYear()} - ${
-            createdDate.getMonth() + 1
-          } - ${createdDate.getDate()}`;
-          return (
-            <ListHeader
-              className="list_grid"
-              key={post.id}
-              onClick={() => handlePostClick(post.id)}
-            >
-              <Link to={`/main/posts/${post.id}`}>
-                <div>{post.title}</div>
-              </Link>
-              <View>{post.views}</View>
-              <Dates>{dateString}</Dates>
-            </ListHeader>
-          );
-        })}
-      </PostLi>
-      <PaginationContainer>
-        <Pagination
-          activePage={currentPage}
-          itemsCountPerPage={PAGE_SIZE}
-          totalItemsCount={totalPosts}
-          pageRangeDisplayed={5}
-          onChange={handlePageChange}
-          itemClass="page-item"
-          linkClass="page-link"
-          activeLinkClass="active"
-          firstPageText="<<"
-          lastPageText=">>"
-          prevPageText="<"
-          nextPageText=">"
-        />
-      </PaginationContainer>
-      <Search onSearch={handleSearch} />
-    </ListContainer>
+    <div>
+      <h1 className="text-3xl font-bold mb-3">게시글 목록</h1>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                title
+              </th>
+              <th scope="col" className="px-6 py-3">
+                views
+              </th>
+              <th scope="col" className="px-6 py-3">
+                dates
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentPagePosts?.map((post: any) => {
+              const createdDate = new Date(post.createdAt);
+              const dateString = `${createdDate.getFullYear()} - ${
+                createdDate.getMonth() + 1
+              } - ${createdDate.getDate()}`;
+              return (
+                <tr
+                  key={post.id}
+                  onClick={() => handlePostClick(post.id)}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                >
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    <Link to={`/main/posts/${post.id}`}>{post.title}</Link>
+                  </th>
+                  <td className="px-6 py-4">{post.views}</td>
+                  <td className="px-6 py-4">{dateString}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+        <PaginationContainer>
+          <Pagination
+            activePage={currentPage}
+            itemsCountPerPage={PAGE_SIZE}
+            totalItemsCount={totalPosts}
+            pageRangeDisplayed={5}
+            onChange={handlePageChange}
+            itemClass="page-item"
+            linkClass="page-link"
+            activeLinkClass="active"
+            firstPageText="<<"
+            lastPageText=">>"
+            prevPageText="<"
+            nextPageText=">"
+          />
+        </PaginationContainer>
+        <Search onSearch={handleSearch} />
+    </div>
   );
 }
 

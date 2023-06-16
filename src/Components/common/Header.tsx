@@ -1,4 +1,4 @@
-import React, { VFC } from "react";
+import React, { VFC, memo } from "react";
 import useSWR from "swr";
 import { useCallback, useState } from "react";
 import axios from "axios";
@@ -130,4 +130,4 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
   );
 }
 
-export default Header;
+export default memo(Header);
