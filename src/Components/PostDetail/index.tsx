@@ -392,12 +392,16 @@ const PostDetail = () => {
             </h5>
             <span className="text-gray-400 text-sm">{dateString}</span>
           </div>
-          <p className="font-normal text-white" style={{ padding: 15 }}>
-            <MDEditor.Markdown style={{ padding: 10 }} source={content} />
-          </p>
+          <MDEditor.Markdown
+            className="rounded-lg bg-gray-400"
+            style={{ padding: 10 }}
+            source={content}
+          />
           <div className="flex w-full justify-between items-center mb-2">
             <div>
-              <span className="text-white text-xs">좋아요: {likeCount}</span>
+              <span className="text-gray-400 dark:text-white text-xs">
+                좋아요: {likeCount}
+              </span>
               {user && (
                 <LikeButton
                   likeCount={likeCount}
@@ -411,7 +415,7 @@ const PostDetail = () => {
                 <>
                   <div className="flex items-center flex-wrap ">
                     <span
-                      className="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-xs pr-3 py-1 border-r-2 border-gray-200 hover:text-red-600"
+                      className="cursor-pointer text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-xs pr-3 py-1 border-r-2 border-gray-200 hover:text-red-600"
                       onClick={handleDeleteClick}
                     >
                       삭제
@@ -426,16 +430,20 @@ const PostDetail = () => {
           </div>
         </>
       )}
-      <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
-      <CommentList
-        comments={comments}
-        replies={replies}
-        onDelete={handleCommentDelete}
-        onEdit={handleCommentEdit}
-        onReply={handleReplySubmit}
-        onDeleteReply={handleReplyDelete}
-        onReplyEdit={handleReplyEdit}
-      />
+      <section className="bg-white dark:bg-gray-800 rounded-lg py-8 lg:py-16">
+        <div className="max-w-4xl mx-auto px-4">
+          <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
+          <CommentList
+            comments={comments}
+            replies={replies}
+            onDelete={handleCommentDelete}
+            onEdit={handleCommentEdit}
+            onReply={handleReplySubmit}
+            onDeleteReply={handleReplyDelete}
+            onReplyEdit={handleReplyEdit}
+          />
+        </div>
+      </section>
     </div>
   );
 };

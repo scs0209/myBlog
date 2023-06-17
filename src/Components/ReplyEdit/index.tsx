@@ -1,5 +1,5 @@
 import React, { ChangeEvent, VFC } from "react";
-import { ReplyCancelButton, ReplyEditWrapper, ReplySaveButton } from "./styles";
+import { Textarea } from "flowbite-react";
 
 interface Props {
   value: string;
@@ -10,15 +10,31 @@ interface Props {
 
 const ReplyEdit: VFC<Props> = ({ onCancel, onSave, value, onChange }) => {
   return (
-    <ReplyEditWrapper>
-      <textarea
-        value={value}
-        onChange={onChange}
-        style={{ resize: "none", outline: "none" }}
-      />
-      <ReplyCancelButton onClick={onCancel}>취소</ReplyCancelButton>
-      <ReplySaveButton onClick={onSave}>저장</ReplySaveButton>
-    </ReplyEditWrapper>
+    <form className="mb-6">
+      <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <label className="sr-only">Your comment</label>
+        <Textarea
+          value={value}
+          onChange={onChange}
+          placeholder="댓글을 입력해주세요."
+          style={{ resize: "none"}}
+          rows={3}
+          required
+        />
+      </div>
+        <button
+          type="button"
+          className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800" onClick={onCancel}
+        >
+          취소
+        </button>
+        <button
+          type="submit"
+          className="ml-2 inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800" onClick={onSave}
+        >
+          저장
+        </button>
+    </form>
   );
 }
 

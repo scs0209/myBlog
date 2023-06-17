@@ -1,9 +1,11 @@
 import RepliesButton from "../../Components/RepliesButton";
-import React, { ChangeEvent, memo, useCallback, useState, VFC } from "react";
+import React, { useCallback, useState, VFC } from "react";
 import { Comment, Reply } from "../../typings/db";
-import { ButtonWrapper, CancelButton, Comments, CompleteButton, Container, Content, DeleteButton, EditButton, EditForm, EditInput, List, Name, ReplyButton, ReplyContainer, Textarea, Title } from "./styles";
 import ReplyComp from "Components/Reply";
 import useInput from "../../utils/useInput";
+import { Dropdown } from "flowbite-react";
+import ReplyForm from "../../Components/ReplyForm";
+import CommentEdit from "Components/CommentEdit";
 
 interface Props {
   comments: Comment[];
@@ -17,10 +19,11 @@ interface Props {
 
 const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyEdit, onDeleteReply, replies }) => {
   const [editId, setEditId] = useState<number | null>(null);
-  const [editContent, setEditContent] = useState<string>("");
+  const [editContent, onChangeEditContent, setEditContent] = useInput("");
   const [replyId, setReplyId] = useState<number | null>(null);
   const [replyContent, onChangeReplyContent, setReplyContent] = useInput<string>("");
   const [isRepliesVisible, setIsRepliesVisible] = useState<{[commentId: number]: boolean;}>({});
+  const [show, setShow] = useState(false)
 
   const handleRepliesClick = useCallback((commentId: number) => {
     setIsRepliesVisible((prev) => {
@@ -55,10 +58,6 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
     setEditContent("");
   }, [editId, editContent, onEdit]);
 
-  const onChangeEditContent = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setEditContent(e.target.value);
-  }, []);
-
   const handleReplyCancel = useCallback(() => {
     setReplyId(null);
     setReplyContent("");
@@ -77,61 +76,103 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
     [replyContent, onReply]
   );
 
+  const toggleShow = useCallback(() => {
+    setShow((prev) => !prev)
+  }, [])
+
 
 
   return (
-    <Container>
-      <Title>댓글</Title>
-      <List>
-        {comments?.map((comment) => (
-          <Comments key={comment?.id}>
-            <div>
-              <Name>{comment?.User?.name}</Name>
-              {editId === comment?.id ? (
-                <EditForm>
-                  <EditInput
-                    type="text"
-                    value={editContent}
-                    onChange={onChangeEditContent}
-                  />
-                  <CompleteButton onClick={handleEditSubmit}>
-                    완료
-                  </CompleteButton>
-                  <CancelButton onClick={handleEditCancel}>취소</CancelButton>
-                </EditForm>
-              ) : (
-                <Content>{comment?.content}</Content>
-              )}
-            </div>
-            <ButtonWrapper>
-              {editId === comment?.id ? null : (
-                <div>
-                  <EditButton
-                    onClick={() =>
-                      handleEditClick(comment?.id!, comment?.content!)
-                    }
-                  >
-                    수정
-                  </EditButton>
-                  <DeleteButton onClick={() => handleDeleteClick(comment?.id)}>
-                    삭제
-                  </DeleteButton>
-                </div>
-              )}
-              <RepliesButton
-                onClick={() => handleRepliesClick(comment?.id)}
-                isRepliesVisible={isRepliesVisible[comment?.id!]}
+    <>
+      {comments?.map((comment) => (
+        <div key={comment?.id}>
+          <article className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900">
+            <footer className="flex justify-between items-center mb-2">
+              <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                {comment?.User?.name}
+              </p>
+              <Dropdown
+                size="xs"
+                label="..."
+                style={{ backgroundColor: " #2d3748" }}
               >
-                (
-                {
-                  replies?.filter((reply) => reply.CommentId === comment?.id)
-                    .length
-                }
-                )
-              </RepliesButton>
-            </ButtonWrapper>
+                {editId === comment?.id ? null : (
+                  <>
+                    <Dropdown.Item>
+                      <button
+                        onClick={() =>
+                          handleEditClick(comment?.id!, comment?.content!)
+                        }
+                      >
+                        수정
+                      </button>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <button onClick={() => handleDeleteClick(comment?.id)}>
+                        삭제
+                      </button>
+                    </Dropdown.Item>
+                  </>
+                )}
+              </Dropdown>
+            </footer>
+
+            {editId === comment?.id ? (
+              <CommentEdit
+                value={editContent}
+                onChange={onChangeEditContent}
+                onCancel={handleEditCancel}
+                onSubmit={handleEditSubmit}
+              />
+            ) : (
+              <>
+                <p className="text-gray-500 dark:text-gray-400">
+                  {comment?.content}
+                </p>
+                <div className="flex items-center mt-4 space-x-4">
+                  <button>
+                    <button
+                      type="button"
+                      onClick={toggleShow}
+                      className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        className="mr-1 w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        ></path>
+                      </svg>
+                      답글
+                    </button>
+                  </button>
+                  <RepliesButton
+                    onClick={() => handleRepliesClick(comment?.id)}
+                    isRepliesVisible={isRepliesVisible[comment?.id!]}
+                  >
+                    {`(${
+                      replies?.filter(
+                        (reply) => reply.CommentId === comment?.id
+                      ).length
+                    })`}
+                  </RepliesButton>
+                </div>
+              </>
+            )}
+          </article>
+
+          {/* 답글 */}
+          <article className="p-6 mb-6 ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-800 dark:text-white">
             {isRepliesVisible[comment?.id!] && (
-              <ReplyContainer>
+              <>
                 {replies
                   ?.filter((reply) => reply.CommentId === comment?.id)
                   .map((reply) => (
@@ -142,23 +183,21 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
                       onDelete={onDeleteReply}
                     />
                   ))}
-                <div style={{ display: "flex", width: "100%", marginBottom: "0.6rem" }}>
-                  <Textarea
-                    placeholder="댓글을 입력해주세요."
-                    value={replyContent}
-                    onChange={onChangeReplyContent}
-                  />
-                  <ReplyButton onClick={() => handleReplySubmit(comment?.id)}>
-                    완료
-                  </ReplyButton>
-                  <ReplyButton onClick={handleReplyCancel}>취소</ReplyButton>
-                </div>
-              </ReplyContainer>
+              </>
             )}
-          </Comments>
-        ))}
-      </List>
-    </Container>
+            {show && (
+              <ReplyForm
+                comment={comment}
+                replyContent={replyContent}
+                onChangeReplyContent={onChangeReplyContent}
+                onSubmit={handleReplySubmit}
+                onCancel={handleReplyCancel}
+              />
+            )}
+          </article>
+        </div>
+      ))}
+    </>
   );
 }
 

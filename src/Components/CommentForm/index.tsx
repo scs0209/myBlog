@@ -1,7 +1,7 @@
 import autosize from "autosize";
-import React, { FormEvent, memo, useCallback, useEffect, useRef, useState, VFC } from "react";
-import { Button, Form, Textarea } from "./styles";
+import React, { FormEvent, useCallback, useEffect, useRef, VFC } from "react";
 import useInput from "../../utils/useInput";
+import { Textarea } from "flowbite-react";
 
 interface Props {
   onSubmit: (content: string) => void;
@@ -27,11 +27,33 @@ const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
   if(content === undefined) return <div>로딩중...</div>
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Textarea name="content" id="content" ref={textareaRef} onChange={onChangeContent} value={content} placeholder="댓글을 입력해주세요." />
-      <Button type="submit">작성하기</Button>
+    <form className="mb-6" onSubmit={handleSubmit}>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
+          Discussion
+        </h2>
+      </div>
+      <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <label className="sr-only">Your comment</label>
+        <Textarea
+          name="content"
+          id="content"
+          ref={textareaRef}
+          onChange={onChangeContent}
+          value={content}
+          placeholder="댓글을 입력해주세요."
+          rows={4}
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+      >
+        comment
+      </button>
       {error && <div>{error}</div>}
-    </Form>
+    </form>
   );
 }
 

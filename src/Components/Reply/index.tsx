@@ -2,6 +2,7 @@ import ReplyEdit from "../../Components/ReplyEdit";
 import React, { ChangeEvent, useCallback, useState, VFC } from "react";
 import { Reply as ReplyType } from "typings/db";
 import { Content, DeleteButton, EditButton, Name, ReplyContainer, ReplyHeader } from "./styles";
+import { Dropdown } from "flowbite-react";
 
 interface Props{
   reply: ReplyType;
@@ -34,18 +35,28 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
     onDelete(reply.CommentId, reply.id);
   }, [onDelete, reply])
 
-  return(
-    <ReplyContainer>
-      <ReplyHeader>
-        <Name>{reply.User.name}</Name>
-        <Content>{reply.content}</Content>
-        {!isEditing && (
-          <span>
-            <EditButton onClick={handleEdit}>✏</EditButton>
-            <DeleteButton onClick={handleDelete}>🗑</DeleteButton>
-          </span>
-        )}
-      </ReplyHeader>
+  return (
+    <>
+      <footer className="flex justify-between items-center mb-2">
+        <div className="flex items-center">
+          <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+            {reply.User.name}
+          </p>
+          <Dropdown label="...">
+            {!isEditing && (
+              <>
+                <Dropdown.Item>
+                  <button onClick={handleEdit}>수정</button>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <button onClick={handleDelete}>삭제</button>
+                </Dropdown.Item>
+              </>
+            )}
+          </Dropdown>
+        </div>
+      </footer>
+      <p className="text-gray-500 dark:text-gray-400">{reply.content}</p>
       {isEditing && (
         <ReplyEdit
           onCancel={handleEditCancel}
@@ -54,8 +65,8 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
           onChange={handleContentChange}
         />
       )}
-    </ReplyContainer>
-  )
+    </>
+  );
 }
 
 export default ReplyComp;

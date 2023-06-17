@@ -10,9 +10,13 @@ interface Props {
 
 const RepliesButton:FC<Props> = ({ onClick, isRepliesVisible, children }) => {
   return (
-    <Button onClick={onClick}>
+    <button
+      type="button"
+      className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400"
+      onClick={onClick}
+    >
       {isRepliesVisible ? `숨기기` : `보기`} {children}
-    </Button>
+    </button>
   );
 };
 

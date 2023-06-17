@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Avatar from "react-avatar";
 import ProfileModal from "../ProfileModal";
 import { backUrl } from "../../config";
+import { DarkThemeToggle } from "flowbite-react";
 
 interface Props {
   toggleSidebar: () => void;
@@ -46,7 +47,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
     }, []);
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-gray-800 border-gray-700">
+    <nav className="fixed top-0 z-50 w-full bg-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div className="flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="flex items-center justify-start">
           <button
@@ -115,6 +116,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
               />
             </button>
           )}
+          <DarkThemeToggle className="ml-2" />
 
           {/* <!-- Dropdown menu --> */}
           {userData && (

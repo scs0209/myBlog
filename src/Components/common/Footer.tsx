@@ -1,11 +1,11 @@
 const Footer = () => {
 
   return (
-    <footer className="text-gray-600 body-font">
-      <div className="bg-gray-100">
+    <footer className="fixed bottom-0 z-50 w-full text-gray-600 body-font">
+      <div className="bg-gray-200 dark:bg-gray-800">
         <div className="container px-5 py-6 mx-auto flex items-center sm:flex-row flex-col">
-          <div className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-            <span className="ml-3 text-xl">성창수</span>
+          <div className="flex title-font font-medium items-center text-gray-800 md:justify-start justify-center dark:text-white">
+            <span className="ml-3 text-xl font-sans font-bold">성창수</span>
           </div>
           <p className="text-sm text-gray-500 sm:ml-6 sm:mt-0 mt-4">
             © 2023 SCS - All rights reserved

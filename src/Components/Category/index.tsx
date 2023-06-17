@@ -114,15 +114,15 @@ const Category: VFC<Props> = ({ showSidebar }) => {
       id="logo-sidebar"
       className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${
         showSidebar ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
-      } bg-gray-800 border-gray-700`}
+      } bg-gray-200 dark:bg-gray-800 border-gray-700`}
       aria-label="Sidebar"
     >
-      <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+      <div className="h-full px-3 pb-4 overflow-y-auto bg-gray-200 dark:bg-gray-800">
         <ul className="space-y-2 font-medium">
           <li>
             <Link
               to="/main/posts"
-              className="border-b-2 border-blue-600 flex items-center p-2 text-gray-300 rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="border-b-2 font-bold border-blue-600 flex items-center p-2 text-black rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
             >
               <span className="ml-3">전체 게시글</span>
             </Link>
@@ -141,17 +141,11 @@ const Category: VFC<Props> = ({ showSidebar }) => {
         {userData?.role === "admin" && (
           <div>
             {userData?.role === "admin" && (
-              <EditButton
-                type="button"
-                onClick={onClickCreateCategory}
-              >
+              <EditButton type="button" onClick={onClickCreateCategory}>
                 +
               </EditButton>
             )}
-            <EditButton
-              type="button"
-              onClick={() => toggleEdit(null)}
-            >
+            <EditButton type="button" onClick={() => toggleEdit(null)}>
               {edit ? "x" : "편집"}
             </EditButton>
           </div>
