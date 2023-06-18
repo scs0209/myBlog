@@ -4,7 +4,6 @@ import React, { VFC, useCallback } from "react";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import useInput from "../../utils/useInput";
-import { Form, Input, Label, Span, SubmitButton } from "./styles";
 import { backUrl } from "config";
 
 interface Props{
@@ -57,8 +56,11 @@ const CreateCategoryModal: VFC<Props> = ({ show, onCloseModal, setShowCreateCate
 
   return (
     <Modal show={show} onCloseModal={onCloseModal}>
-      <div className="px-6 py-6 lg:px-8">
-        <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
+      <div className="flex justify-end px-5 pt-20 text-white cursor-pointer border-solid border-b-2 border-sky-300" onClick={onCloseModal}>
+        &times;
+        </div>
+      <div className="px-10 mt-3 lg:px-8">
+        <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
           Create Category
         </h3>
         <form className="space-y-6" onSubmit={onCreateCategory}>

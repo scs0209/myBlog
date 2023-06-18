@@ -1,5 +1,4 @@
 import React, { FC, useCallback } from "react";
-import { CloseButton, Content, ModalWrapper } from "./styles";
 
 interface Props{
   children: React.ReactNode;

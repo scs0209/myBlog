@@ -1,7 +1,6 @@
 import ReplyEdit from "../../Components/ReplyEdit";
 import React, { ChangeEvent, useCallback, useState, VFC } from "react";
 import { Reply as ReplyType } from "typings/db";
-import { Content, DeleteButton, EditButton, Name, ReplyContainer, ReplyHeader } from "./styles";
 import { Dropdown } from "flowbite-react";
 
 interface Props{

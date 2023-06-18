@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import { CloseModalButton, CreateMenu } from "./styles"
+import { CloseModalButton } from "./styles"
 
 interface Props {
   children: React.ReactNode;

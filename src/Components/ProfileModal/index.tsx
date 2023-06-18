@@ -1,23 +1,22 @@
-import React, { VFC } from 'react';
-import { Link } from 'react-router-dom';
-import { User } from '../../typings/db';
+import React, { VFC } from "react";
+import { Link } from "react-router-dom";
+import { User } from "../../typings/db";
 
 interface Props {
-  userData: User
+  userData: User;
   showProfile: boolean;
   onLogout: () => void;
 }
 
-const ProfileModal: VFC<Props>= ({ userData, showProfile, onLogout }) => {
+const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout }) => {
 
   if (!showProfile) {
     return null;
   }
-  
 
   return (
     <div
-      className="absolute z-50 top-10 right-10 my-4 text-base list-none bg-gray-700 divide-y divide-gray-600 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+      className="absolute z-50 top-10 right-10 my-4 text-base list-none bg-gray-200 divide-y divide-gray-600 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
       id="user-dropdown"
     >
       <div className="px-4 py-3">
@@ -35,7 +34,7 @@ const ProfileModal: VFC<Props>= ({ userData, showProfile, onLogout }) => {
               to="/main/write"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
             >
-                포스트 작성
+              포스트 작성
             </Link>
           )}
         </li>

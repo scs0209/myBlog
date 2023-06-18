@@ -5,7 +5,7 @@ import fetcher from "../../utils/fetcher";
 import useInput from "../../utils/useInput";
 import { backUrl } from "../../config";
 import { Link } from "react-router-dom";
-import CategoryLi from "../../Components/CategoryLi";
+import CategoryLi from "../CategoryPost";
 import CreateCategoryModal from "../../Components/onCreateCategoryModal";
 import EditButton from "./EditButton";
 

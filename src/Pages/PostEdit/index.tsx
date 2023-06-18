@@ -1,9 +1,7 @@
-import React, { ChangeEvent, useCallback, useRef, useState } from "react";
+import React, { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import fetcher from "../../utils/fetcher";
 import useSWR from "swr";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { backUrl } from "../../config";
 import MDEditor from "@uiw/react-md-editor";
@@ -14,12 +12,10 @@ const PostEdit = () => {
   const { data: post, mutate } = useSWR(`${backUrl}/api/main/posts/${id}`, fetcher);
   const [title, setTitle] = useState(post?.title || "");
   const [content, setContent] = useState(post?.content || "");
-  const quillRef = useRef<ReactQuill>(null);
 
   const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   }, []);
-
 
   const handleSubmit = useCallback((e: any) => {
     e.preventDefault();
@@ -55,72 +51,15 @@ const PostEdit = () => {
       });
   }, [id, title, content, navigate, mutate]);
 
-    const handleImageUpload = useCallback(() => {
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
-
-    input.onchange = () => {
-      const file = input.files?.[0];
-      if (!file) {
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-
-      reader.onloadend = () => {
-        const image = new Image();
-        if (reader.result) {
-          image.src = reader.result as string;
-        } else {
-          image.src = "";
-        }
-        image.onload = () => {
-          const quill = quillRef.current?.getEditor();
-          if (!quill) {
-            return;
-          }
-          const range = quill.getSelection();
-          if (!range) return;
-          quillRef.current
-            ?.getEditor()
-            .insertEmbed(range.index, "image", image.src);
-        };
-      };
-
-      const formData = new FormData();
-      formData.append("image", file);
-
-      axios
-        .post(`${backUrl}/api/upload`, formData, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          // handle response
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
-  }, [quillRef]);
-
 
   return (
     <div>
-      <h2 className="text-4xl font-bold">게시글 수정</h2>
+      <h2 className="text-4xl font-bold dark:text-white">게시글 수정</h2>
       <form onSubmit={handleSubmit}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
+        <div className="dark:bg-slate-700">
           <div>
             <input
-              className="w-11/12 pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none"
+              className="w-11/12 pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none dark:bg-slate-700 dark:text-white"
               type="text"
               name="title"
               value={title}

@@ -110,8 +110,12 @@ router.get("/categories/:categoryId", async (req, res) => {
 // 특정 카테고리에 해당하는 게시글 목록을 가져오는 API
 router.get("/categories/:categoryId/posts", async (req, res, next) => {
   const { categoryId } = req.params; //categoryId를 가져온다.
+  const { page } = req.query;
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
   try {
-    const posts = await Post.findAll({
+    const { rows: posts, count } = await Post.findAndCountAll({
       where: {
         categoryId, // categoryId가 일치하는 게시글을 조회한다.
       },
@@ -121,8 +125,12 @@ router.get("/categories/:categoryId/posts", async (req, res, next) => {
           as: "category",
         },
       ],
+      offset,
+      limit,
+      order: [["createdAt", "DESC"]],
     });
-    res.json(posts); // 조회 결과를 JSON 형태로 반환한다.
+    console.log(posts.length)
+    res.json({ posts, count }); // 조회 결과를 JSON 형태로 반환한다.
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "서버 오류" });

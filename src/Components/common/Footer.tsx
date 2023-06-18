@@ -3,7 +3,7 @@ const Footer = () => {
   return (
     <footer className="fixed bottom-0 z-50 w-full text-gray-600 body-font">
       <div className="bg-gray-200 dark:bg-gray-800">
-        <div className="container px-5 py-6 mx-auto flex items-center sm:flex-row flex-col">
+        <div className="container px-5 py-6 mx-auto flex flex-row justify-between items-center sm:flex-row">
           <div className="flex title-font font-medium items-center text-gray-800 md:justify-start justify-center dark:text-white">
             <span className="ml-3 text-xl font-sans font-bold">성창수</span>
           </div>

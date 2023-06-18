@@ -1,24 +1,30 @@
 import React, { useCallback, useEffect, useState } from "react";
-import fetcher from "utils/fetcher";
+import { useLocation, useNavigate, useParams } from "react-router";
 import useSWR from 'swr';
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import Search from "../../Components/Search";
-import axios from "axios";
+import fetcher from "../../utils/fetcher";
+import { Link } from "react-router-dom";
 import { backUrl } from "../../config";
 import { Pagination } from "flowbite-react";
 
-const PostList = () => {
+const CategoryList = () => {
+  const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
-  const location = useLocation(); // 현재 경로(location) 정보 가져오기
-  const PAGE_SIZE = 10; //한 페이지에서 가져올 데이터의 한계치를 나타내는 값
+  const location = useLocation();
+  const PAGE_SIZE = 10;
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const { data: categoryData, error: categoryError } = useSWR(
+    `${backUrl}/api/categories/${categoryId}`,
+    fetcher
+  );
+
   const {
     data: postData,
-    error,
+    error: postError,
     mutate,
   } = useSWR(
-    `${backUrl}/api/main/posts?page=${currentPage}&search=${searchTerm}`,
+    `${backUrl}/api/categories/${categoryId}/posts?page=${currentPage}`,
     fetcher
   );
 
@@ -27,55 +33,15 @@ const PostList = () => {
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
   const startIdx = 0;
   const endIdx = PAGE_SIZE;
-  const [currentPagePosts, setCurrentPagePosts] = useState(
-    posts?.slice(startIdx, endIdx)
-  );
+  const [currentPagePosts, setCurrentPagePosts] = useState([]);
 
   const handlePageChange = useCallback(
     (pageNum: number) => {
       setCurrentPage(pageNum);
-      setSearchTerm("");
-      navigate(`/main/posts?page=${pageNum}&search=`);
-      mutate(`${backUrl}/api/main/posts?page=${pageNum}&search=`);
+      navigate(`/main/categories/${categoryId}?page=${pageNum}`);
+      mutate(`${backUrl}/api/categories/${categoryId}/posts?page=${pageNum}`);
     },
-    [setCurrentPage, setSearchTerm, mutate, navigate]
-  );
-
-  const handleSearch = useCallback(
-    (keyword: string) => {
-      setSearchTerm(keyword);
-      setCurrentPage(1);
-      navigate(`/main/posts?page=1&search=${keyword}`);
-      mutate(`${backUrl}/api/main/posts?page=1&search=${keyword}`, false);
-    },
-    [setSearchTerm, setCurrentPage, navigate, mutate]
-  );
-
-  // 게시글 조회 기능
-  const handlePostClick = useCallback(
-    (postId: any) => {
-      axios
-        .post(`${backUrl}/api/main/posts/${postId}/views`, null, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          console.log(response.data.message);
-          const updatedPosts = currentPagePosts.map((post: any) => {
-            if (post.id === postId) {
-              return {
-                ...post,
-                views: response.data.post.views,
-              };
-            }
-            return post;
-          });
-          setCurrentPagePosts(updatedPosts);
-        })
-        .catch((error) => {
-          console.error(error.response.data.message);
-        });
-    },
-    [currentPagePosts]
+    [setCurrentPage, categoryId, mutate, navigate]
   );
 
   // 추가
@@ -83,16 +49,18 @@ const PostList = () => {
     const params = new URLSearchParams(location.search);
     const pageNum = parseInt(params.get("page") || "1", 10);
     setCurrentPage(pageNum);
-    setSearchTerm("");
-    mutate(`${backUrl}/api/main/posts?page=${pageNum}&search=`);
+    mutate(`${backUrl}/api/categories/${categoryId}/posts?page=${pageNum}`);
   }, [location, mutate]);
 
   //currentPagePosts 변경 될 때마다 업데이트 해줘서 페이지네이션할 때 오류 안나게 해주기 위해 사용
   useEffect(() => {
-    setCurrentPagePosts(posts?.slice(startIdx, endIdx));
+    if (posts) {
+      setCurrentPagePosts(posts?.slice(startIdx, endIdx));
+    }
   }, [postData, startIdx, endIdx]);
 
-  if (error) return <div>에러가 발생했습니다.</div>;
+  if (categoryError || postError) return <div>에러가 발생했습니다.</div>;
+  if (!categoryData || !postData) return <div>로딩중</div>;
   if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
 
   return (
@@ -122,7 +90,6 @@ const PostList = () => {
               return (
                 <tr
                   key={post.id}
-                  onClick={() => handlePostClick(post.id)}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                 >
                   <th
@@ -151,10 +118,9 @@ const PostList = () => {
           totalPages={totalPages}
           className="mt-4"
         />
-        <Search onSearch={handleSearch} />
       </div>
     </div>
   );
 }
 
-export default PostList;
+export default CategoryList;

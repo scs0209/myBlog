@@ -37,17 +37,17 @@ const App = () => {
   }, [updateSidebarState]);
 
   return (
-    <>
     <Flowbite>
-      <Header toggleSidebar={toggleSidebar} />
-      <Category showSidebar={showSidebar} />
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/main/*" element={<MainPage />} />
-      </Routes>
-      <Footer />
+      <div className="dark:bg-slate-700">
+        <Header toggleSidebar={toggleSidebar} />
+        <Category showSidebar={showSidebar} />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/main/*" element={<MainPage />} />
+        </Routes>
+        <Footer />
+      </div>
     </Flowbite>
-    </>
   );
 }
 

@@ -1,15 +1,12 @@
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {Link, Navigate} from 'react-router-dom';
 import useSWR from 'swr';
 import useInput from "../../utils/useInput";
 import fetcher from "../../utils/fetcher";
-import { Button, Error, Form, Input, InputContainer, Label, Links, LoginContainer, Name, Paragraph } from "./styles";
+import { Button, Label, TextInput } from "flowbite-react";
+import { backUrl } from "../../config";
 
-const backUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
-    : "https://port-0-server-p8xrq2mlfsc6kg2.sel3.cloudtype.app";
 const Login = () => {
   const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
   const [logInError, setLogInError] = useState(false);
@@ -51,45 +48,63 @@ const Login = () => {
   }
 
   return (
-    <LoginContainer>
-      <h2>LogIn</h2>
-      <Form onSubmit={onSubmitLogin}>
-        <Label htmlFor="input_email">
-          <Name>Email: </Name>
-          <InputContainer>
-            <Input
-              type="email"
-              name="email"
-              value={email}
-              onChange={onChangeEmail}
-            />
-          </InputContainer>
-        </Label>
-        <Label htmlFor="input_pw">
-          <Name>PW: </Name>
-          <InputContainer>
-            <Input
-              type="password"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-            />
-          {logInError && <Error>{errorMsg}</Error>}
-          </InputContainer>
-        </Label>
+    <div className="flex flex-col items-center w-full">
+      <h2 className="text-3xl font-bold dark:text-white mb-3">LogIn</h2>
+      <form className="flex max-w-md flex-col gap-4" onSubmit={onSubmitLogin}>
         <div>
-          <Button type="submit">LogIn</Button>
+          <div className="mb-2 block">
+            <Label htmlFor="input_email" value="Email: " />
+          </div>
+          <TextInput
+            type="email"
+            name="email"
+            id="email"
+            value={email}
+            onChange={onChangeEmail}
+          />
         </div>
-      </Form>
-      <Paragraph>
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="input_pw" value="Password: " />
+          </div>
+          <TextInput
+            type="password"
+            name="password"
+            id="password"
+            value={password}
+            onChange={onChangePassword}
+          />
+        </div>
+        {logInError && <div className="mt-1 text-red-600 text-xs">{errorMsg}</div>}
+
+        <Button
+          className="bg-blue-500 hover:bg-blue-700 dark:bg-slate-500 dark:hover:bg-slate-600 mt-3"
+          type="submit"
+        >
+          LogIn
+        </Button>
+      </form>
+      <p className="dark:text-white items-center text-xs mt-3">
         아직 회원이 아니신가요?&nbsp;
-        <Link to="/main/signup">회원가입 하러가기</Link>
-      </Paragraph>
-      <Links>
-        <Link to="/main/find-id">email 찾기</Link>
-        <Link to="/main/find-password">비밀번호 찾기</Link>
-      </Links>
-    </LoginContainer>
+        <Link className="text-gray-200 hover:text-blue-500" to="/main/signup">
+          회원가입 하러가기
+        </Link>
+      </p>
+      <div className="flex flex-col items-center mt-4">
+        <Link
+          className="dark:text-white hover:text-blue-500 text-xs mb-2"
+          to="/main/find-id"
+        >
+          email 찾기
+        </Link>
+        <Link
+          className="dark:text-white hover:text-blue-500 text-xs"
+          to="/main/find-password"
+        >
+          비밀번호 찾기
+        </Link>
+      </div>
+    </div>
   );
 };
 

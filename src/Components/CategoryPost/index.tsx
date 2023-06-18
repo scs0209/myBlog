@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEvent, VFC, memo } from "react"
 import { Category } from "../../typings/db";
 import { Link } from "react-router-dom";
-import CategoryButton from "../../Components/common/CategoryButton";
+import CategoryButton from "../common/CategoryButton";
 
 interface Props {
   categories: Category[];
@@ -14,7 +14,7 @@ interface Props {
   onDeleteCategory: (categoryId: number) => void;
 }
 
-const CategoryLi: VFC<Props> = ({ categories, edit, editedCategoryId, editedCategoryName, onChangeCategoryName, onSubmitEdit, toggleEdit, onDeleteCategory }: any) => {
+const CategoryPost: VFC<Props> = ({ categories, edit, editedCategoryId, editedCategoryName, onChangeCategoryName, onSubmitEdit, toggleEdit, onDeleteCategory }: any) => {
   return (
     <>
       {categories.map((category: any) => (
@@ -68,4 +68,4 @@ const CategoryLi: VFC<Props> = ({ categories, edit, editedCategoryId, editedCate
   );
 }
 
-export default memo(CategoryLi)
+export default memo(CategoryPost)
