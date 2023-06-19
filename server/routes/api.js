@@ -381,6 +381,27 @@ router.get("/main/posts", async (req, res) => {
   }
 });
 
+// 인기 글 가져오기
+router.get("/main/popular_posts", async (req, res) => {
+  const { limit } = req.query;
+  const parsedLimit = parseInt(limit) || 5; // 한 번에 가져올 인기 게시물 수 (기본값: 5)
+
+  try {
+    const popular_posts = await Post.findAll({
+      order: [["views", "DESC"]],
+      limit: parsedLimit,
+    });
+    res.json({
+      popular_posts,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "서버 에러가 발생했습니다.",
+    });
+  }
+});
+
 //게시글 상세 조회
 router.get("/main/posts/:id", async (req, res) => {
   const { id } = req.params;

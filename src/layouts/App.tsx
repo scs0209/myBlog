@@ -3,8 +3,9 @@ import Header from '../Components/common/Header';
 import React, { useCallback, useEffect, useState } from "react";
 import { Route, Routes } from "react-router";
 import Footer from '../Components/common/Footer';
-import Category from '../Components/Category';
 import { Flowbite } from "flowbite-react";
+import Home from '../Pages/HomePage';
+import Category from '../Components/Category';
 const MainPage = loadable(() => import('./Main'));
 
 const App = () => {
@@ -41,10 +42,12 @@ const App = () => {
       <div className="dark:bg-slate-700">
         <Header toggleSidebar={toggleSidebar} />
         <Category showSidebar={showSidebar} />
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/main/*" element={<MainPage />} />
-        </Routes>
+        <div className="h-screen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/main/*" element={<MainPage />} />
+          </Routes>
+        </div>
         <Footer />
       </div>
     </Flowbite>

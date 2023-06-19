@@ -112,17 +112,17 @@ const Category: VFC<Props> = ({ showSidebar }) => {
   return (
     <aside
       id="logo-sidebar"
-      className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${
+      className={`fixed z-40 left-2 w-64 top-20 transition-transform ${
         showSidebar ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
-      } bg-gray-200 dark:bg-gray-800 border-gray-700`}
+      } `}
       aria-label="Sidebar"
     >
-      <div className="h-full px-3 pb-4 overflow-y-auto bg-gray-200 dark:bg-gray-800">
+      <div className="px-3 pb-4 overflow-y-auto bg-gray-200 dark:bg-gray-800 border-gray-700 rounded-lg shadow-md">
         <ul className="space-y-2 font-medium">
           <li>
             <Link
               to="/main/posts"
-              className="border-b-2 font-bold border-blue-600 flex items-center p-2 text-black rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
+              className="border-b-2 font-bold border-blue-600 flex items-center p-2 text-black dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
             >
               <span className="ml-3">전체 게시글</span>
             </Link>
@@ -139,7 +139,7 @@ const Category: VFC<Props> = ({ showSidebar }) => {
           />
         </ul>
         {userData?.role === "admin" && (
-          <div>
+          <div className="flex justify-center">
             {userData?.role === "admin" && (
               <EditButton type="button" onClick={onClickCreateCategory}>
                 +

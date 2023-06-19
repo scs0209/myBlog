@@ -15,7 +15,7 @@ const FindPassword = loadable(() => import("../../Pages/FindPassword"));
 const ChangePassword = loadable(() => import("../../Pages/ChangePassword"));
 
 const MainPage = () => {
-  const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
+  // const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
 
   return (
     <>

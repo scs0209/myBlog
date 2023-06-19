@@ -9,6 +9,7 @@ const path = require("path");
 const hpp = require("hpp");
 const helmet = require("helmet");
 const apiRouter = require("./routes/api");
+const newRouter = require("./routes/news")
 const passport = require("passport");
 
 const app = express();
@@ -73,6 +74,7 @@ app.use(passport.session());
 //이제부터 클라이언트가 '/add/data/'의 주소로 보내는 모든 데이터는 서버로 전송된다.
 // 여기서 클라이언트가 보내는 데이터를 읽기 위해서는 'body-parser'라는 모듈이 필요하기 때문에 npm i body-parser를 해준다.
 app.use("/api", apiRouter);
+app.use("/api/news", newRouter);
 app.get("*", (req, res, next) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });

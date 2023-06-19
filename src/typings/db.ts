@@ -27,3 +27,17 @@ export interface Category {
   id: number;
   name: string;
 }
+
+export interface Post {
+  id: number;
+  title: string;
+  content: string;
+}
+
+export interface NewsArticle {
+  title: string;
+  link: string;
+  originallink: string;
+  description: string;
+  pubDate: string;
+}
