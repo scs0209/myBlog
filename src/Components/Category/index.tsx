@@ -122,7 +122,7 @@ const Category: VFC<Props> = ({ showSidebar }) => {
           <li>
             <Link
               to="/main/posts"
-              className="border-b-2 font-bold border-blue-600 flex items-center p-2 text-black dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
+              className="border-b-2 font-bold border-blue-600 flex justify-center items-center p-2 text-black dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
             >
               <span className="ml-3">전체 게시글</span>
             </Link>
