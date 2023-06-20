@@ -8,7 +8,6 @@ interface Props {
   onCancel: () => void
 }
 
-
 const CommentEdit: VFC<Props> = ({ value, onChange, onSubmit, onCancel}) => {
   return (
     <form className="mb-6">

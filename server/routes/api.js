@@ -18,6 +18,42 @@ const Category = require("../models/category");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
 const Replies = require("../models/reply");
+const Visitor = require("../models/visitor");
+
+// 인기 있는 라우트 처리 및 방문자 수 늘리기
+router.get("/visitors", async (req, res) => {
+  const today = new Date().toISOString().slice(0, 10);
+
+  try {
+    const visitor = await Visitor.findOne({ where: { date: today } });
+
+    if (!visitor) {
+      await Visitor.create({ date: today });
+      res.cookie("visited", true, { maxAge: 24 * 60 * 60 * 1000 }); // 쿠키 만료 기간을 하루로 설정
+    } else {
+      if (!req.cookies.visited) {
+        visitor.count += 1;
+        await visitor.save();
+        res.cookie("visited", true, { maxAge: 24 * 60 * 60 * 1000 }); // 쿠키 만료 기간을 하루로 설정
+      }
+    }
+    res.json(visitor.count);
+  } catch (err) {
+    res.status(500).json({ message: "서버 오류" });
+  }
+});
+
+// 총 방문자 수 가져오기
+router.get('/total-visitors', async (req, res) => {
+  try {
+    const totalVisitors = await Visitor.sum('count');
+    res.json({ totalVisitors });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "방문자 수를 가져오는 도중에 에러가 발생했습니다." });
+  }
+});
+
 
 // 카테고리 목록 가져오기
 router.get("/categories", async (req, res, next) => {

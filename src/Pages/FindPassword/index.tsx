@@ -1,7 +1,5 @@
 import axios from "axios";
-import { Button, Form, Input, Label, LabelContainer, Message } from "../../Pages/FindId/styles";
 import React, { FormEvent, useCallback, useState } from "react";
-import { FindPasswordContainer, Name } from "./styles";
 import useInput from "../../utils/useInput";
 import { backUrl } from "../../config";
 

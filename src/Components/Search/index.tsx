@@ -9,7 +9,6 @@ interface Props {
 const Search: VFC<Props> = ({onSearch}) => {
   const [keyword, onChangeKeyword] = useInput("");
 
-
   const handleSubmit = useCallback((e: any) => {
     e.preventDefault();
     onSearch(keyword);

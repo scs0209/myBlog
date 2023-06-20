@@ -4,9 +4,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Route, Routes } from "react-router";
 import Footer from '../Components/common/Footer';
 import { Flowbite } from "flowbite-react";
-import Home from '../Pages/HomePage';
 import Category from '../Components/Category';
-const MainPage = loadable(() => import('./Main'));
+const MainPage = loadable(() => import("./Main"));
+const Home = loadable(() => import("../Pages/HomePage"));
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
