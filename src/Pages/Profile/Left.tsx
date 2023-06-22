@@ -16,7 +16,7 @@ const Left = () => {
 
   return (
     <>
-      <Card className="max-w-sm">
+      <Card className="max-w-sm mb-2">
         <div className="flex flex-col items-center pb-10">
           <img
             alt="Bonnie image"
@@ -38,7 +38,7 @@ const Left = () => {
           </div>
         </div>
       </Card>
-      <Card className="max-w-sm">
+      <Card className="max-w-sm mb-2">
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
           Skills
         </h5>

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { FormEvent, useCallback, useState } from "react";
 import useInput from "../../utils/useInput";
 import { backUrl } from "../../config";
+import HeadInfo from "Components/common/HeadInfo";
 
 const FindPassword = () => {
   const [email, onChangeEmail, setEmail] = useInput("");
@@ -27,6 +28,8 @@ const FindPassword = () => {
   }, [email, receiveEmail]);
 
   return (
+    <>
+    <HeadInfo title="Find Password" />
     <div className="flex flex-col items-center h-screen px-6 py-8 mx-auto lg:py-0">
       <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -73,6 +76,7 @@ const FindPassword = () => {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

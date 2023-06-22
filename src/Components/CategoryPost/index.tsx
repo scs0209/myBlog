@@ -2,6 +2,7 @@ import React, { ChangeEvent, FormEvent, VFC, memo } from "react"
 import { Category } from "../../typings/db";
 import { Link } from "react-router-dom";
 import CategoryButton from "../common/CategoryButton";
+import HeadInfo from "Components/common/HeadInfo";
 
 interface Props {
   categories: Category[];

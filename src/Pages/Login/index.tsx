@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import useInput from "../../utils/useInput";
 import fetcher from "../../utils/fetcher";
 import { backUrl } from "../../config";
+import HeadInfo from "Components/common/HeadInfo";
 
 const Login = () => {
   const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
@@ -55,6 +56,8 @@ const Login = () => {
   }
 
   return (
+    <>
+    <HeadInfo title="Login" />
     <div className="flex flex-col items-center h-screen px-6 py-8 mx-auto lg:py-0">
       <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -180,6 +183,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

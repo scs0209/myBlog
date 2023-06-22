@@ -9,6 +9,7 @@ import { Comment, Reply } from "../../typings/db";
 import LikeButton from "../../Components/LikedButton";
 import { backUrl } from "../../config";
 import MDEditor from "@uiw/react-md-editor";
+import HeadInfo from "Components/common/HeadInfo";
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -383,68 +384,71 @@ const PostDetail = () => {
   if (`${createdDate.getFullYear()}` === "NaN") return <div>로딩중...</div>;
 
   return (
-    <div className="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-      {post && (
-        <>
-          <div className="mb-3">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {title}
-            </h5>
-            <span className="text-gray-400 text-sm">{dateString}</span>
-          </div>
-          <MDEditor.Markdown
-            className="rounded-lg bg-gray-400"
-            style={{ padding: 10 }}
-            source={content}
-          />
-          <div className="flex w-full justify-between items-center mb-2">
-            <div>
-              <span className="text-gray-400 dark:text-white text-xs">
-                좋아요: {likeCount}
-              </span>
-              {user && (
-                <LikeButton
-                  likeCount={likeCount}
-                  liked={liked}
-                  onClick={handleLikedClick}
-                />
-              )}
+    <>
+    <HeadInfo title={post.title} />
+      <div className="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        {post && (
+          <>
+            <div className="mb-3">
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {title}
+              </h5>
+              <span className="text-gray-400 text-sm">{dateString}</span>
             </div>
-            <div>
-              {user && user.role === "admin" && (
-                <>
-                  <div className="flex items-center flex-wrap ">
-                    <span
-                      className="cursor-pointer text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-xs pr-3 py-1 border-r-2 border-gray-200 hover:text-red-600"
-                      onClick={handleDeleteClick}
-                    >
-                      삭제
-                    </span>
-                    <span className="text-gray-400 inline-flex items-center leading-none text-xs hover:text-blue-600">
-                      <Link to={`/main/posts/${id}/edit`}>수정</Link>
-                    </span>
-                  </div>
-                </>
-              )}
+            <MDEditor.Markdown
+              className="rounded-lg bg-gray-400"
+              style={{ padding: 10 }}
+              source={content}
+            />
+            <div className="flex w-full justify-between items-center mb-2">
+              <div>
+                <span className="text-gray-400 dark:text-white text-xs">
+                  좋아요: {likeCount}
+                </span>
+                {user && (
+                  <LikeButton
+                    likeCount={likeCount}
+                    liked={liked}
+                    onClick={handleLikedClick}
+                  />
+                )}
+              </div>
+              <div>
+                {user && user.role === "admin" && (
+                  <>
+                    <div className="flex items-center flex-wrap ">
+                      <span
+                        className="cursor-pointer text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-xs pr-3 py-1 border-r-2 border-gray-200 hover:text-red-600"
+                        onClick={handleDeleteClick}
+                      >
+                        삭제
+                      </span>
+                      <span className="text-gray-400 inline-flex items-center leading-none text-xs hover:text-blue-600">
+                        <Link to={`/main/posts/${id}/edit`}>수정</Link>
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
+          </>
+        )}
+        <section className="bg-white dark:bg-gray-800 rounded-lg py-8 lg:py-16">
+          <div className="max-w-4xl mx-auto px-4">
+            <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
+            <CommentList
+              comments={comments}
+              replies={replies}
+              onDelete={handleCommentDelete}
+              onEdit={handleCommentEdit}
+              onReply={handleReplySubmit}
+              onDeleteReply={handleReplyDelete}
+              onReplyEdit={handleReplyEdit}
+            />
           </div>
-        </>
-      )}
-      <section className="bg-white dark:bg-gray-800 rounded-lg py-8 lg:py-16">
-        <div className="max-w-4xl mx-auto px-4">
-          <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
-          <CommentList
-            comments={comments}
-            replies={replies}
-            onDelete={handleCommentDelete}
-            onEdit={handleCommentEdit}
-            onReply={handleReplySubmit}
-            onDeleteReply={handleReplyDelete}
-            onReplyEdit={handleReplyEdit}
-          />
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   );
 };
 

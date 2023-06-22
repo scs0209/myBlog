@@ -3,7 +3,7 @@ import { Card } from "flowbite-react";
 const Right = () => {
   return (
     <>
-      <Card>
+      <Card className="mb-2">
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
           General Information
         </h5>

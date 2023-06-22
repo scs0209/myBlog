@@ -7,6 +7,7 @@ import { Select } from "antd";
 import useInput from "../../utils/useInput";
 import MDEditor from "@uiw/react-md-editor";
 import { backUrl } from "../../config";
+import HeadInfo from "Components/common/HeadInfo";
 
 
 const { Option } = Select;
@@ -80,41 +81,44 @@ const Post = () => {
   );
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <input
-          className="w-11/12 pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none"
-          type="text"
-          name="title"
-          value={title}
-          onChange={onChangeTitle}
-          placeholder="제목"
-        />
-        <div className="markarea">
-          <div data-color-mode="light">
-            <MDEditor
-              style={{ width: "100%" }}
-              height={600}
-              value={content}
-              onChange={setContent}
-              preview="live"
-            />
+    <>
+    <HeadInfo title="Write" />
+      <div>
+        <form onSubmit={onSubmit}>
+          <input
+            className="w-11/12 pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none"
+            type="text"
+            name="title"
+            value={title}
+            onChange={onChangeTitle}
+            placeholder="제목"
+          />
+          <div className="markarea">
+            <div data-color-mode="light">
+              <MDEditor
+                style={{ width: "100%" }}
+                height={600}
+                value={content}
+                onChange={setContent}
+                preview="live"
+              />
+            </div>
           </div>
-        </div>
-        <div className="mt-5 text-center">
-          <Select value={category} onChange={onChangeCategory}>
-            <Option value="">카테고리 선택</Option>
-            {categoryData &&
-              categoryData.map((category: any) => (
-                <Option key={category.id} value={category.id}>
-                  {category.name}
-                </Option>
-              ))}
-          </Select>
-        </div>
-        <PostSubmit />
-      </form>
-    </div>
+          <div className="mt-5 text-center">
+            <Select value={category} onChange={onChangeCategory}>
+              <Option value="">카테고리 선택</Option>
+              {categoryData &&
+                categoryData.map((category: any) => (
+                  <Option key={category.id} value={category.id}>
+                    {category.name}
+                  </Option>
+                ))}
+            </Select>
+          </div>
+          <PostSubmit />
+        </form>
+      </div>
+    </>
   );
 }
 

@@ -5,6 +5,7 @@ import useSWR from "swr";
 import axios from "axios";
 import { backUrl } from "../../config";
 import MDEditor from "@uiw/react-md-editor";
+import HeadInfo from "Components/common/HeadInfo";
 
 const PostEdit = () => {
   const { id } = useParams<{ id: string }>();
@@ -53,43 +54,46 @@ const PostEdit = () => {
 
 
   return (
-    <div>
-      <h2 className="text-4xl font-bold dark:text-white">게시글 수정</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="dark:bg-slate-700">
-          <div>
-            <input
-              className="w-11/12 pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none dark:bg-slate-700 dark:text-white"
-              type="text"
-              name="title"
-              value={title}
-              onChange={onChangeTitle}
-              placeholder="제목"
-            />
-          </div>
-          <div className="markarea">
-            <div data-color-mode="light">
-              <MDEditor
-                style={{ width: "100%" }}
-                height={600}
-                value={content}
-                onChange={setContent}
-                preview="live"
+    <>
+    <HeadInfo title="Post Edit" />
+      <div>
+        <h2 className="text-4xl font-bold dark:text-white">게시글 수정</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="dark:bg-slate-700">
+            <div>
+              <input
+                className="w-11/12 pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none dark:bg-slate-700 dark:text-white"
+                type="text"
+                name="title"
+                value={title}
+                onChange={onChangeTitle}
+                placeholder="제목"
               />
             </div>
+            <div className="markarea">
+              <div data-color-mode="light">
+                <MDEditor
+                  style={{ width: "100%" }}
+                  height={600}
+                  value={content}
+                  onChange={setContent}
+                  preview="live"
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="text-center mt-8">
-          <button
-            className="w-32 p-2 rounded-lg  bg-white cursor-pointer hover:bg-rose-400 hover:text-white"
-            style={{ border: "solid 1px lightgray" }}
-            type="submit"
-          >
-            수정
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="text-center mt-8">
+            <button
+              className="w-32 p-2 rounded-lg  bg-white cursor-pointer hover:bg-rose-400 hover:text-white"
+              style={{ border: "solid 1px lightgray" }}
+              type="submit"
+            >
+              수정
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }
 
