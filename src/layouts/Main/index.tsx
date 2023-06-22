@@ -4,6 +4,7 @@ import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
 import CategoryList from "../../Pages/CategoryList";
 import { backUrl } from "../../config";
+import Footer from "Components/common/Footer";
 const Post = loadable(() => import('../../Pages/Post'));
 const PostList = loadable(() => import('../../Pages/PostList'));
 const PostDetail = loadable(() => import('../../Pages/PostDetail'));

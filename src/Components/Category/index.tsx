@@ -114,9 +114,11 @@ const Category: VFC<Props> = ({ showSidebar }) => {
   return (
     <aside
       id="logo-sidebar"
-      className={`fixed z-40 left-2 w-64 top-20 transition-transform ${
-        showSidebar ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
-      } `}
+      className={`fixed z-40 w-64 top-20 transition-transform ${
+        showSidebar
+          ? "left-2 translate-x-0 sm:translate-x-0"
+          : "-translate-x-full sm:-left-2"
+      }`}
       aria-label="Sidebar"
     >
       <Visitor />

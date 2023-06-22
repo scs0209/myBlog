@@ -5,7 +5,7 @@ import { backUrl } from "../../config";
 
 const Visitor = () => {
   const { data: todayVisitorsData } = useSWR(`${backUrl}/api/visitors`, fetcher, {
-  dedupingInterval: 3600000
+  dedupingInterval: 5000
 });
   const { data: totalVisitorsData } = useSWR(`${backUrl}/api/total-visitors`, fetcher);
 

@@ -842,6 +842,21 @@ router.post("/users/login", isNotLoggedIn, (req, res, next) => {
   })(req, res, next);
 });
 
+// 소셜 로그인
+// Google 로그인
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+  res.redirect('/');
+});
+
+// Github 로그인
+router.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
+
+router.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+  res.redirect('/');
+});
+
 // 로그아웃
 router.post("/users/logout", isLoggedIn, (req, res) => {
   req.logout(() => {

@@ -64,7 +64,7 @@ const CategoryList = () => {
   if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
 
   return (
-    <div>
+    <div className="h-screen">
       <h1 className="text-3xl font-bold mb-3 dark:text-white">게시글 목록</h1>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

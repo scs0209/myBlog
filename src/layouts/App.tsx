@@ -42,7 +42,7 @@ const App = () => {
       <div className="dark:bg-slate-700">
         <Header toggleSidebar={toggleSidebar} />
         <Category showSidebar={showSidebar} />
-        <div className="h-screen">
+        <div>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/main/*" element={<MainPage />} />
