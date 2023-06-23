@@ -1,5 +1,5 @@
-import Right from "./Right";
-import Left from "./Left";
+import Right from "../../Components/Profile/Right";
+import Left from "../../Components/Profile/Left";
 import HeadInfo from "Components/common/HeadInfo";
 
 const Profile = () => {

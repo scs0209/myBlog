@@ -1,4 +1,5 @@
 import { Card } from "flowbite-react";
+import RightItem from "./RightItem";
 
 const Right = () => {
   return (
@@ -18,22 +19,10 @@ const Right = () => {
               using Next, so feel free to stop by and take a look!
             </p>
           </div>
-          <div className="col-span-1 font-bold mt-6">
-            <h5 className="text-gray-400 dark:text-gray-300">Education</h5>
-            <p className="text-xs dark:text-white">Soon Chun Hyang Univ</p>
-          </div>
-          <div className="col-span-1 font-bold mt-6">
-            <h5 className="text-gray-400 dark:text-gray-300">Role</h5>
-            <p className="text-xs dark:text-white">Frontend Developer</p>
-          </div>
-          <div className="col-span-1 font-bold mt-6">
-            <h5 className="text-gray-400 dark:text-gray-300">Language</h5>
-            <p className="text-xs dark:text-white">Korean, English</p>
-          </div>
-          <div className="col-span-1 font-bold mt-6">
-            <h5 className="text-gray-400 dark:text-gray-300">Birthday</h5>
-            <p className="text-xs dark:text-white">1997-02-09</p>
-          </div>
+          <RightItem title="Education" content="Soon Chun Hyang Univ" />
+          <RightItem title="Role" content="Frontend Developer" />
+          <RightItem title="Language" content="Korean, English" />
+          <RightItem title="Birthday" content="1997-02-09" />
         </div>
       </Card>
       <Card>

@@ -1,0 +1,30 @@
+.postDetailContainer {
+  @apply block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100;
+}
+
+.title {
+  @apply mb-2 text-2xl font-bold tracking-tight text-gray-900;
+}
+
+.date {
+  @apply text-gray-400 text-sm;
+}
+.editor {
+  @apply rounded-lg bg-gray-400;
+}
+
+.flexContainer {
+  @apply flex w-full justify-between items-center mb-2;
+}
+
+.deleteSpan {
+  @apply cursor-pointer text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-xs pr-3 py-1 border-r-2 border-gray-200 hover:text-red-600;
+}
+
+.editSpan {
+  @apply text-gray-400 inline-flex items-center leading-none text-xs hover:text-blue-600;
+}
+
+.section {
+  @apply bg-white rounded-lg py-8 lg:py-16;
+}

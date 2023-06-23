@@ -2,7 +2,6 @@ import React, { ChangeEvent, FormEvent, VFC, memo } from "react"
 import { Category } from "../../typings/db";
 import { Link } from "react-router-dom";
 import CategoryButton from "../common/CategoryButton";
-import HeadInfo from "Components/common/HeadInfo";
 
 interface Props {
   categories: Category[];
@@ -13,9 +12,12 @@ interface Props {
   onSubmitEdit: (e: FormEvent<HTMLFormElement>) => void;
   toggleEdit: (categoryId: any) => void;
   onDeleteCategory: (categoryId: number) => void;
+  handleClickCategory: (id: number) => void;
+  activeCategoryId: any
 }
 
-const CategoryPost: VFC<Props> = ({ categories, edit, editedCategoryId, editedCategoryName, onChangeCategoryName, onSubmitEdit, toggleEdit, onDeleteCategory }: any) => {
+const CategoryPost: VFC<Props> = ({ categories, edit, editedCategoryId, editedCategoryName, onChangeCategoryName, onSubmitEdit, toggleEdit, onDeleteCategory, handleClickCategory, activeCategoryId }) => {
+  
   return (
     <>
       {categories.map((category: any) => (
@@ -41,7 +43,10 @@ const CategoryPost: VFC<Props> = ({ categories, edit, editedCategoryId, editedCa
             <div className="flex justify-between">
               <Link
                 to={`/main/categories/${category.id}`}
-                className="flex items-center p-2 text-gray-700 rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
+                className={`flex items-center p-2 text-gray-700 rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 ${
+                  activeCategoryId === category.id ? "font-bold bg-gray-300 dark:bg-gray-600" : ""
+                }`}
+                onClick={() => handleClickCategory(category.id)}
               >
                 {category.name}
               </Link>

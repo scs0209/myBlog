@@ -20,6 +20,8 @@ const Category: VFC<Props> = ({ showSidebar }) => {
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput("");
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
+  const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
+
   const { data: userData, mutate: mutateUserData } = useSWR(
     `${backUrl}/api/users`,
     fetcher
@@ -106,6 +108,15 @@ const Category: VFC<Props> = ({ showSidebar }) => {
     }
   }, [editedCategoryId, data]);
 
+  const handleClickCategory = useCallback((id: number) => {
+    console.log("click");
+    setActiveCategoryId(id);
+  }, []);
+
+  const handleClickAllPosts = () => {
+    setActiveCategoryId(null);
+  };
+
 
   if(error) return <div>에러가 발생했습니다</div>
   if(!data) return <div>로딩중...</div>
@@ -129,6 +140,7 @@ const Category: VFC<Props> = ({ showSidebar }) => {
             <Link
               to="/main/posts"
               className="border-b-2 font-bold border-blue-600 flex justify-center items-center p-2 text-black dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
+              onClick={handleClickAllPosts}
             >
               <span className="ml-3">전체 게시글</span>
             </Link>
@@ -142,6 +154,8 @@ const Category: VFC<Props> = ({ showSidebar }) => {
             onSubmitEdit={onSubmitEdit}
             toggleEdit={toggleEdit}
             onDeleteCategory={onDeleteCategory}
+            handleClickCategory={handleClickCategory}
+            activeCategoryId={activeCategoryId}
           />
         </ul>
         {userData?.role === "admin" && (

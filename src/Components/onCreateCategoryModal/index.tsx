@@ -56,9 +56,6 @@ const CreateCategoryModal: VFC<Props> = ({ show, onCloseModal, setShowCreateCate
 
   return (
     <Modal show={show} onCloseModal={onCloseModal}>
-      <div className="flex justify-end px-5 pt-20 text-white cursor-pointer border-solid border-b-2 border-sky-300" onClick={onCloseModal}>
-        &times;
-        </div>
       <div className="px-10 mt-3 lg:px-8">
         <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
           Create Category

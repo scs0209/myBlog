@@ -10,6 +10,7 @@ import LikeButton from "../../Components/LikedButton";
 import { backUrl } from "../../config";
 import MDEditor from "@uiw/react-md-editor";
 import HeadInfo from "Components/common/HeadInfo";
+import styles from "../../styles/PostDetail.module.css"
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -385,24 +386,24 @@ const PostDetail = () => {
 
   return (
     <>
-    <HeadInfo title={post.title} />
-      <div className="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+      <HeadInfo title={post.title} />
+      <div
+        className={`${styles.postDetailContainer} dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700`}
+      >
         {post && (
           <>
             <div className="mb-3">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {title}
-              </h5>
-              <span className="text-gray-400 text-sm">{dateString}</span>
+              <h5 className={`${styles.title} dark:text-white`}>{title}</h5>
+              <span className={styles.date}>{dateString}</span>
             </div>
             <MDEditor.Markdown
               className="rounded-lg bg-gray-400"
               style={{ padding: 10 }}
               source={content}
             />
-            <div className="flex w-full justify-between items-center mb-2">
+            <div className={styles.flexContainer}>
               <div>
-                <span className="text-gray-400 dark:text-white text-xs">
+                <span className="text-gray-400 text-xs dark:text-white">
                   좋아요: {likeCount}
                 </span>
                 {user && (
@@ -418,12 +419,12 @@ const PostDetail = () => {
                   <>
                     <div className="flex items-center flex-wrap ">
                       <span
-                        className="cursor-pointer text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-xs pr-3 py-1 border-r-2 border-gray-200 hover:text-red-600"
+                        className={styles.deleteSpan}
                         onClick={handleDeleteClick}
                       >
                         삭제
                       </span>
-                      <span className="text-gray-400 inline-flex items-center leading-none text-xs hover:text-blue-600">
+                      <span className={styles.editSpan}>
                         <Link to={`/main/posts/${id}/edit`}>수정</Link>
                       </span>
                     </div>
@@ -433,7 +434,7 @@ const PostDetail = () => {
             </div>
           </>
         )}
-        <section className="bg-white dark:bg-gray-800 rounded-lg py-8 lg:py-16">
+        <section className={`${styles.section} dark:bg-gray-800`}>
           <div className="max-w-4xl mx-auto px-4">
             <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
             <CommentList
