@@ -121,6 +121,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
                 showProfile={showProfile}
                 onLogout={onLogout}
                 onClose={handleCloseShowProfile}
+                id={userData.id}
               />
             )}
           </div>

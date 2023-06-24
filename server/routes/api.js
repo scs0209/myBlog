@@ -750,6 +750,26 @@ router.get("/users", (req, res, next) => {
   return res.json(req.user || false);
 });
 
+// 특정 유저 정보 불러오기
+router.get("/users/:id", async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      where: { id: req.params.id },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "해당 ID의 사용자가 없습니다.",
+      });
+    }
+
+    return res.json(user);
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+});
+
 // 회원가입
 router.post("/users", isNotLoggedIn, async (req, res, next) => {
   try {
@@ -770,6 +790,36 @@ router.post("/users", isNotLoggedIn, async (req, res, next) => {
     });
     return res.status(201).json({
       message: "회원가입이 완료되었습니다.",
+    });
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+});
+
+// 회원 탈퇴
+router.delete("/users/:userId", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId } });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "해당 이메일을 가진 사용자가 없습니다.",
+      });
+    }
+
+    if (req.user.id !== parseInt(req.params.userId)) {
+      return res.status(403).json({
+        message: "본인 계정에만 탈퇴를 진행할 수 있습니다.",
+      });
+    }
+
+    await User.destroy({ where: { id: req.params.userId } });
+
+    req.session.destroy();
+
+    return res.status(200).json({
+      message: "회원 탈퇴가 완료되었습니다.",
     });
   } catch (error) {
     console.log(error);

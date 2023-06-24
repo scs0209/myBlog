@@ -6,10 +6,11 @@ interface Props {
   userData: User;
   showProfile: boolean;
   onLogout: () => void;
-  onClose: () => void
+  onClose: () => void;
+  id: number;
 }
 
-const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout, onClose }) => {
+const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout, onClose, id }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   // 바깥쪽 영역 클릭 시 모달이 닫히는 함수
@@ -57,6 +58,14 @@ const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout, onClose }) 
               포스트 작성
             </Link>
           )}
+        </li>
+        <li>
+          <Link
+            to={`/main/my-page/${id}`}
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+          >
+            My Page
+          </Link>
         </li>
         <li>
           <Link

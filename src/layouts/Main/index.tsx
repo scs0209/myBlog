@@ -1,10 +1,6 @@
 import loadable from "@loadable/component";
 import {  Route, Routes } from "react-router-dom";
-import useSWR from 'swr';
-import fetcher from "../../utils/fetcher";
 import CategoryList from "../../Pages/CategoryList";
-import { backUrl } from "../../config";
-import Footer from "Components/common/Footer";
 const Post = loadable(() => import('../../Pages/Post'));
 const PostList = loadable(() => import('../../Pages/PostList'));
 const PostDetail = loadable(() => import('../../Pages/PostDetail'));
@@ -15,9 +11,9 @@ const FindId = loadable(() => import("../../Pages/FindId"));
 const FindPassword = loadable(() => import("../../Pages/FindPassword"));
 const ChangePassword = loadable(() => import("../../Pages/ChangePassword"));
 const Profile = loadable(() => import("../../Pages/Profile"));
+const MyPage = loadable(() => import("../../Pages/MyPage"));
 
 const MainPage = () => {
-  // const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
 
   return (
     <>
@@ -35,6 +31,7 @@ const MainPage = () => {
             <Route path="/categories/:categoryId" element={<CategoryList />} />
             <Route path="/write" element={<Post />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/my-page/:id" element={<MyPage />} />
           </Routes>
         </div>
       </div>
