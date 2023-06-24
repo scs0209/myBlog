@@ -1,5 +1,5 @@
-import ReplyEdit from "../../Components/ReplyEdit";
 import React, { ChangeEvent, useCallback, useState, VFC } from "react";
+import ReplyEdit from "./ReplyEdit";
 import { Reply as ReplyType } from "typings/db";
 import { Dropdown } from "flowbite-react";
 
@@ -36,12 +36,11 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
 
   return (
     <>
-      <footer className="flex justify-between items-center mb-2">
-        <div className="flex items-center">
+      <footer className="flex items-center justify-between mb-2">
           <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
             {reply.User.name}
           </p>
-          <Dropdown label="...">
+          <Dropdown size="xs" label="...">
             {!isEditing && (
               <>
                 <Dropdown.Item>
@@ -53,9 +52,8 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
               </>
             )}
           </Dropdown>
-        </div>
       </footer>
-      <p className="text-gray-500 dark:text-gray-400">{reply.content}</p>
+      <p className="text-gray-500 dark:text-gray-400 mb-4">{reply.content}</p>
       {isEditing && (
         <ReplyEdit
           onCancel={handleEditCancel}

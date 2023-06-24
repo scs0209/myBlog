@@ -5,7 +5,7 @@ import fetcher from "../../utils/fetcher";
 import useInput from "../../utils/useInput";
 import { backUrl } from "../../config";
 import { Link } from "react-router-dom";
-import CategoryLi from "../CategoryPost";
+import CategoryNameEdit from "../CategoryNameEdit";
 import CreateCategoryModal from "../../Components/onCreateCategoryModal";
 import EditButton from "./EditButton";
 import SideBar from "./SideBar";
@@ -145,7 +145,7 @@ const Category: VFC<Props> = ({ showSidebar }) => {
               <span className="ml-3">전체 게시글</span>
             </Link>
           </li>
-          <CategoryLi
+          <CategoryNameEdit
             categories={data}
             edit={edit}
             editedCategoryId={editedCategoryId}

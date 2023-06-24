@@ -61,8 +61,8 @@ const CategoryList = () => {
   }, [postData, startIdx, endIdx]);
 
   if (categoryError || postError) return <div>에러가 발생했습니다.</div>;
-  if (!categoryData || !postData) return <div>로딩중</div>;
-  if (!Array.isArray(posts)) return <div>게시글 몰록을 불러오는 중입니다.</div>;
+  if (!categoryData || !postData) return <div className="h-screen">로딩중</div>;
+  if (!Array.isArray(posts)) return <div className="h-screen">게시글 몰록을 불러오는 중입니다.</div>;
 
   return (
     <>

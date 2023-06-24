@@ -371,7 +371,7 @@ const PostDetail = () => {
   }, [commentsData, likeInfo, repliesData]);
 
   if (error) return <div>에러가 발생했습니다.</div>;
-  if (!post) return <div>로딩 중...</div>;
+  if (!post) return <div className="h-screen">로딩 중...</div>;
 
   // 원래는 return문 이후에 변수를 선언하는 것은 허용되지 않지만, 조건부 렌더링을 사용하여 변수를 선언하고 렌더링하는 경우는 예외적으로 허용된다.
   const { title, content, createdAt } = post;

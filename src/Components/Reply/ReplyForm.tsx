@@ -1,16 +1,35 @@
+import React, {  VFC, useCallback, useState } from "react"
 import { Textarea } from "flowbite-react";
-import React, { ChangeEvent, VFC } from "react"
 import { Comment } from "../../typings/db";
+import useInput from "utils/useInput";
 
 interface Props {
-  comment: Comment
-  replyContent: string;
-  onChangeReplyContent: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-  onSubmit: (commentId: number | null) => void;
-  onCancel: () => void;
+  comment: Comment;
+  onReply: (commentId: number, content: string) => void;
 }
 
-const ReplyForm: VFC<Props> = ({ replyContent, onChangeReplyContent, onSubmit, onCancel, comment }) => {
+const ReplyForm: VFC<Props> = ({ onReply, comment }) => {
+  const [replyId, setReplyId] = useState<number | null>(null);
+  const [replyContent, onChangeReplyContent, setReplyContent] =
+    useInput<string>("");
+    const handleReplyCancel = useCallback(() => {
+      setReplyId(null);
+      setReplyContent("");
+    }, []);
+
+    const handleReplySubmit = useCallback(
+      (commentId: number | null) => {
+        if (commentId === null) {
+          return;
+        }
+
+        onReply(commentId, replyContent);
+        setReplyId(null);
+        setReplyContent("");
+      },
+      [replyContent, onReply]
+    );
+
   return (
     <form className="mb-6">
       <div className="flex justify-between items-center mb-6">
@@ -32,14 +51,14 @@ const ReplyForm: VFC<Props> = ({ replyContent, onChangeReplyContent, onSubmit, o
       </div>
       <button
         type="submit"
-        onClick={() => onSubmit(comment.id)}
+        onClick={() => handleReplySubmit(comment.id)}
         className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
       >
         완료
       </button>
       <button
         className="ml-3 inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-        onClick={onCancel}
+        onClick={handleReplyCancel}
       >
         취소
       </button>

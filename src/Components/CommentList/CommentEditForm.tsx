@@ -8,7 +8,7 @@ interface Props {
   onCancel: () => void
 }
 
-const CommentEdit: VFC<Props> = ({ value, onChange, onSubmit, onCancel}) => {
+const CommentEditForm: VFC<Props> = ({ value, onChange, onSubmit, onCancel}) => {
   return (
     <form className="mb-6">
       <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -40,4 +40,4 @@ const CommentEdit: VFC<Props> = ({ value, onChange, onSubmit, onCancel}) => {
   );
 }
 
-export default CommentEdit
+export default CommentEditForm

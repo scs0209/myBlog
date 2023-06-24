@@ -7,6 +7,7 @@ import useSWR from 'swr';
 import { backUrl } from "../../config";
 import HeadInfo from "Components/common/HeadInfo";
 import styles from "../../styles/SignUp.module.css"
+import SignUpErr from "Components/Signup/SignupErr";
 
 const SignUp = () => {
   const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
@@ -142,24 +143,12 @@ const SignUp = () => {
                   onChange={onChangePasswordCheck}
                 />
               </div>
-              {mismatchError && (
-                <div className="mt-1 text-red-600 text-xs">
-                  비밀번호가 일치하지 않습니다!
-                </div>
-              )}
-              {!name && (
-                <div className="mt-1 text-red-600 text-xs">
-                  이름을 입력해주세요!
-                </div>
-              )}
-              {signUpError && (
-                <div className="mt-1 text-red-600 text-xs">{signUpError}</div>
-              )}
-              {signUpSuccess && (
-                <div className="mt-1 text-blue-600 text-xs">
-                  회원가입이 완료됐습니다. 로그인해주세요.
-                </div>
-              )}
+              <SignUpErr
+                mismatchError={mismatchError}
+                name={name}
+                signUpError={signUpError}
+                signUpSuccess={signUpSuccess}
+              />
               <button
                 type="submit"
                 className={`${styles.btn} dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800`}

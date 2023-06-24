@@ -1,4 +1,4 @@
-import React, { VFC } from "react";
+import React, { VFC, useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { User } from "../../typings/db";
 
@@ -6,9 +6,29 @@ interface Props {
   userData: User;
   showProfile: boolean;
   onLogout: () => void;
+  onClose: () => void
 }
 
-const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout }) => {
+const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout, onClose }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // 바깥쪽 영역 클릭 시 모달이 닫히는 함수
+  // 바깥쪽 영역 클릭 시 모달이 닫히는 함수
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setTimeout(() => {
+        onClose();
+      }, 0);
+    }
+  }, []);
+
+  // showProfile 상태가 변경될 때마다 이벤트 리스너를 업데이트합니다.
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
 
   if (!showProfile) {
     return null;
@@ -17,7 +37,7 @@ const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout }) => {
   return (
     <div
       className="absolute z-50 top-10 right-10 my-4 text-base list-none bg-gray-200 divide-y divide-gray-600 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-      id="user-dropdown"
+      ref={modalRef}
     >
       <div className="px-4 py-3">
         <span className="block text-sm text-gray-900 dark:text-white">
