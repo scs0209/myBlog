@@ -86,7 +86,7 @@ const Post = () => {
       <div>
         <form onSubmit={onSubmit}>
           <input
-            className="w-11/12 pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none"
+            className="w-full rounded-md pt-3.5 pb-3.5 border-none text-2xl font-bold border-b-gray-400 focus:outline-none"
             type="text"
             name="title"
             value={title}

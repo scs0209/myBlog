@@ -7,7 +7,7 @@ const Profile = () => {
   return (
     <>
       <HeadInfo title="Profile" />
-      <div className="flex flex-col gap-1 md:grid md:grid-cols-3">
+      <div className="flex flex-col items-center gap-1 md:grid md:grid-cols-3">
         <div className="col-start-1 col-end-4 mb-4">
           <h1 className="mb-1 text-3xl font-medium text-gray-900 dark:text-white">
             Profile

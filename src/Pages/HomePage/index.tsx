@@ -3,15 +3,16 @@ import HeadInfo from "Components/common/HeadInfo";
 import Carousels from "Components/HomePage/Carousels";
 import News from "Components/HomePage/News";
 import Popular from "Components/HomePage/Popular";
+import Footer from "Components/common/Footer";
 
 const Home = () => {
   return (
     <>
-    <HeadInfo title="Home" />
+      <HeadInfo title="Home" />
       <div className="p-5 sm:ml-64">
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
           <Carousels />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+          <div className="grid grid-cols-1 w-full sm:grid-cols-2 gap-4 mb-5">
             <Popular />
             <News />
             <div className="flex items-center justify-center rounded bg-gray-50 h-60 dark:bg-gray-800">
@@ -27,6 +28,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

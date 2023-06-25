@@ -134,7 +134,7 @@ const Category: VFC<Props> = ({ showSidebar }) => {
     >
       <Visitor />
       <SideBar />
-      <div className="px-3 pb-4 overflow-y-auto bg-gray-200 dark:bg-gray-800 border-gray-700 rounded-lg shadow-md">
+      <div className="h-[calc(85vh-20rem)] px-3 pb-4 overflow-y-auto bg-gray-200 dark:bg-gray-800 border-gray-700 rounded-lg shadow-md">
         <ul className="space-y-2 font-medium">
           <li>
             <Link

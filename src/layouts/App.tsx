@@ -2,7 +2,6 @@ import loadable from '@loadable/component'
 import Header from '../Components/common/Header';
 import React, { useCallback, useEffect, useState } from "react";
 import { Route, Routes } from "react-router";
-import Footer from '../Components/common/Footer';
 import { Flowbite } from "flowbite-react";
 import Category from '../Components/Category';
 const MainPage = loadable(() => import("./Main"));
@@ -48,7 +47,6 @@ const App = () => {
             <Route path="/main/*" element={<MainPage />} />
           </Routes>
         </div>
-        <Footer />
       </div>
     </Flowbite>
   );

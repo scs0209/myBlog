@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { useCallback, useState } from "react";
 import axios from "axios";
 import fetcher from "../../utils/fetcher";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Avatar from "react-avatar";
 import ProfileModal from "../ProfileModal";
 import { backUrl } from "../../config";
@@ -17,6 +17,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
   const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
   const [showPost, setShowPost] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const navigate = useNavigate();
 
   const onLogout = useCallback(() => {
     axios
@@ -24,9 +25,10 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
         withCredentials: true,
       })
       .then(() => {
+        navigate("/")
         mutate(false, false);
       });
-  }, [mutate]);
+  }, [mutate, navigate]);
 
   const onClickShowPost = useCallback(() => {
     setShowPost((prev) => !prev);
@@ -36,9 +38,10 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
     setShowProfile(false);
   }, [])
 
-  const toggleShowProfile = useCallback(() => {
-    setShowProfile((prev) => !prev)
-  }, [])
+  const handleToggleShowProfile = useCallback(() => {
+    console.log("click", showProfile);
+    setShowProfile((prevShowProfile) => !prevShowProfile);
+  }, []);
   
 
   return (
@@ -96,7 +99,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
             ) : (
               <button
                 type="button"
-                onClick={toggleShowProfile}
+                onClick={handleToggleShowProfile}
                 className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                 id="user-menu-button"
                 data-dropdown-toggle="user-dropdown"

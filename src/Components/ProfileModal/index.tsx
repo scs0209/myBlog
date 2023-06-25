@@ -14,22 +14,30 @@ const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout, onClose, id
   const modalRef = useRef<HTMLDivElement>(null);
 
   // 바깥쪽 영역 클릭 시 모달이 닫히는 함수
-  // 바깥쪽 영역 클릭 시 모달이 닫히는 함수
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      setTimeout(() => {
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node) &&
+        (event.target as HTMLElement).closest("#user-menu-button") === null
+      ) {
         onClose();
-      }, 0);
-    }
-  }, []);
+      }
+    },
+    [onClose]
+  );
 
   // showProfile 상태가 변경될 때마다 이벤트 리스너를 업데이트합니다.
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    if (showProfile) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [handleClickOutside]);
+  }, [handleClickOutside, showProfile]);
 
   if (!showProfile) {
     return null;

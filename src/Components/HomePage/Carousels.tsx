@@ -3,7 +3,7 @@ import { Carousel } from "flowbite-react";
 
 const Carousels = () => {
   return (
-    <div className="flex items-center justify-center h-48 mb-6 rounded bg-gray-50 dark:bg-gray-800">
+    <div className="flex items-center w-full justify-center h-48 mb-6 rounded bg-gray-50 dark:bg-gray-800">
       <Carousel>
         <img src={require("../../images/banner.jpg")} alt="banner" />
         <img src={require("../../images/포트폴리오.PNG")} alt="portfolio" />
