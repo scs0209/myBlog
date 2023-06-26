@@ -47,7 +47,7 @@ const PostList = () => {
       setSearchTerm(keyword);
       setCurrentPage(1);
       navigate(`/main/posts?page=1&search=${keyword}`);
-      mutate(`${backUrl}/api/main/posts?page=1&search=${keyword}`, false);
+      mutate(`${backUrl}/api/main/posts?page=1&search=${keyword}`);
     },
     [setSearchTerm, setCurrentPage, navigate, mutate]
   );
@@ -83,15 +83,25 @@ const PostList = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const pageNum = parseInt(params.get("page") || "1", 10);
+    const search = params.get("search");
+
     setCurrentPage(pageNum);
-    setSearchTerm("");
-    mutate(`${backUrl}/api/main/posts?page=${pageNum}&search=`);
-  }, [location, mutate]);
+
+    if (search) {
+      setSearchTerm(search);
+    } else {
+      setSearchTerm("");
+    }
+
+    mutate(`${backUrl}/api/main/posts?page=${pageNum}&search=${searchTerm}`);
+  }, [location, mutate, searchTerm]);
 
   //currentPagePosts 변경 될 때마다 업데이트 해줘서 페이지네이션할 때 오류 안나게 해주기 위해 사용
   useEffect(() => {
     setCurrentPagePosts(posts?.slice(startIdx, endIdx));
   }, [postData, startIdx, endIdx]);
+
+  console.log(postData)
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!Array.isArray(posts)) return <div className="h-screen">게시글 몰록을 불러오는 중입니다.</div>;

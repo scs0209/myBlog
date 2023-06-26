@@ -39,7 +39,6 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
   }, [])
 
   const handleToggleShowProfile = useCallback(() => {
-    console.log("click", showProfile);
     setShowProfile((prevShowProfile) => !prevShowProfile);
   }, []);
   

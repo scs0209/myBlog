@@ -9,7 +9,6 @@ import MDEditor from "@uiw/react-md-editor";
 import { backUrl } from "../../config";
 import HeadInfo from "Components/common/HeadInfo";
 
-
 const { Option } = Select;
 const Post = () => {
   const { data: currentUser } = useSWR(`${backUrl}/api/users`, fetcher);
