@@ -1,16 +1,14 @@
 import axios from "axios";
-import CommentForm from "../../Components/CommentForm";
-import CommentList from "../../Components/CommentList";
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useSWR from 'swr';
 import fetcher from "../../utils/fetcher";
-import { Comment, Reply } from "../../typings/db";
-import LikeButton from "../../Components/LikedButton";
 import { backUrl } from "../../config";
-import MDEditor from "@uiw/react-md-editor";
 import HeadInfo from "Components/common/HeadInfo";
 import styles from "../../styles/PostDetail.module.css"
+import PostInfo from "Components/PostDetail/PostInfo";
+import LikeSection from "Components/PostDetail/LikeSection";
+import CommentSection from "Components/PostDetail/CommentSection";
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,26 +19,6 @@ const PostDetail = () => {
     error,
     mutate: mutatePost,
   } = useSWR(`${backUrl}/api/main/posts/${id}`, fetcher);
-  const { data: commentsData, mutate: mutateComments } = useSWR(
-    `${backUrl}/api/posts/${id}/comments`,
-    fetcher
-  );
-  const { data: likeInfo, mutate: mutateLikeInfo } = useSWR(
-    `${backUrl}/api/posts/${id}/like-info`,
-    fetcher
-  );
-  const { data: repliesData, mutate: mutateReplies } = useSWR(
-    `${backUrl}/api/posts/${id}/replies`,
-    fetcher
-  );
-  
-
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [commentError, setCommentError] = useState("");
-  const [replies, setReplies] = useState<Reply[]>([]);
-  const [replyContent, setReplyContent] = useState<string>("");
-  const [likeCount, setLikeCount] = useState<number>(0);
-  const [liked, setLiked] = useState<boolean>(false);
 
   // 글 삭제
   const handleDeleteClick = useCallback(() => {
@@ -66,310 +44,6 @@ const PostDetail = () => {
     }
   }, [id, navigate, mutatePost]);
 
-  // 댓글 등록
-  const handleCommentSubmit = useCallback(
-    (content: string) => {
-      if (!content || !content.trim()) {
-        alert("내용을 입력해주세요.");
-        return;
-      }
-      axios
-        .post(
-          `${backUrl}/api/posts/${id}/comments`,
-          {
-            content,
-            postId: id,
-          },
-          {
-            withCredentials: true,
-          }
-        )
-        .then((response) => {
-          const newComment = {
-            id: response.data.id,
-            content,
-            User: { id: response.data.User.id, name: response.data.User.name },
-          };
-          setComments((prevComments) => {
-            if (!Array.isArray(prevComments)) {
-              console.warn("prevComments is not an array:", prevComments);
-              return [newComment];
-            }
-            return [...prevComments, commentsData];
-          });
-          setCommentError("");
-          mutateComments();
-        })
-        .catch((err) => {
-          if (err.response && err.response.status === 401) {
-            alert(err.response.data);
-            setCommentError("");
-          } else {
-            console.error(err);
-            setCommentError("댓글을 작성하는 도중 오류가 발생했습니다.");
-          }
-        });
-    },
-    [id, mutateComments]
-  );
-
-  // 댓글 수정
-  const handleCommentEdit = useCallback(
-    (commentId: number, content: string) => {
-      if (!content || !content.trim()) {
-        alert("내용을 입력해주세요");
-        return;
-      }
-      axios
-        .put(
-          `${backUrl}/api/posts/comments/${commentId}`,
-          {
-            content: content,
-          },
-          {
-            withCredentials: true,
-          }
-        )
-        .then(() => {
-          setComments((prevComments) => {
-            const newComments = [...prevComments];
-            const commentIndex = newComments.findIndex(
-              (comment) => comment.id === commentId
-            );
-            newComments[commentIndex] = {
-              ...newComments[commentIndex],
-              content,
-            };
-            return newComments;
-          });
-          setCommentError("");
-        })
-        .catch((err) => {
-          console.error(err);
-          if (err.response && err.response.status === 403) {
-            alert("댓글 작성자만 수정할 수 있습니다.");
-          } else if (err.response && err.response.status === 401) {
-            alert(err.response.data);
-          } else {
-            setCommentError("댓글을 수정하는 도중 오류가 발생했습니다.");
-          }
-        });
-    },
-    [setComments, setCommentError]
-  );
-
-  // 댓글 삭제
-  const handleCommentDelete = useCallback((commentId: number) => {
-    axios
-      .delete(`${backUrl}/api/posts/comments/${commentId}`, {
-        withCredentials: true,
-      })
-      .then(() => {
-        setComments((prevComments) =>
-          prevComments.filter((comment) => comment.id !== commentId)
-        );
-        setCommentError("");
-      })
-      .catch((err) => {
-        console.error(err);
-        if (err.response && err.response.status === 403) {
-          alert("댓글 작성자만 댓글을 삭제할 수 있습니다");
-        } else if (err.response && err.response.status === 401) {
-          alert(err.response.data);
-        } else {
-          setCommentError("댓글을 삭제하는 도중 오류가 발생했습니다.");
-        }
-      });
-  }, []);
-
-  // 답글 생성
-  const handleReplySubmit = useCallback((commentId: number, replyContent: string) => {
-    if(!replyContent) {
-      alert("글을 작성해주세요!")
-      return
-    }
-
-    const newReply = {
-      content: replyContent,
-      User: { name: user.name },
-      CommentId: commentId,
-    }
-
-    // 댓글에 대한 답글 추가 API 호출
-    axios
-      .post(`${backUrl}/api/posts/comments/${commentId}/replies`, newReply, {
-      withCredentials: true,
-      })
-      .then((response) => {
-        const addedReply = response.data;
-        setReplies((prev) => [...prev, addedReply]);
-        setReplyContent("");
-      })
-      .catch(error => {
-        if (error.response && error.response.status === 401) {
-          alert(error.response.data);
-        }
-        console.error(error);
-      })
-  }, [user.name]);
-
-
-  // 답글 수정
-  const handleReplyEdit = useCallback(
-    (commentId: number, replyId: number, editedContent: string) => {
-      if (!editedContent.trim()) {
-        alert("글을 작성해주세요!");
-        return;
-      }
-
-      axios
-        .put(
-          `${backUrl}/api/posts/comments/${commentId}/replies/${replyId}`,
-          { content: editedContent },
-          {
-            withCredentials: true,
-          }
-        )
-        .then((res) => {
-          const editedReply = res.data;
-          setReplies((prev) =>
-            prev.map((reply) => {
-              if (reply.id === replyId) {
-                return editedReply;
-              }
-              return reply;
-            })
-          );
-        })
-        .catch((err) => {
-          if (err.response && err.response.status === 403) {
-            alert("댓글 작성자만 수정할 수 있습니다.");
-          } else if (err.response && err.response.status === 401) {
-            alert(err.response.data);
-          } else {
-            console.log(err);
-          }
-        });
-      },
-    []
-  );
-
-  // 답글 삭제
-  const handleReplyDelete = useCallback(
-    (commentId: number, replyId: number) => {
-      if (window.confirm("정말 삭제하시겠습니까?")) {
-        axios
-          .delete(`${backUrl}/api/posts/comments/${commentId}/replies/${replyId}`, {
-            withCredentials: true,
-          })
-          .then(() => {
-            setReplies((prev) => prev.filter((reply) => reply.id !== replyId));
-          })
-          .catch((err) => {
-            if (err.response && err.response.status === 403) {
-              alert("삭제 권한이 없습니다.");
-            } else if (err.response && err.response.status === 401) {
-              alert(err.response.data);
-            } else {
-              console.log(err);
-            }
-          });
-      }
-    },
-    []
-  );
-
-  //좋아요 클릭
-  const handleLikedClick = useCallback(() => {
-    if (liked) {
-      // 좋아요 취소를 눌렀을 때
-      mutateLikeInfo(
-        (prev: any) => ({
-          ...prev,
-          count: prev.count - 1,
-          liked: false,
-        }),
-        false
-      );
-
-      axios
-        .delete(`${backUrl}/api/posts/${id}/like`, {
-          withCredentials: true,
-        })
-        .then(() => {
-          // 서버 응답이 오면 다시 업데이트
-          mutateLikeInfo((prev: any) => ({
-            ...prev,
-            count: prev.count - 1,
-            liked: false,
-          }));
-        })
-        .catch((err) => {
-          console.error(err);
-          // 에러 발생 시 UI를 롤백
-          mutateLikeInfo((prev: any) => ({
-            ...prev,
-            count: prev.count + 1,
-            liked: true,
-          }));
-        });
-    } else {
-      // 좋아요를 눌렀을 때
-      mutateLikeInfo(
-        (prev: any) => ({
-          ...prev,
-          count: prev.count + 1,
-          liked: true,
-        }),
-        false
-      );
-
-      axios
-        .post(
-          `${backUrl}/api/posts/${id}/like`,
-          {
-            UserId: user.id,
-            PostID: id,
-          },
-          {
-            withCredentials: true,
-          }
-        )
-        .then(() => {
-          // 서버 응답이 오면 다시 업데이트
-          mutateLikeInfo((prev: any) => ({
-            ...prev,
-            count: prev.count + 1,
-            liked: true,
-          }));
-        })
-        .catch((err) => {
-          console.error(err);
-          // 에러 발생 시 UI를 롤백
-          mutateLikeInfo((prev: any) => ({
-            ...prev,
-            count: prev.count - 1,
-            liked: false,
-          }));
-        });
-    }
-  }, [id, liked, mutateLikeInfo, user.id]);
-
-  //post 객체가 변경될 때마다 실행되며, post 객체가 존재하면 해당 게시물의 댓글들을 comments 상태로 업데이트 함
-  // 따라서 이 코드는 게시물의 댓글들을 표시하기 위한 코드이다. post 객체가 변경될 때마다 댓글 목록이 업데이트 되기때문에, 댓글이 추가되거나 삭제될 때도 자동으로 반영된다.
-  useEffect(() => {
-    if (commentsData) {
-      setComments(commentsData);
-    }
-    if (likeInfo) {
-      setLikeCount(likeInfo.likeCount);
-      setLiked(likeInfo.liked);
-    }
-    if (repliesData) {
-      setReplies(repliesData);
-    }
-  }, [commentsData, likeInfo, repliesData]);
-
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!post) return <div className="h-screen">로딩 중...</div>;
 
@@ -392,28 +66,9 @@ const PostDetail = () => {
       >
         {post && (
           <>
-            <div className="mb-3">
-              <h5 className={`${styles.title} dark:text-white`}>{title}</h5>
-              <span className={styles.date}>{dateString}</span>
-            </div>
-            <MDEditor.Markdown
-              className="rounded-lg bg-gray-400"
-              style={{ padding: 10 }}
-              source={content}
-            />
+            <PostInfo title={title} content={content} createdAt={dateString} />
             <div className={styles.flexContainer}>
-              <div>
-                <span className="text-gray-400 text-xs dark:text-white">
-                  좋아요: {likeCount}
-                </span>
-                {user && (
-                  <LikeButton
-                    likeCount={likeCount}
-                    liked={liked}
-                    onClick={handleLikedClick}
-                  />
-                )}
-              </div>
+              <LikeSection />
               <div>
                 {user && user.role === "admin" && (
                   <>
@@ -434,23 +89,10 @@ const PostDetail = () => {
             </div>
           </>
         )}
-        <section className={`${styles.section} dark:bg-gray-800`}>
-          <div className="max-w-4xl mx-auto px-4">
-            <CommentForm onSubmit={handleCommentSubmit} error={commentError} />
-            <CommentList
-              comments={comments}
-              replies={replies}
-              onDelete={handleCommentDelete}
-              onEdit={handleCommentEdit}
-              onReply={handleReplySubmit}
-              onDeleteReply={handleReplyDelete}
-              onReplyEdit={handleReplyEdit}
-            />
-          </div>
-        </section>
+        <CommentSection />
       </div>
     </>
   );
 };
 
-export default memo(PostDetail);
+export default PostDetail;

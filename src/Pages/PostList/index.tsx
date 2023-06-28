@@ -60,7 +60,6 @@ const PostList = () => {
           withCredentials: true,
         })
         .then((response) => {
-          console.log(response.data.message);
           const updatedPosts = currentPagePosts.map((post: any) => {
             if (post.id === postId) {
               return {
@@ -100,8 +99,6 @@ const PostList = () => {
   useEffect(() => {
     setCurrentPagePosts(posts?.slice(startIdx, endIdx));
   }, [postData, startIdx, endIdx]);
-
-  console.log(postData)
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!Array.isArray(posts)) return <div className="h-screen">게시글 몰록을 불러오는 중입니다.</div>;

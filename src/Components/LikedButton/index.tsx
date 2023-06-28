@@ -1,13 +1,12 @@
-import React, { VFC } from "react";
+import React, { VFC, memo } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
 interface Props {
-  likeCount: number;
   liked: boolean;
   onClick: () => void;
 }
 
-const LikeButton: VFC<Props> = ({ likeCount, liked, onClick }) => {
+const LikeButton: VFC<Props> = ({ liked, onClick }) => {
   return (
     <button className="relative top-1 ml-1 cursor-pointer bg-transparent text-red-600" onClick={onClick}>
       {liked ? <AiFillHeart color="red" /> : <AiOutlineHeart />}{" "}
@@ -15,4 +14,4 @@ const LikeButton: VFC<Props> = ({ likeCount, liked, onClick }) => {
   );
 }
 
-export default LikeButton;
+export default memo(LikeButton);

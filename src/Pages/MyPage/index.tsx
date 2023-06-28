@@ -28,7 +28,6 @@ const MyPage = () => {
       });
   }, [navigate, userData]);
 
-  console.log(userData)
   if(!userData) return <div className="h-screen">데이터를 불러오는 중입니다...</div>
 
   return (

@@ -40,7 +40,6 @@ const SignUp = () => {
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response);
         setSignUpSuccess(true);
       })
       .catch((error)=> {

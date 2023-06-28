@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, VFC, useCallback, useState } from "react"
+import React, { Dispatch, SetStateAction, VFC, memo, useCallback, useState } from "react"
 import { Comment, Reply } from "../../typings/db";
 import useInput from "utils/useInput";
 import { Dropdown } from "flowbite-react";
@@ -111,9 +111,9 @@ const CommentItem:VFC<Props> = ({ comment, replies, onDelete, onEdit, toggleShow
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                   ></path>
                 </svg>
@@ -136,4 +136,4 @@ const CommentItem:VFC<Props> = ({ comment, replies, onDelete, onEdit, toggleShow
 
 }
 
-export default CommentItem
+export default memo(CommentItem)

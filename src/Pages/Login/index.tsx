@@ -30,7 +30,6 @@ const Login = () => {
       }
     )
     .then((res) => {
-      console.log(res.data);
       mutate(res.data, false);
     })
     .catch((err) => {

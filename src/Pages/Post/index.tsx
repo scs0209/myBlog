@@ -33,7 +33,6 @@ const Post = () => {
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
-      console.log(content);
       if (!title || !content || !category) {
         alert("제목과 내용, 카테고리를 입력해주세요!");
         return;

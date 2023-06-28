@@ -109,7 +109,6 @@ const Category: VFC<Props> = ({ showSidebar }) => {
   }, [editedCategoryId, data]);
 
   const handleClickCategory = useCallback((id: number) => {
-    console.log("click");
     setActiveCategoryId(id);
   }, []);
 
