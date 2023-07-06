@@ -1,5 +1,6 @@
-import { ChangeEvent, FormEvent, VFC, memo } from "react"
-import styles from "../../styles/CategoryPost.module.css";
+import { ChangeEvent, FormEvent, memo, VFC } from 'react';
+
+import styles from '../../styles/CategoryPost.module.css';
 
 interface Props {
   editedCategoryName: string;
@@ -7,7 +8,11 @@ interface Props {
   onSubmitEdit: (e: FormEvent<HTMLFormElement>) => void;
 }
 
-const CategoryEditForm: VFC<Props> = ({ onSubmitEdit, editedCategoryName, onChangeCategoryName}) => {
+const CategoryEditForm: VFC<Props> = ({
+  onSubmitEdit,
+  editedCategoryName,
+  onChangeCategoryName,
+}) => {
   return (
     <form onSubmit={onSubmitEdit}>
       <div className="flex items-center">
@@ -26,6 +31,6 @@ const CategoryEditForm: VFC<Props> = ({ onSubmitEdit, editedCategoryName, onChan
       </div>
     </form>
   );
-}
+};
 
-export default memo(CategoryEditForm)
+export default memo(CategoryEditForm);

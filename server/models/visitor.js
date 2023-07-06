@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 class Visitor extends Sequelize.Model {
   static initiate(sequelize) {
@@ -23,11 +23,11 @@ class Visitor extends Sequelize.Model {
       {
         sequelize,
         timestamps: false,
-        modelName: "Visitor",
-        tableName: "visitors",
-        charset: "utf8",
-        collate: "utf8_general_ci",
-      }
+        modelName: 'Visitor',
+        tableName: 'visitors',
+        charset: 'utf8',
+        collate: 'utf8_general_ci',
+      },
     );
   }
 }

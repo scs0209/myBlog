@@ -1,13 +1,13 @@
-import React, { VFC, memo } from "react";
-import useSWR from "swr";
-import { useCallback, useState } from "react";
-import axios from "axios";
-import fetcher from "../../utils/fetcher";
-import { Link, useNavigate } from "react-router-dom";
-import Avatar from "react-avatar";
-import ProfileModal from "../ProfileModal";
-import { backUrl } from "../../config";
-import { DarkThemeToggle } from "flowbite-react";
+import axios from 'axios';
+import { DarkThemeToggle } from 'flowbite-react';
+import React, { memo, useCallback, useState, VFC } from 'react';
+import Avatar from 'react-avatar';
+import { Link, useNavigate } from 'react-router-dom';
+import useSWR from 'swr';
+
+import { backUrl } from '../../config';
+import fetcher from '../../utils/fetcher';
+import ProfileModal from '../ProfileModal';
 
 interface Props {
   toggleSidebar: () => void;
@@ -25,7 +25,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
         withCredentials: true,
       })
       .then(() => {
-        navigate("/")
+        navigate('/');
         mutate(false, false);
       });
   }, [mutate, navigate]);
@@ -36,12 +36,11 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
 
   const handleCloseShowProfile = useCallback(() => {
     setShowProfile(false);
-  }, [])
+  }, []);
 
   const handleToggleShowProfile = useCallback(() => {
     setShowProfile((prevShowProfile) => !prevShowProfile);
   }, []);
-  
 
   return (
     <>
@@ -131,6 +130,6 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
       </nav>
     </>
   );
-}
+};
 
 export default memo(Header);

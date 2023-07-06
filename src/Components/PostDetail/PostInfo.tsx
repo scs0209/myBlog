@@ -1,6 +1,7 @@
-import React, { VFC } from "react";
-import styles from "../../styles/PostDetail.module.css";
-import MDEditor from "@uiw/react-md-editor";
+import MDEditor from '@uiw/react-md-editor';
+import React, { VFC } from 'react';
+
+import styles from '../../styles/PostDetail.module.css';
 
 interface Props {
   title: string;

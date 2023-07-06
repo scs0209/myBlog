@@ -1,0 +1,77 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "commonjs": true
+  },
+
+  "parser": "@typescript-eslint/parser",
+
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-hooks",
+    "import",
+    "simple-import-sort",
+    "prettier",
+    "jsx-a11y"
+  ],
+
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsx-a11y/recommended",
+    "prettier/prettier",
+    "plugin:import/recommended"
+  ],
+
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+
+    "import/no-anonymous-default-export": "off",
+    "import/newline-after-import": "error",
+    "import/first": "error",
+    "import/no-unresolved": "off",
+
+    "simple-import-sort/imports": "error",
+
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+
+    "prettier/prettier": "error",
+
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "eol-last": ["error", "always"], // 파일의 마지막에 줄바꿈을 넣을 것인가?
+    "comma-dangle": ["error", "always-multiline"], // 후행쉼표
+    "object-curly-spacing": ["error", "always"], // 중괄호 앞뒤의 공백 여부
+    "space-in-parens": ["error", "never"], // 소괄호 앞뒤의 공백 여부
+    "computed-property-spacing": ["error", "never"], // object의 key 부분에 공백 여부
+    "comma-spacing": ["error", { "before": false, "after": true }], // comma(,) 앞 뒤의 공백 여부
+    "quotes": ["error", "single"], // 홑따옴표 혹은 겹따옴표 사용 여부
+    "no-tabs": ["error", { "allowIndentationTabs": true }], // tab 사용 여부
+    "semi": ["error", "always"], // 세미콜론 사용 여부
+    "object-shorthand": "error", // es6에서 객체를 간편하게 사용하는 문법
+
+    // blankline을 삽입하는 기준
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "*", "next": "return" },
+      { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
+      {
+        "blankLine": "any",
+        "prev": ["const", "let", "var"],
+        "next": ["const", "let", "var"]
+      }
+    ]
+  },
+
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    }
+  }
+}

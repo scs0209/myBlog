@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 class Replies extends Sequelize.Model {
   static initiate(sequelize) {
@@ -17,21 +17,21 @@ class Replies extends Sequelize.Model {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
-            model: "comments",
-            key: "id",
+            model: 'comments',
+            key: 'id',
           },
-          onDelete: "CASCADE",
+          onDelete: 'CASCADE',
         },
       },
       {
         sequelize,
-        modelName: "Replies",
-        tableName: "replies",
-        charset: "utf8mb4",
-        collate: "utf8mb4_general_ci",
+        modelName: 'Replies',
+        tableName: 'replies',
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_general_ci',
         timestamps: true,
         paranoid: true,
-      }
+      },
     );
   }
 

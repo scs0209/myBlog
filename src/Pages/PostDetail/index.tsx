@@ -1,14 +1,15 @@
-import axios from "axios";
-import React, { useCallback } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
+import HeadInfo from 'Components/common/HeadInfo';
+import CommentSection from 'Components/PostDetail/CommentSection';
+import LikeSection from 'Components/PostDetail/LikeSection';
+import PostInfo from 'Components/PostDetail/PostInfo';
+import React, { useCallback } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
-import fetcher from "../../utils/fetcher";
-import { backUrl } from "../../config";
-import HeadInfo from "Components/common/HeadInfo";
-import styles from "../../styles/PostDetail.module.css"
-import PostInfo from "Components/PostDetail/PostInfo";
-import LikeSection from "Components/PostDetail/LikeSection";
-import CommentSection from "Components/PostDetail/CommentSection";
+
+import { backUrl } from '../../config';
+import styles from '../../styles/PostDetail.module.css';
+import fetcher from '../../utils/fetcher';
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,7 +23,8 @@ const PostDetail = () => {
 
   // 글 삭제
   const handleDeleteClick = useCallback(() => {
-    const confirmResult = window.confirm("정말로 삭제하시겠습니까?");
+    const confirmResult = window.confirm('정말로 삭제하시겠습니까?');
+
     if (confirmResult) {
       axios
         .delete(`${backUrl}/api/main/posts/${id}`, {
@@ -30,11 +32,11 @@ const PostDetail = () => {
         })
         .then(() => {
           mutatePost(`${backUrl}/api/main/posts`, false);
-          navigate("/");
+          navigate('/');
         })
         .catch((error) => {
           if (error.response.status === 403) {
-            alert("삭제 권한이 없습니다.");
+            alert('삭제 권한이 없습니다.');
           } else if (error.response && error.response.status === 401) {
             alert(error.response.data);
           } else {
@@ -56,7 +58,7 @@ const PostDetail = () => {
   } - ${createdDate.getDate()}`;
 
   //이걸 해주지 않으면 중간에 NaN이 나온다.
-  if (`${createdDate.getFullYear()}` === "NaN") return <div>로딩중...</div>;
+  if (`${createdDate.getFullYear()}` === 'NaN') return <div>로딩중...</div>;
 
   return (
     <>
@@ -70,13 +72,10 @@ const PostDetail = () => {
             <div className={styles.flexContainer}>
               <LikeSection />
               <div>
-                {user && user.role === "admin" && (
+                {user && user.role === 'admin' && (
                   <>
                     <div className="flex items-center flex-wrap ">
-                      <span
-                        className={styles.deleteSpan}
-                        onClick={handleDeleteClick}
-                      >
+                      <span className={styles.deleteSpan} onClick={handleDeleteClick}>
                         삭제
                       </span>
                       <span className={styles.editSpan}>

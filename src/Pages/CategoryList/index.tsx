@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import HeadInfo from 'Components/common/HeadInfo';
+import { Pagination } from 'flowbite-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import useSWR from 'swr';
-import fetcher from "../../utils/fetcher";
-import { Link } from "react-router-dom";
-import { backUrl } from "../../config";
-import { Pagination } from "flowbite-react";
-import HeadInfo from "Components/common/HeadInfo";
+
+import { backUrl } from '../../config';
+import fetcher from '../../utils/fetcher';
 
 const CategoryList = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
@@ -17,17 +18,14 @@ const CategoryList = () => {
 
   const { data: categoryData, error: categoryError } = useSWR(
     `${backUrl}/api/categories/${categoryId}`,
-    fetcher
+    fetcher,
   );
 
   const {
     data: postData,
     error: postError,
     mutate,
-  } = useSWR(
-    `${backUrl}/api/categories/${categoryId}/posts?page=${currentPage}`,
-    fetcher
-  );
+  } = useSWR(`${backUrl}/api/categories/${categoryId}/posts?page=${currentPage}`, fetcher);
 
   const posts = postData?.posts;
   const totalPosts = postData?.count ?? 0;
@@ -42,13 +40,14 @@ const CategoryList = () => {
       navigate(`/main/categories/${categoryId}?page=${pageNum}`);
       mutate(`${backUrl}/api/categories/${categoryId}/posts?page=${pageNum}`);
     },
-    [setCurrentPage, categoryId, mutate, navigate]
+    [setCurrentPage, categoryId, mutate, navigate],
   );
 
   // 추가
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const pageNum = parseInt(params.get("page") || "1", 10);
+    const pageNum = parseInt(params.get('page') || '1', 10);
+
     setCurrentPage(pageNum);
     mutate(`${backUrl}/api/categories/${categoryId}/posts?page=${pageNum}`);
   }, [location, mutate]);
@@ -62,11 +61,12 @@ const CategoryList = () => {
 
   if (categoryError || postError) return <div>에러가 발생했습니다.</div>;
   if (!categoryData || !postData) return <div className="h-screen">로딩중</div>;
-  if (!Array.isArray(posts)) return <div className="h-screen">게시글 몰록을 불러오는 중입니다.</div>;
+  if (!Array.isArray(posts))
+    return <div className="h-screen">게시글 몰록을 불러오는 중입니다.</div>;
 
   return (
     <>
-    <HeadInfo title="Category" />
+      <HeadInfo title="Category" />
       <div className="h-screen">
         <h1 className="text-3xl font-bold mb-3 dark:text-white">게시글 목록</h1>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -90,6 +90,7 @@ const CategoryList = () => {
                 const dateString = `${createdDate.getFullYear()} - ${
                   createdDate.getMonth() + 1
                 } - ${createdDate.getDate()}`;
+
                 return (
                   <tr
                     key={post.id}
@@ -101,9 +102,7 @@ const CategoryList = () => {
                     >
                       <Link to={`/main/posts/${post.id}`}>{post.title}</Link>
                     </th>
-                    <td className="hidden md:table-cell px-6 py-3">
-                      {post.views}
-                    </td>
+                    <td className="hidden md:table-cell px-6 py-3">{post.views}</td>
                     <td className="px-1 md:px-6 py-4">{dateString}</td>
                   </tr>
                 );
@@ -125,6 +124,6 @@ const CategoryList = () => {
       </div>
     </>
   );
-}
+};
 
 export default CategoryList;

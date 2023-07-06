@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
 interface Props {
   onClick: () => void;
@@ -6,15 +6,14 @@ interface Props {
   children: React.ReactNode;
 }
 
-
-const RepliesButton:FC<Props> = ({ onClick, isRepliesVisible, children }) => {
+const RepliesButton: FC<Props> = ({ onClick, isRepliesVisible, children }) => {
   return (
     <button
       type="button"
       className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400"
       onClick={onClick}
     >
-      {isRepliesVisible ? `숨기기` : `보기`} {children}
+      {isRepliesVisible ? '숨기기' : '보기'} {children}
     </button>
   );
 };

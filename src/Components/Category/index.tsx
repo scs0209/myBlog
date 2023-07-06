@@ -1,15 +1,16 @@
-import axios from "axios";
-import React, { FormEvent, VFC, useCallback, useEffect, useState } from "react";
+import axios from 'axios';
+import React, { FormEvent, useCallback, useEffect, useState, VFC } from 'react';
+import { Link } from 'react-router-dom';
 import useSWR from 'swr';
-import fetcher from "../../utils/fetcher";
-import useInput from "../../utils/useInput";
-import { backUrl } from "../../config";
-import { Link } from "react-router-dom";
-import CategoryNameEdit from "../CategoryNameEdit";
-import CreateCategoryModal from "../../Components/onCreateCategoryModal";
-import EditButton from "./EditButton";
-import SideBar from "./SideBar";
-import Visitor from "./Visitor";
+
+import CreateCategoryModal from '../../Components/onCreateCategoryModal';
+import { backUrl } from '../../config';
+import fetcher from '../../utils/fetcher';
+import useInput from '../../utils/useInput';
+import CategoryNameEdit from '../CategoryNameEdit';
+import EditButton from './EditButton';
+import SideBar from './SideBar';
+import Visitor from './Visitor';
 
 interface Props {
   showSidebar: boolean;
@@ -18,14 +19,11 @@ interface Props {
 const Category: VFC<Props> = ({ showSidebar }) => {
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
-  const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput("");
+  const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput('');
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
 
-  const { data: userData, mutate: mutateUserData } = useSWR(
-    `${backUrl}/api/users`,
-    fetcher
-  );
+  const { data: userData, mutate: mutateUserData } = useSWR(`${backUrl}/api/users`, fetcher);
   const { data, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
 
   const onClickCreateCategory = useCallback(() => {
@@ -40,7 +38,7 @@ const Category: VFC<Props> = ({ showSidebar }) => {
   //editedCategoryId를 해당 ID로 변경한다.
   const toggleEdit = useCallback((categoryId: any) => {
     setEdit((prev) => !prev);
-    setEditedCategoryName("");
+    setEditedCategoryName('');
     setEditedCategoryId(categoryId);
   }, []);
 
@@ -48,11 +46,13 @@ const Category: VFC<Props> = ({ showSidebar }) => {
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!editedCategoryName || !editedCategoryName.trim()) {
-        alert("글자를 입력해주세요.");
+        alert('글자를 입력해주세요.');
+
         return;
       }
-      if (userData?.role !== "admin") {
-        alert("관리자만 카테고리를 수정할 수 있습니다.");
+      if (userData?.role !== 'admin') {
+        alert('관리자만 카테고리를 수정할 수 있습니다.');
+
         return;
       }
       axios
@@ -63,7 +63,7 @@ const Category: VFC<Props> = ({ showSidebar }) => {
           },
           {
             withCredentials: true,
-          }
+          },
         )
         .then(() => {
           mutate();
@@ -71,10 +71,10 @@ const Category: VFC<Props> = ({ showSidebar }) => {
         })
         .catch((error) => {
           console.error(error);
-          alert("카테고리 수정에 실패했습니다.");
+          alert('카테고리 수정에 실패했습니다.');
         });
-      },
-    [editedCategoryName, toggleEdit, mutate, editedCategoryId, userData]
+    },
+    [editedCategoryName, toggleEdit, mutate, editedCategoryId, userData],
   );
 
   // 카테고리 삭제
@@ -89,21 +89,21 @@ const Category: VFC<Props> = ({ showSidebar }) => {
         })
         .catch((error) => {
           if (error.response && error.response.status === 403) {
-            alert("권한이 없습니다.");
+            alert('권한이 없습니다.');
           } else {
             console.error(error);
           }
         });
     },
-    [mutate]
+    [mutate],
   );
 
   useEffect(() => {
     // 수정할 카테고리가 선택되면 해당 카테고리의 이름으로 editedCategoryName 상태를 설정합니다.
-    if (editedCategoryId !== null) {//editCategoryId가 null이 아니라면, 'data' 배열에서 해당 id와 일치하는 카테고리를 찾아서 'editedCategoryName' 상태를 그 카테고리의 이름으로 설정한다.
-      const editedCategory = data.find(
-        (category: any) => category.id === editedCategoryId
-      );
+    if (editedCategoryId !== null) {
+      //editCategoryId가 null이 아니라면, 'data' 배열에서 해당 id와 일치하는 카테고리를 찾아서 'editedCategoryName' 상태를 그 카테고리의 이름으로 설정한다.
+      const editedCategory = data.find((category: any) => category.id === editedCategoryId);
+
       setEditedCategoryName(editedCategory.name);
     }
   }, [editedCategoryId, data]);
@@ -116,18 +116,14 @@ const Category: VFC<Props> = ({ showSidebar }) => {
     setActiveCategoryId(null);
   };
 
-
-  if(error) return <div>에러가 발생했습니다</div>
-  if(!data) return <div>로딩중...</div>
-
+  if (error) return <div>에러가 발생했습니다</div>;
+  if (!data) return <div>로딩중...</div>;
 
   return (
     <aside
       id="logo-sidebar"
       className={`fixed z-40 w-64 top-20 transition-transform ${
-        showSidebar
-          ? "left-2 translate-x-0 sm:translate-x-0"
-          : "-translate-x-full sm:-left-2"
+        showSidebar ? 'left-2 translate-x-0 sm:translate-x-0' : '-translate-x-full sm:-left-2'
       }`}
       aria-label="Sidebar"
     >
@@ -157,15 +153,15 @@ const Category: VFC<Props> = ({ showSidebar }) => {
             activeCategoryId={activeCategoryId}
           />
         </ul>
-        {userData?.role === "admin" && (
+        {userData?.role === 'admin' && (
           <div className="flex justify-center">
-            {userData?.role === "admin" && (
+            {userData?.role === 'admin' && (
               <EditButton type="button" onClick={onClickCreateCategory}>
                 +
               </EditButton>
             )}
             <EditButton type="button" onClick={() => toggleEdit(null)}>
-              {edit ? "x" : "편집"}
+              {edit ? 'x' : '편집'}
             </EditButton>
           </div>
         )}
@@ -177,6 +173,6 @@ const Category: VFC<Props> = ({ showSidebar }) => {
       />
     </aside>
   );
-}
+};
 
 export default Category;

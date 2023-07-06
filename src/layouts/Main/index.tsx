@@ -1,20 +1,21 @@
-import loadable from "@loadable/component";
-import {  Route, Routes } from "react-router-dom";
-import CategoryList from "../../Pages/CategoryList";
+import loadable from '@loadable/component';
+import { Route, Routes } from 'react-router-dom';
+
+import CategoryList from '../../Pages/CategoryList';
+
 const Post = loadable(() => import('../../Pages/Post'));
 const PostList = loadable(() => import('../../Pages/PostList'));
 const PostDetail = loadable(() => import('../../Pages/PostDetail'));
 const PostEdit = loadable(() => import('../../Pages/PostEdit'));
-const Login = loadable(() => import("../../Pages/Login"));
-const SignUp = loadable(() => import("../../Pages/SignUp"));
-const FindId = loadable(() => import("../../Pages/FindId"));
-const FindPassword = loadable(() => import("../../Pages/FindPassword"));
-const ChangePassword = loadable(() => import("../../Pages/ChangePassword"));
-const Profile = loadable(() => import("../../Pages/Profile"));
-const MyPage = loadable(() => import("../../Pages/MyPage"));
+const Login = loadable(() => import('../../Pages/Login'));
+const SignUp = loadable(() => import('../../Pages/SignUp'));
+const FindId = loadable(() => import('../../Pages/FindId'));
+const FindPassword = loadable(() => import('../../Pages/FindPassword'));
+const ChangePassword = loadable(() => import('../../Pages/ChangePassword'));
+const Profile = loadable(() => import('../../Pages/Profile'));
+const MyPage = loadable(() => import('../../Pages/MyPage'));
 
 const MainPage = () => {
-
   return (
     <>
       <div className="p-0 md:p-12 sm:ml-64 dark:bg-slate-700">
@@ -37,6 +38,6 @@ const MainPage = () => {
       </div>
     </>
   );
-}
+};
 
 export default MainPage;

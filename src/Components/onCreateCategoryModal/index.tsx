@@ -1,12 +1,13 @@
-import axios from "axios";
-import Modal from "Components/Modal";
-import React, { VFC, useCallback } from "react";
+import axios from 'axios';
+import Modal from 'Components/Modal';
+import { backUrl } from 'config';
+import React, { useCallback, VFC } from 'react';
 import useSWR from 'swr';
-import fetcher from "../../utils/fetcher";
-import useInput from "../../utils/useInput";
-import { backUrl } from "config";
 
-interface Props{
+import fetcher from '../../utils/fetcher';
+import useInput from '../../utils/useInput';
+
+interface Props {
   show: boolean;
   onCloseModal: (e: any) => void;
   setShowCreateCategoryModal: (flag: boolean) => void;
@@ -14,52 +15,54 @@ interface Props{
 
 const CreateCategoryModal: VFC<Props> = ({ show, onCloseModal, setShowCreateCategoryModal }) => {
   const [newCategory, onChangeNewCategory, setNewCategory] = useInput('');
-  const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher)
+  const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
 
   const onCreateCategory = useCallback(
     (e: any) => {
       e.preventDefault();
       // 중복 확인
-      if (
-        categories?.some((category: any) => category.name === newCategory.trim())
-      ) {
-        alert("이미 존재하는 카테고리입니다.");
+      if (categories?.some((category: any) => category.name === newCategory.trim())) {
+        alert('이미 존재하는 카테고리입니다.');
+
         return;
       }
       // 입력창 비우면 생성 x
       if (!newCategory || !newCategory.trim()) {
-        alert("제목을 입력해주세요!");
+        alert('제목을 입력해주세요!');
+
         return;
       }
       axios
-        .post(`${backUrl}/api/categories`, {
-          name: newCategory,
-        }, {
-          withCredentials: true,
-        })
+        .post(
+          `${backUrl}/api/categories`,
+          {
+            name: newCategory,
+          },
+          {
+            withCredentials: true,
+          },
+        )
         .then(() => {
           setShowCreateCategoryModal(false);
-          setNewCategory("");
-          alert("카테고리가 추가되었습니다.");
+          setNewCategory('');
+          alert('카테고리가 추가되었습니다.');
           mutate([...(categories ?? []), newCategory], false); // 생성한 카테고리를 화면에 바로 반영
         })
         .catch((error) => {
           if (error.response && error.response.status === 403) {
-            alert("권한이 없습니다.");
+            alert('권한이 없습니다.');
           } else {
             console.error(error);
           }
         });
     },
-    [newCategory, setNewCategory, setShowCreateCategoryModal, categories, mutate]
+    [newCategory, setNewCategory, setShowCreateCategoryModal, categories, mutate],
   );
 
   return (
     <Modal show={show} onCloseModal={onCloseModal}>
       <div className="px-10 mt-3 lg:px-8">
-        <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
-          Create Category
-        </h3>
+        <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">Create Category</h3>
         <form className="space-y-6" onSubmit={onCreateCategory}>
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -83,6 +86,6 @@ const CreateCategoryModal: VFC<Props> = ({ show, onCloseModal, setShowCreateCate
       </div>
     </Modal>
   );
-}
+};
 
 export default CreateCategoryModal;

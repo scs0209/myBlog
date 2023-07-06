@@ -4,7 +4,7 @@ const PostSubmit = () => {
       <div className="text-center mt-3">
         <button
           className="w-32 p-2 rounded-lg cursor-pointer hover:bg-rose-400 hover:text-white"
-          style={{ border: "solid 1px lightgray"}}
+          style={{ border: 'solid 1px lightgray' }}
           type="submit"
         >
           포스트 등록
@@ -12,6 +12,6 @@ const PostSubmit = () => {
       </div>
     </div>
   );
-}
+};
 
 export default PostSubmit;

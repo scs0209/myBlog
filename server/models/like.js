@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 class Like extends Sequelize.Model {
   static initiate(sequelize) {
@@ -12,19 +12,19 @@ class Like extends Sequelize.Model {
       },
       {
         sequelize,
-        modelName: "Like",
-        tableName: "likes",
-        charset: "utf8",
-        collate: "utf8_general_ci",
+        modelName: 'Like',
+        tableName: 'likes',
+        charset: 'utf8',
+        collate: 'utf8_general_ci',
         timestamps: true,
         paranoid: true,
-      }
+      },
     );
   }
   static associate(db) {
     db.Like.belongsTo(db.User);
     db.Like.belongsTo(db.Post);
   }
-};
+}
 
 module.exports = Like;

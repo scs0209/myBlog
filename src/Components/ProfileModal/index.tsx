@@ -1,6 +1,7 @@
-import React, { VFC, useCallback, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { User } from "../../typings/db";
+import React, { useCallback, useEffect, useRef, VFC } from 'react';
+import { Link } from 'react-router-dom';
+
+import { User } from '../../typings/db';
 
 interface Props {
   userData: User;
@@ -19,23 +20,24 @@ const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout, onClose, id
       if (
         modalRef.current &&
         !modalRef.current.contains(event.target as Node) &&
-        (event.target as HTMLElement).closest("#user-menu-button") === null
+        (event.target as HTMLElement).closest('#user-menu-button') === null
       ) {
         onClose();
       }
     },
-    [onClose]
+    [onClose],
   );
 
   // showProfile 상태가 변경될 때마다 이벤트 리스너를 업데이트합니다.
   useEffect(() => {
     if (showProfile) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     }
+
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [handleClickOutside, showProfile]);
 
@@ -49,16 +51,14 @@ const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout, onClose, id
       ref={modalRef}
     >
       <div className="px-4 py-3">
-        <span className="block text-sm text-gray-900 dark:text-white">
-          {userData.name}
-        </span>
+        <span className="block text-sm text-gray-900 dark:text-white">{userData.name}</span>
         <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
           {userData.email}
         </span>
       </div>
       <ul className="py-2" aria-labelledby="user-menu-button">
         <li>
-          {userData?.role === "admin" && (
+          {userData?.role === 'admin' && (
             <Link
               to="/main/write"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"

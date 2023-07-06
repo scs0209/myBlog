@@ -1,32 +1,40 @@
-import axios from "axios";
-import React, { FormEvent, useCallback, useState } from "react";
-import useInput from "../../utils/useInput";
-import { backUrl } from "config";
-import HeadInfo from "Components/common/HeadInfo";
-import styles from "../../styles/ChangePassword.module.css"
+import axios from 'axios';
+import HeadInfo from 'Components/common/HeadInfo';
+import { backUrl } from 'config';
+import React, { FormEvent, useCallback, useState } from 'react';
+
+import styles from '../../styles/ChangePassword.module.css';
+import useInput from '../../utils/useInput';
 
 const ChangePassword = () => {
-  const [password, onChangePassword, setPassword] = useInput("");
-  const [newPassword, onChangeNewPassword, setNewPassword] = useInput("");
-  const [message, setMessage] = useState("");
+  const [password, onChangePassword, setPassword] = useInput('');
+  const [newPassword, onChangeNewPassword, setNewPassword] = useInput('');
+  const [message, setMessage] = useState('');
 
-  const onSubmitForm = useCallback((e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    axios
-      .put(`${backUrl}/api/users/password`, { currentPassword: password, newPassword }, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setMessage(res.data.message);
-        setPassword("");
-        setNewPassword("");
-      })
-      .catch((err) => {
-        setMessage(err.response.data.message);
-        setPassword("");
-        setNewPassword("");
-      })
-  }, [password, newPassword])
+  const onSubmitForm = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      axios
+        .put(
+          `${backUrl}/api/users/password`,
+          { currentPassword: password, newPassword },
+          {
+            withCredentials: true,
+          },
+        )
+        .then((res) => {
+          setMessage(res.data.message);
+          setPassword('');
+          setNewPassword('');
+        })
+        .catch((err) => {
+          setMessage(err.response.data.message);
+          setPassword('');
+          setNewPassword('');
+        });
+    },
+    [password, newPassword],
+  );
 
   return (
     <>
@@ -34,9 +42,7 @@ const ChangePassword = () => {
       <div className={styles.container}>
         <div className={`${styles.card} dark:bg-gray-800 dark:border-gray-700`}>
           <div className={styles.inner}>
-            <h1 className={`${styles.title} dark:text-white`}>
-              Change Password
-            </h1>
+            <h1 className={`${styles.title} dark:text-white`}>Change Password</h1>
             <form className="space-y-4 md:space-y-6" onSubmit={onSubmitForm}>
               <div>
                 <label
@@ -73,16 +79,12 @@ const ChangePassword = () => {
                 submit
               </button>
             </form>
-            {message && (
-              <div className={styles.message}>
-                {message}
-              </div>
-            )}
+            {message && <div className={styles.message}>{message}</div>}
           </div>
         </div>
       </div>
     </>
   );
-}
+};
 
-export default ChangePassword
+export default ChangePassword;

@@ -1,27 +1,25 @@
-import React, { useCallback, useState } from "react";
-import axios from "axios";
+import MDEditor from '@uiw/react-md-editor';
+import { Select } from 'antd';
+import axios from 'axios';
+import HeadInfo from 'Components/common/HeadInfo';
+import React, { useCallback, useState } from 'react';
 import useSWR from 'swr';
-import fetcher from "../../utils/fetcher";
-import PostSubmit from "../../Components/PostSubmit";
-import { Select } from "antd";
-import useInput from "../../utils/useInput";
-import MDEditor from "@uiw/react-md-editor";
-import { backUrl } from "../../config";
-import HeadInfo from "Components/common/HeadInfo";
+
+import PostSubmit from '../../Components/PostSubmit';
+import { backUrl } from '../../config';
+import fetcher from '../../utils/fetcher';
+import useInput from '../../utils/useInput';
 
 const { Option } = Select;
 const Post = () => {
   const { data: currentUser } = useSWR(`${backUrl}/api/users`, fetcher);
-  const [title, onChangeTitle, setTitle] = useInput("");
-  const [content, setContent] = useState<string | undefined>("");
-  const [category, setCategory] = useState(""); // 카테고리 추가
+  const [title, onChangeTitle, setTitle] = useInput('');
+  const [content, setContent] = useState<string | undefined>('');
+  const [category, setCategory] = useState(''); // 카테고리 추가
 
-  const { data: postData, mutate } = useSWR(
-    `${backUrl}/api/main/posts`,
-    fetcher, {
-      dedupingInterval: 10000,
-    }
-  );
+  const { data: postData, mutate } = useSWR(`${backUrl}/api/main/posts`, fetcher, {
+    dedupingInterval: 10000,
+  });
 
   const { data: categoryData } = useSWR(`${backUrl}/api/categories`, fetcher);
 
@@ -29,12 +27,12 @@ const Post = () => {
     setCategory(value);
   }, []);
 
-
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
       if (!title || !content || !category) {
-        alert("제목과 내용, 카테고리를 입력해주세요!");
+        alert('제목과 내용, 카테고리를 입력해주세요!');
+
         return;
       }
       axios
@@ -48,17 +46,18 @@ const Post = () => {
           },
           {
             withCredentials: true,
-          }
+          },
         )
         .then((res) => {
-          alert("게시글이 작성되었습니다.");
-          setTitle("");
-          setContent("");
-          setCategory("");
+          alert('게시글이 작성되었습니다.');
+          setTitle('');
+          setContent('');
+          setCategory('');
           mutate((cachedData: any) => {
             if (Array.isArray(cachedData)) {
               return [...cachedData, res.data];
             }
+
             return cachedData;
           }, false);
         })
@@ -66,21 +65,12 @@ const Post = () => {
           console.error(err);
         });
     },
-    [
-      title,
-      content,
-      category,
-      mutate,
-      setTitle,
-      setContent,
-      setContent,
-      currentUser.id,
-    ]
+    [title, content, category, mutate, setTitle, setContent, setContent, currentUser.id],
   );
 
   return (
     <>
-    <HeadInfo title="Write" />
+      <HeadInfo title="Write" />
       <div>
         <form onSubmit={onSubmit}>
           <input
@@ -94,7 +84,7 @@ const Post = () => {
           <div className="markarea">
             <div data-color-mode="light">
               <MDEditor
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 height={600}
                 value={content}
                 onChange={setContent}
@@ -118,6 +108,6 @@ const Post = () => {
       </div>
     </>
   );
-}
+};
 
 export default Post;

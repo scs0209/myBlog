@@ -1,8 +1,9 @@
-import React, { useCallback, useState, VFC } from "react";
-import { Comment, Reply } from "../../typings/db";
-import ReplyComp from "Components/Reply";
-import ReplyForm from "../Reply/ReplyForm";
-import CommentItem from "./CommentItem";
+import ReplyComp from 'Components/Reply';
+import React, { useCallback, useState, VFC } from 'react';
+
+import { Comment, Reply } from '../../typings/db';
+import ReplyForm from '../Reply/ReplyForm';
+import CommentItem from './CommentItem';
 
 interface Props {
   comments: Comment[];
@@ -14,13 +15,21 @@ interface Props {
   onReplyEdit: (commentId: number, replyId: number, content: string) => void;
 }
 
-const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyEdit, onDeleteReply, replies }) => {
-  const [isRepliesVisible, setIsRepliesVisible] = useState<{[commentId: number]: boolean;}>({});
-  const [show, setShow] = useState(false)
+const CommentList: VFC<Props> = ({
+  comments,
+  onDelete,
+  onEdit,
+  onReply,
+  onReplyEdit,
+  onDeleteReply,
+  replies,
+}) => {
+  const [isRepliesVisible, setIsRepliesVisible] = useState<{ [commentId: number]: boolean }>({});
+  const [show, setShow] = useState(false);
 
   const toggleShow = useCallback(() => {
-    setShow((prev) => !prev)
-  }, [])
+    setShow((prev) => !prev);
+  }, []);
 
   return (
     <>
@@ -55,17 +64,12 @@ const CommentList: VFC<Props> = ({ comments, onDelete, onEdit, onReply, onReplyE
                   ))}
               </>
             )}
-            {show && (
-              <ReplyForm
-                comment={comment}
-                onReply={onReply}
-              />
-            )}
+            {show && <ReplyForm comment={comment} onReply={onReply} />}
           </article>
         </div>
       ))}
     </>
   );
-}
+};
 
 export default CommentList;

@@ -1,50 +1,56 @@
-import axios from "axios";
-import React, { useCallback, useState } from "react";
-import {Link, Navigate} from 'react-router-dom';
+import axios from 'axios';
+import HeadInfo from 'Components/common/HeadInfo';
+import SocialBtn from 'Components/LogIn/SocialBtn';
+import React, { useCallback, useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import useSWR from 'swr';
-import useInput from "../../utils/useInput";
-import fetcher from "../../utils/fetcher";
-import { backUrl } from "../../config";
-import HeadInfo from "Components/common/HeadInfo";
-import styles from "../../styles/Login.module.css"
-import SocialBtn from "Components/LogIn/SocialBtn";
+
+import { backUrl } from '../../config';
+import styles from '../../styles/Login.module.css';
+import fetcher from '../../utils/fetcher';
+import useInput from '../../utils/useInput';
 
 const Login = () => {
   const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
   const [logInError, setLogInError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('');
   const [email, onChangeEmail] = useInput('');
-  const [password, onChangePassword] = useInput(''); 
+  const [password, onChangePassword] = useInput('');
 
   //Login 버튼 클릭 이벤트
-  const onSubmitLogin = useCallback((e: any) => {
-    e.preventDefault();
-    setLogInError(false);
-    axios.post(
-      `${backUrl}/api/users/login`,
-      { 
-        email, password
-      },
-      {
-        withCredentials: true,
-      }
-    )
-    .then((res) => {
-      mutate(res.data, false);
-    })
-    .catch((err) => {
-      console.log(err);
-      setLogInError(err.response.status === 401);
-      setErrorMsg(err.response.data)
-    });
-  }, [email, password, mutate]);  
+  const onSubmitLogin = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      setLogInError(false);
+      axios
+        .post(
+          `${backUrl}/api/users/login`,
+          {
+            email,
+            password,
+          },
+          {
+            withCredentials: true,
+          },
+        )
+        .then((res) => {
+          mutate(res.data, false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLogInError(err.response.status === 401);
+          setErrorMsg(err.response.data);
+        });
+    },
+    [email, password, mutate],
+  );
 
   if (data === undefined) {
     return <div>로딩중...</div>;
   }
 
-  if(data){
-    return <Navigate to="/main/posts" />
+  if (data) {
+    return <Navigate to="/main/posts" />;
   }
 
   return (
@@ -53,15 +59,10 @@ const Login = () => {
       <div className={styles.container}>
         <div className={`${styles.card} dark:bg-gray-800 dark:border-gray-700`}>
           <div className={styles.cardContent}>
-            <h1 className={`${styles.title} dark:text-white`}>
-              Sign in to your account
-            </h1>
+            <h1 className={`${styles.title} dark:text-white`}>Sign in to your account</h1>
             <form className="space-y-4 md:space-y-6" onSubmit={onSubmitLogin}>
               <div>
-                <label
-                  htmlFor="email"
-                  className={`${styles.label} dark:text-white`}
-                >
+                <label htmlFor="email" className={`${styles.label} dark:text-white`}>
                   Your email
                 </label>
                 <input
@@ -75,10 +76,7 @@ const Login = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="password"
-                  className={`${styles.label} dark:text-white`}
-                >
+                <label htmlFor="password" className={`${styles.label} dark:text-white`}>
                   Password
                 </label>
                 <input
@@ -95,10 +93,7 @@ const Login = () => {
                 <div className="flex items-start">
                   <div className="flex items-center h-5"></div>
                   <div className="text-sm">
-                    <Link
-                      to="/main/find-id"
-                      className="text-gray-500 dark:text-gray-300"
-                    >
+                    <Link to="/main/find-id" className="text-gray-500 dark:text-gray-300">
                       Find Email
                     </Link>
                   </div>
@@ -110,9 +105,7 @@ const Login = () => {
                   Forgot password?
                 </Link>
               </div>
-              {logInError && (
-                <div className="mt-1 text-red-600 text-xs">{errorMsg}</div>
-              )}
+              {logInError && <div className="mt-1 text-red-600 text-xs">{errorMsg}</div>}
               <button
                 type="submit"
                 className={`${styles.signInBtn} dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800`}
@@ -121,11 +114,8 @@ const Login = () => {
               </button>
               <SocialBtn />
               <p className={`${styles.smallText} dark:text-gray-400`}>
-                Don’t have an account yet?{" "}
-                <Link
-                  to="/main/signup"
-                  className={`${styles.signUpLink} dark:text-primary-500`}
-                >
+                Don’t have an account yet?{' '}
+                <Link to="/main/signup" className={`${styles.signUpLink} dark:text-primary-500`}>
                   Sign up
                 </Link>
               </p>

@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 class PostTag extends Sequelize.Model {
   static initiate(sequelize) {
     PostTag.init(
@@ -12,13 +12,13 @@ class PostTag extends Sequelize.Model {
       },
       {
         sequelize,
-        modelName: "PostTag",
-        tableName: "post_tags",
-        charset: "utf8",
-        collate: "utf8_general_ci",
+        modelName: 'PostTag',
+        tableName: 'post_tags',
+        charset: 'utf8',
+        collate: 'utf8_general_ci',
         timestamps: true,
         paranoid: true,
-      }
+      },
     );
   }
 }

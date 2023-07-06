@@ -1,18 +1,18 @@
-import { Badge, Card } from "flowbite-react";
+import { Badge, Card } from 'flowbite-react';
 
 const Left = () => {
   const skills = [
-    "Logo Design",
-    "React",
-    "Web Design",
-    "UI Design",
-    "Javascript",
-    "HTML",
-    "CSS",
-    "Next.js",
-    "Tailwind",
+    'Logo Design',
+    'React',
+    'Web Design',
+    'UI Design',
+    'Javascript',
+    'HTML',
+    'CSS',
+    'Next.js',
+    'Tailwind',
   ];
-  const hobbies = ["table tennis", "workout", "shopping", "movies", "swimming"];
+  const hobbies = ['table tennis', 'workout', 'shopping', 'movies', 'swimming'];
 
   return (
     <>
@@ -22,15 +22,11 @@ const Left = () => {
             alt="Bonnie image"
             className="mb-3 rounded-full shadow-lg"
             height="96"
-            src={require("../../images/이력서사진.jpg")}
+            src={require('../../images/이력서사진.jpg')}
             width="96"
           />
-          <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-            Changsu Seong
-          </h5>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            Frontend Developer
-          </span>
+          <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">Changsu Seong</h5>
+          <span className="text-sm text-gray-500 dark:text-gray-400">Frontend Developer</span>
           <div className="mt-4 flex space-x-3 lg:mt-6">
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Email: tjdckdtn2463@naver.com
@@ -39,9 +35,7 @@ const Left = () => {
         </div>
       </Card>
       <Card className="max-w-sm mb-2">
-        <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-          Skills
-        </h5>
+        <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">Skills</h5>
         <div className="flex flex-wrap">
           {skills.map((skill) => {
             return <Badge className="mt-2 mr-2">{skill}</Badge>;
@@ -49,9 +43,7 @@ const Left = () => {
         </div>
       </Card>
       <Card className="max-w-sm">
-        <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-          Hobbies
-        </h5>
+        <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">Hobbies</h5>
         <div className="flex flex-wrap">
           {hobbies.map((hobby) => {
             return (
@@ -64,6 +56,6 @@ const Left = () => {
       </Card>
     </>
   );
-}
+};
 
-export default Left
+export default Left;

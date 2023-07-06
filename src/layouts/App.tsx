@@ -1,11 +1,13 @@
-import loadable from '@loadable/component'
-import Header from '../Components/common/Header';
-import React, { useCallback, useEffect, useState } from "react";
-import { Route, Routes } from "react-router";
-import { Flowbite } from "flowbite-react";
+import loadable from '@loadable/component';
+import { Flowbite } from 'flowbite-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router';
+
 import Category from '../Components/Category';
-const MainPage = loadable(() => import("./Main"));
-const Home = loadable(() => import("../Pages/HomePage"));
+import Header from '../Components/common/Header';
+
+const MainPage = loadable(() => import('./Main'));
+const Home = loadable(() => import('../Pages/HomePage'));
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -28,11 +30,11 @@ const App = () => {
     updateSidebarState();
 
     // resize 이벤트 리스너 추가
-    window.addEventListener("resize", updateSidebarState);
+    window.addEventListener('resize', updateSidebarState);
 
     // 컴포넌트 해제 시 이벤트 리스너 제거
     return () => {
-      window.removeEventListener("resize", updateSidebarState);
+      window.removeEventListener('resize', updateSidebarState);
     };
   }, [updateSidebarState]);
 
@@ -50,10 +52,6 @@ const App = () => {
       </div>
     </Flowbite>
   );
-}
+};
 
 export default App;
-
-
-
-

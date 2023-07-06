@@ -1,14 +1,15 @@
-import React, { FormEvent, useCallback, useState } from "react";
-import axios from "axios";
-import useInput from "../../utils/useInput";
-import { backUrl } from "../../config";
-import HeadInfo from "Components/common/HeadInfo";
-import styles from "../../styles/FindId.module.css"
+import axios from 'axios';
+import HeadInfo from 'Components/common/HeadInfo';
+import React, { FormEvent, useCallback, useState } from 'react';
+
+import { backUrl } from '../../config';
+import styles from '../../styles/FindId.module.css';
+import useInput from '../../utils/useInput';
 
 const FindId = () => {
-  const [name, onChangeName] = useInput("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [name, onChangeName] = useInput('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
 
   const onSubmitForm = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -19,39 +20,35 @@ const FindId = () => {
           { name },
           {
             withCredentials: true,
-          }
+          },
         )
         .then((res) => {
           const userEmail = res.data.email;
           const hiddenEmail = userEmail.replace(/\d+/g, (match: string) =>
-            "*".repeat(match.length)
+            '*'.repeat(match.length),
           );
+
           setEmail(hiddenEmail);
-          setMessage("");
+          setMessage('');
         })
         .catch((err) => {
           setMessage(err.response.data.message);
-          setEmail("");
+          setEmail('');
         });
     },
-    [name]
+    [name],
   );
 
   return (
     <>
-    <HeadInfo title="Find Email" />
+      <HeadInfo title="Find Email" />
       <div className={styles.container}>
         <div className={`${styles.card} dark:bg-gray-800 dark:border-gray-700`}>
           <div className={styles.cardContent}>
-            <h1 className={`${styles.title} dark:text-white`}>
-              Find Email
-            </h1>
+            <h1 className={`${styles.title} dark:text-white`}>Find Email</h1>
             <form className="space-y-4 md:space-y-6" onSubmit={onSubmitForm}>
               <div>
-                <label
-                  htmlFor="email"
-                  className={`${styles.label} dark:text-white`}
-                >
+                <label htmlFor="email" className={`${styles.label} dark:text-white`}>
                   Name
                 </label>
                 <input
@@ -68,19 +65,13 @@ const FindId = () => {
                 submit
               </button>
             </form>
-            {message && (
-              <div className="mt-1 text-red-600 items-center">{message}</div>
-            )}
-            {email && (
-              <div className="mt-1 dark:text-white items-center">
-                찾은 이메일: {email}
-              </div>
-            )}
+            {message && <div className="mt-1 text-red-600 items-center">{message}</div>}
+            {email && <div className="mt-1 dark:text-white items-center">찾은 이메일: {email}</div>}
           </div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default FindId;

@@ -32,9 +32,9 @@ class User extends Sequelize.Model {
           allowNull: true,
         },
         role: {
-          type: Sequelize.ENUM("user", "admin"),
+          type: Sequelize.ENUM('user', 'admin'),
           allowNull: false,
-          defaultValue: "user",
+          defaultValue: 'user',
         },
       },
       // createAt => 생성할 때 시간이 자동으로 저장, updatedAt => update될 때 시간이 자동으로 저장(timestamps true 일 경우);
@@ -42,12 +42,12 @@ class User extends Sequelize.Model {
       {
         sequelize,
         timestamps: false,
-        modelName: "User", //자바스크립트에서 사용하는 이름
-        tableName: "users", //sql에서 사용하는 이름
-        charset: "utf8", //utf8mb4 => 이모티콘까지 사용 가능
-        collate: "utf8_general_ci",
-      }
-    ); 
+        modelName: 'User', //자바스크립트에서 사용하는 이름
+        tableName: 'users', //sql에서 사용하는 이름
+        charset: 'utf8', //utf8mb4 => 이모티콘까지 사용 가능
+        collate: 'utf8_general_ci',
+      },
+    );
   }
   static associate(db) {
     db.User.hasMany(db.Post);

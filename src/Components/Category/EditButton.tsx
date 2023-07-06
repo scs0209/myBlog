@@ -1,7 +1,7 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode } from 'react';
 
 interface Props {
-  type: "button" | "submit" | "reset";
+  type: 'button' | 'submit' | 'reset';
   onClick: () => void;
   children: ReactNode;
 }
@@ -16,6 +16,6 @@ const EditButton: FC<Props> = ({ type, onClick, children }) => {
       {children}
     </button>
   );
-}
+};
 
-export default EditButton
+export default EditButton;

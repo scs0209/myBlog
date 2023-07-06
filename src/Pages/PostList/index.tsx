@@ -1,45 +1,41 @@
-import React, { useCallback, useEffect, useState } from "react";
-import fetcher from "utils/fetcher";
+import axios from 'axios';
+import HeadInfo from 'Components/common/HeadInfo';
+import { Pagination } from 'flowbite-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import Search from "../../Components/Search";
-import axios from "axios";
-import { backUrl } from "../../config";
-import { Pagination } from "flowbite-react";
-import HeadInfo from "Components/common/HeadInfo";
+import fetcher from 'utils/fetcher';
+
+import Search from '../../Components/Search';
+import { backUrl } from '../../config';
 
 const PostList = () => {
   const navigate = useNavigate();
   const location = useLocation(); // 현재 경로(location) 정보 가져오기
   const PAGE_SIZE = 10; //한 페이지에서 가져올 데이터의 한계치를 나타내는 값
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const {
     data: postData,
     error,
     mutate,
-  } = useSWR(
-    `${backUrl}/api/main/posts?page=${currentPage}&search=${searchTerm}`,
-    fetcher
-  );
+  } = useSWR(`${backUrl}/api/main/posts?page=${currentPage}&search=${searchTerm}`, fetcher);
 
   const posts = postData?.posts;
   const totalPosts = postData?.count ?? 0;
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
   const startIdx = 0;
   const endIdx = PAGE_SIZE;
-  const [currentPagePosts, setCurrentPagePosts] = useState(
-    posts?.slice(startIdx, endIdx)
-  );
+  const [currentPagePosts, setCurrentPagePosts] = useState(posts?.slice(startIdx, endIdx));
 
   const handlePageChange = useCallback(
     (pageNum: number) => {
       setCurrentPage(pageNum);
-      setSearchTerm("");
+      setSearchTerm('');
       navigate(`/main/posts?page=${pageNum}&search=`);
       mutate(`${backUrl}/api/main/posts?page=${pageNum}&search=`);
     },
-    [setCurrentPage, setSearchTerm, mutate, navigate]
+    [setCurrentPage, setSearchTerm, mutate, navigate],
   );
 
   const handleSearch = useCallback(
@@ -49,7 +45,7 @@ const PostList = () => {
       navigate(`/main/posts?page=1&search=${keyword}`);
       mutate(`${backUrl}/api/main/posts?page=1&search=${keyword}`);
     },
-    [setSearchTerm, setCurrentPage, navigate, mutate]
+    [setSearchTerm, setCurrentPage, navigate, mutate],
   );
 
   // 게시글 조회 기능
@@ -67,29 +63,31 @@ const PostList = () => {
                 views: response.data.post.views,
               };
             }
+
             return post;
           });
+
           setCurrentPagePosts(updatedPosts);
         })
         .catch((error) => {
           console.error(error.response.data.message);
         });
     },
-    [currentPagePosts]
+    [currentPagePosts],
   );
 
   // 추가
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const pageNum = parseInt(params.get("page") || "1", 10);
-    const search = params.get("search");
+    const pageNum = parseInt(params.get('page') || '1', 10);
+    const search = params.get('search');
 
     setCurrentPage(pageNum);
 
     if (search) {
       setSearchTerm(search);
     } else {
-      setSearchTerm("");
+      setSearchTerm('');
     }
 
     mutate(`${backUrl}/api/main/posts?page=${pageNum}&search=${searchTerm}`);
@@ -101,11 +99,12 @@ const PostList = () => {
   }, [postData, startIdx, endIdx]);
 
   if (error) return <div>에러가 발생했습니다.</div>;
-  if (!Array.isArray(posts)) return <div className="h-screen">게시글 몰록을 불러오는 중입니다.</div>;
+  if (!Array.isArray(posts))
+    return <div className="h-screen">게시글 몰록을 불러오는 중입니다.</div>;
 
   return (
     <>
-    <HeadInfo title="Posts" />
+      <HeadInfo title="Posts" />
       <div>
         <h1 className="text-3xl font-bold mb-3 dark:text-white">게시글 목록</h1>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -129,6 +128,7 @@ const PostList = () => {
                 const dateString = `${createdDate.getFullYear()} - ${
                   createdDate.getMonth() + 1
                 } - ${createdDate.getDate()}`;
+
                 return (
                   <tr
                     key={post.id}
@@ -141,9 +141,7 @@ const PostList = () => {
                     >
                       <Link to={`/main/posts/${post.id}`}>{post.title}</Link>
                     </th>
-                    <td className="hidden md:table-cell px-6 py-3">
-                      {post.views}
-                    </td>
+                    <td className="hidden md:table-cell px-6 py-3">{post.views}</td>
                     <td className="px-1 md:px-6 py-4">{dateString}</td>
                   </tr>
                 );
@@ -166,6 +164,6 @@ const PostList = () => {
       </div>
     </>
   );
-}
+};
 
 export default PostList;

@@ -1,11 +1,11 @@
-import React, { ChangeEvent, VFC } from "react";
-import { Textarea } from "flowbite-react";
+import { Textarea } from 'flowbite-react';
+import React, { ChangeEvent, VFC } from 'react';
 
 interface Props {
   value: string;
   onCancel: () => void;
   onSave: () => void;
-  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 const ReplyEdit: VFC<Props> = ({ onCancel, onSave, value, onChange }) => {
@@ -17,25 +17,27 @@ const ReplyEdit: VFC<Props> = ({ onCancel, onSave, value, onChange }) => {
           value={value}
           onChange={onChange}
           placeholder="댓글을 입력해주세요."
-          style={{ resize: "none"}}
+          style={{ resize: 'none' }}
           rows={3}
           required
         />
       </div>
-        <button
-          type="button"
-          className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800" onClick={onCancel}
-        >
-          취소
-        </button>
-        <button
-          type="submit"
-          className="ml-2 inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800" onClick={onSave}
-        >
-          저장
-        </button>
+      <button
+        type="button"
+        className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+        onClick={onCancel}
+      >
+        취소
+      </button>
+      <button
+        type="submit"
+        className="ml-2 inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+        onClick={onSave}
+      >
+        저장
+      </button>
     </form>
   );
-}
+};
 
-export default ReplyEdit
+export default ReplyEdit;

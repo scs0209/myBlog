@@ -1,12 +1,13 @@
-import React, { ChangeEvent, useCallback, useState, VFC } from "react";
-import ReplyEdit from "./ReplyEdit";
-import { Reply as ReplyType } from "typings/db";
-import { Dropdown } from "flowbite-react";
+import { Dropdown } from 'flowbite-react';
+import React, { ChangeEvent, useCallback, useState, VFC } from 'react';
+import { Reply as ReplyType } from 'typings/db';
 
-interface Props{
+import ReplyEdit from './ReplyEdit';
+
+interface Props {
   reply: ReplyType;
-  onEdit: (commentId: number, replyId: number, content: string) => void
-  onDelete: (commentId: number, replyId: number) => void
+  onEdit: (commentId: number, replyId: number, content: string) => void;
+  onDelete: (commentId: number, replyId: number) => void;
 }
 
 const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
@@ -32,26 +33,26 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
 
   const handleDelete = useCallback(() => {
     onDelete(reply.CommentId, reply.id);
-  }, [onDelete, reply])
+  }, [onDelete, reply]);
 
   return (
     <>
       <footer className="flex items-center justify-between mb-2">
-          <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-            {reply.User.name}
-          </p>
-          <Dropdown size="xs" label="...">
-            {!isEditing && (
-              <>
-                <Dropdown.Item>
-                  <button onClick={handleEdit}>수정</button>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <button onClick={handleDelete}>삭제</button>
-                </Dropdown.Item>
-              </>
-            )}
-          </Dropdown>
+        <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+          {reply.User.name}
+        </p>
+        <Dropdown size="xs" label="...">
+          {!isEditing && (
+            <>
+              <Dropdown.Item>
+                <button onClick={handleEdit}>수정</button>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <button onClick={handleDelete}>삭제</button>
+              </Dropdown.Item>
+            </>
+          )}
+        </Dropdown>
       </footer>
       <p className="text-gray-500 dark:text-gray-400 mb-4">{reply.content}</p>
       {isEditing && (
@@ -64,6 +65,6 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
       )}
     </>
   );
-}
+};
 
 export default ReplyComp;

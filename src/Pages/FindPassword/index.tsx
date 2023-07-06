@@ -1,32 +1,40 @@
-import axios from "axios";
-import React, { FormEvent, useCallback, useState } from "react";
-import useInput from "../../utils/useInput";
-import { backUrl } from "../../config";
-import HeadInfo from "Components/common/HeadInfo";
-import styles from "../../styles/FindPassword.module.css";
+import axios from 'axios';
+import HeadInfo from 'Components/common/HeadInfo';
+import React, { FormEvent, useCallback, useState } from 'react';
+
+import { backUrl } from '../../config';
+import styles from '../../styles/FindPassword.module.css';
+import useInput from '../../utils/useInput';
 
 const FindPassword = () => {
-  const [email, onChangeEmail, setEmail] = useInput("");
-  const [receiveEmail, onChangeReceiveEmail, setReceiveEmail] = useInput("");
-  const [message, setMessage] = useState("");
+  const [email, onChangeEmail, setEmail] = useInput('');
+  const [receiveEmail, onChangeReceiveEmail, setReceiveEmail] = useInput('');
+  const [message, setMessage] = useState('');
 
-  const onSubmitForm = useCallback((e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    axios
-      .post(`${backUrl}/api/users/findPassword`, { email, receiveEmail }, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setMessage(res.data.message);
-        setEmail("");
-        setReceiveEmail("");
-      })
-      .catch((err) => {
-        setMessage(err.response.data.message);
-        setEmail("");
-        setReceiveEmail("");
-      })
-  }, [email, receiveEmail]);
+  const onSubmitForm = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      axios
+        .post(
+          `${backUrl}/api/users/findPassword`,
+          { email, receiveEmail },
+          {
+            withCredentials: true,
+          },
+        )
+        .then((res) => {
+          setMessage(res.data.message);
+          setEmail('');
+          setReceiveEmail('');
+        })
+        .catch((err) => {
+          setMessage(err.response.data.message);
+          setEmail('');
+          setReceiveEmail('');
+        });
+    },
+    [email, receiveEmail],
+  );
 
   return (
     <>
@@ -72,16 +80,12 @@ const FindPassword = () => {
                 submit
               </button>
             </form>
-            {message && (
-              <div className={styles.message}>
-                {message}
-              </div>
-            )}
+            {message && <div className={styles.message}>{message}</div>}
           </div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default FindPassword;

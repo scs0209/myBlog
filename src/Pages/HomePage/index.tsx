@@ -1,9 +1,9 @@
-import React from "react";
-import HeadInfo from "Components/common/HeadInfo";
-import Carousels from "Components/HomePage/Carousels";
-import News from "Components/HomePage/News";
-import Popular from "Components/HomePage/Popular";
-import Footer from "Components/common/Footer";
+import Footer from 'Components/common/Footer';
+import HeadInfo from 'Components/common/HeadInfo';
+import Carousels from 'Components/HomePage/Carousels';
+import News from 'Components/HomePage/News';
+import Popular from 'Components/HomePage/Popular';
+import React from 'react';
 
 const Home = () => {
   return (
@@ -16,14 +16,10 @@ const Home = () => {
             <Popular />
             <News />
             <div className="flex items-center justify-center rounded bg-gray-50 h-60 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                준비중...
-              </p>
+              <p className="text-2xl text-gray-400 dark:text-gray-500">준비중...</p>
             </div>
             <div className="flex items-center justify-center rounded bg-gray-50 h-60 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                준비중...
-              </p>
+              <p className="text-2xl text-gray-400 dark:text-gray-500">준비중...</p>
             </div>
           </div>
         </div>
@@ -31,6 +27,6 @@ const Home = () => {
       <Footer />
     </>
   );
-}
+};
 
 export default Home;

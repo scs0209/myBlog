@@ -1,13 +1,14 @@
-import axios from "axios";
-import React, { useCallback, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
-import fetcher from "../../utils/fetcher";
-import useInput from "../../utils/useInput";
+import axios from 'axios';
+import HeadInfo from 'Components/common/HeadInfo';
+import SignUpErr from 'Components/Signup/SignupErr';
+import React, { useCallback, useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import useSWR from 'swr';
-import { backUrl } from "../../config";
-import HeadInfo from "Components/common/HeadInfo";
-import styles from "../../styles/SignUp.module.css"
-import SignUpErr from "Components/Signup/SignupErr";
+
+import { backUrl } from '../../config';
+import styles from '../../styles/SignUp.module.css';
+import fetcher from '../../utils/fetcher';
+import useInput from '../../utils/useInput';
 
 const SignUp = () => {
   const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
@@ -19,61 +20,72 @@ const SignUp = () => {
   const [signUpError, setSignUpError] = useState('');
   const [signUpSuccess, setSignUpSuccess] = useState(false);
 
-  const onChangePassword = useCallback((e: any) => {
-    setPassword(e.target.value);
-    setMismatchError(e.target.value !== passwordCheck);
-  }, [passwordCheck]);
+  const onChangePassword = useCallback(
+    (e: any) => {
+      setPassword(e.target.value);
+      setMismatchError(e.target.value !== passwordCheck);
+    },
+    [passwordCheck],
+  );
 
-  const onChangePasswordCheck = useCallback((e: any) => {
-    setPasswordCheck(e.target.value);
-    setMismatchError(e.target.value !== password);
-  }, [password]);
+  const onChangePasswordCheck = useCallback(
+    (e: any) => {
+      setPasswordCheck(e.target.value);
+      setMismatchError(e.target.value !== password);
+    },
+    [password],
+  );
 
-  const onSubmit = useCallback((e: any) => {
-    e.preventDefault();
-    if(!mismatchError && name){
-      setSignUpError('');
-      setSignUpSuccess(false);
-      axios.post(`${backUrl}/api/users`, {
-        email, name, password
-      },{
-        withCredentials: true,
-      })
-      .then((response) => {
-        setSignUpSuccess(true);
-      })
-      .catch((error)=> {
-        if(error.response.status === 409){
-          alert(error.response.data.message);
-          console.log(error);
-        } else {
-          setSignUpError(error.response.data);
-          console.log(error.response);
-        }
-      })
-      .finally(() => {});
-    }
-  }, [email, password, name, passwordCheck, mismatchError]);
+  const onSubmit = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      if (!mismatchError && name) {
+        setSignUpError('');
+        setSignUpSuccess(false);
+        axios
+          .post(
+            `${backUrl}/api/users`,
+            {
+              email,
+              name,
+              password,
+            },
+            {
+              withCredentials: true,
+            },
+          )
+          .then((response) => {
+            setSignUpSuccess(true);
+          })
+          .catch((error) => {
+            if (error.response.status === 409) {
+              alert(error.response.data.message);
+              console.log(error);
+            } else {
+              setSignUpError(error.response.data);
+              console.log(error.response);
+            }
+          });
+      }
+    },
+    [email, password, name, passwordCheck, mismatchError],
+  );
 
-    if (data === undefined) {
-      return <div>로딩중...</div>;
-    }
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
 
   if (data) {
-    return <Navigate to="/main/posts" />
+    return <Navigate to="/main/posts" />;
   }
 
   return (
     <>
       <HeadInfo title="Sign Up" />
       <div className={styles.container}>
-        <div
-          className={`${styles.card} dark:border dark:bg-gray-800 dark:border-gray-700`}
-        >
+        <div className={`${styles.card} dark:border dark:bg-gray-800 dark:border-gray-700`}>
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className={`${styles.title} dark:text-white`}>
-              Create and account
-            </h1>
+            <h1 className={`${styles.title} dark:text-white`}>Create and account</h1>
             <form className="space-y-4 md:space-y-6" onSubmit={onSubmit}>
               <div>
                 <label
@@ -155,7 +167,7 @@ const SignUp = () => {
                 Create an account
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Already have an account?{" "}
+                Already have an account?{' '}
                 <Link
                   to="/main/login"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
@@ -169,6 +181,6 @@ const SignUp = () => {
       </div>
     </>
   );
-}
+};
 
 export default SignUp;

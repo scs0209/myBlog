@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 class CategoryTag extends Sequelize.Model {
   static initiate(sequelize) {
@@ -12,13 +12,13 @@ class CategoryTag extends Sequelize.Model {
       },
       {
         sequelize,
-        modelName: "CategoryTag",
-        tableName: "category_tags",
-        charset: "utf8",
-        collate: "utf8_general_ci",
+        modelName: 'CategoryTag',
+        tableName: 'category_tags',
+        charset: 'utf8',
+        collate: 'utf8_general_ci',
         timestamps: true,
         paranoid: true,
-      }
+      },
     );
   }
 }

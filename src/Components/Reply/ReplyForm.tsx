@@ -1,7 +1,8 @@
-import React, {  VFC, useCallback, useState } from "react"
-import { Textarea } from "flowbite-react";
-import { Comment } from "../../typings/db";
-import useInput from "utils/useInput";
+import { Textarea } from 'flowbite-react';
+import React, { useCallback, useState, VFC } from 'react';
+import useInput from 'utils/useInput';
+
+import { Comment } from '../../typings/db';
 
 interface Props {
   comment: Comment;
@@ -10,32 +11,29 @@ interface Props {
 
 const ReplyForm: VFC<Props> = ({ onReply, comment }) => {
   const [replyId, setReplyId] = useState<number | null>(null);
-  const [replyContent, onChangeReplyContent, setReplyContent] =
-    useInput<string>("");
-    const handleReplyCancel = useCallback(() => {
+  const [replyContent, onChangeReplyContent, setReplyContent] = useInput<string>('');
+  const handleReplyCancel = useCallback(() => {
+    setReplyId(null);
+    setReplyContent('');
+  }, []);
+
+  const handleReplySubmit = useCallback(
+    (commentId: number | null) => {
+      if (commentId === null) {
+        return;
+      }
+
+      onReply(commentId, replyContent);
       setReplyId(null);
-      setReplyContent("");
-    }, []);
-
-    const handleReplySubmit = useCallback(
-      (commentId: number | null) => {
-        if (commentId === null) {
-          return;
-        }
-
-        onReply(commentId, replyContent);
-        setReplyId(null);
-        setReplyContent("");
-      },
-      [replyContent, onReply]
-    );
+      setReplyContent('');
+    },
+    [replyContent, onReply],
+  );
 
   return (
     <form className="mb-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
-          Reply
-        </h2>
+        <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Reply</h2>
       </div>
       <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <label className="sr-only">Your comment</label>
@@ -64,6 +62,6 @@ const ReplyForm: VFC<Props> = ({ onReply, comment }) => {
       </button>
     </form>
   );
-}
+};
 
-export default ReplyForm
+export default ReplyForm;

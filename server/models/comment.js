@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 class Comment extends Sequelize.Model {
   static initiate(sequelize) {
@@ -17,13 +17,13 @@ class Comment extends Sequelize.Model {
       },
       {
         sequelize,
-        modelName: "Comment",
-        tableName: "comments",
-        charset: "utf8",
-        collate: "utf8_general_ci",
+        modelName: 'Comment',
+        tableName: 'comments',
+        charset: 'utf8',
+        collate: 'utf8_general_ci',
         timestamps: true,
         paranoid: true,
-      }
+      },
     );
   }
   static associate(db) {
@@ -33,6 +33,6 @@ class Comment extends Sequelize.Model {
     db.Comment.belongsToMany(db.Category, { through: 'CommentCategory' });
     db.Comment.hasMany(db.Replies);
   }
-};
+}
 
 module.exports = Comment;

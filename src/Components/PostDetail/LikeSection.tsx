@@ -1,17 +1,18 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
-import LikeButton from "../../Components/LikedButton";
-import useSWR from "swr";
-import { backUrl } from "config";
-import fetcher from "utils/fetcher";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios from 'axios';
+import { backUrl } from 'config';
+import React, { memo, useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useSWR from 'swr';
+import fetcher from 'utils/fetcher';
+
+import LikeButton from '../../Components/LikedButton';
 
 const LikeSection = () => {
   const { id } = useParams<{ id: string }>();
   const { data: user } = useSWR(`${backUrl}/api/users`, fetcher);
   const { data: likeInfo, mutate: mutateLikeInfo } = useSWR(
     `${backUrl}/api/posts/${id}/like-info`,
-    fetcher
+    fetcher,
   );
 
   const [likeCount, setLikeCount] = useState<number>(0);
@@ -28,7 +29,7 @@ const LikeSection = () => {
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       // 서버 응답이 오면 다시 업데이트
@@ -69,7 +70,7 @@ const LikeSection = () => {
         count: liked ? prev.count - 1 : prev.count + 1,
         liked: !liked,
       }),
-      false
+      false,
     );
 
     if (liked) {
@@ -88,9 +89,7 @@ const LikeSection = () => {
 
   return (
     <div>
-      <span className="text-gray-400 text-xs dark:text-white">
-        좋아요: {likeCount}
-      </span>
+      <span className="text-gray-400 text-xs dark:text-white">좋아요: {likeCount}</span>
       {user && <LikeButton liked={liked} onClick={handleLikedClick} />}
     </div>
   );
