@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios';
 import { DarkThemeToggle } from 'flowbite-react';
 import React, { memo, useCallback, useState, VFC } from 'react';

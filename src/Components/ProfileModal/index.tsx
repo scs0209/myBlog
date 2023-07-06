@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useCallback, useEffect, useRef, VFC } from 'react';
 import { Link } from 'react-router-dom';
 

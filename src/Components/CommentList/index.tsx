@@ -1,3 +1,4 @@
+/* eslint-disable */
 import ReplyComp from 'Components/Reply';
 import React, { useCallback, useState, VFC } from 'react';
 

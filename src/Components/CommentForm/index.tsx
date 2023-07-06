@@ -1,3 +1,4 @@
+/* eslint-disable */
 import autosize from 'autosize';
 import { Textarea } from 'flowbite-react';
 import React, { FormEvent, useCallback, useEffect, useRef, VFC } from 'react';

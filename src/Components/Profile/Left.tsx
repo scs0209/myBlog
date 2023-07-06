@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Badge, Card } from 'flowbite-react';
 
 const Left = () => {

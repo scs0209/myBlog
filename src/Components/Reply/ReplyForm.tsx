@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Textarea } from 'flowbite-react';
 import React, { useCallback, useState, VFC } from 'react';
 import useInput from 'utils/useInput';

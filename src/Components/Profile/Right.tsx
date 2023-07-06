@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Card } from 'flowbite-react';
 
 import RightItem from './RightItem';

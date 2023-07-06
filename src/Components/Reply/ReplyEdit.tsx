@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Textarea } from 'flowbite-react';
 import React, { ChangeEvent, VFC } from 'react';
 

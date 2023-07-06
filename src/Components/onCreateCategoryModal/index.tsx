@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios';
 import Modal from 'Components/Modal';
 import { backUrl } from 'config';

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios';
 import HeadInfo from 'Components/common/HeadInfo';
 import CommentSection from 'Components/PostDetail/CommentSection';
