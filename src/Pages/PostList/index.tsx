@@ -1,106 +1,26 @@
-import axios from 'axios';
 import HeadInfo from 'Components/common/HeadInfo';
 import { Pagination } from 'flowbite-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import usePagination from 'hooks/PostList/usePagination';
+import usePosts from 'hooks/PostList/usePost';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import useSWR from 'swr';
-import fetcher from 'utils/fetcher';
 
 import Search from '../../Components/Search';
-import { backUrl } from '../../config';
 
 const PostList = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // 현재 경로(location) 정보 가져오기
-  const PAGE_SIZE = 10; //한 페이지에서 가져올 데이터의 한계치를 나타내는 값
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const {
-    data: postData,
-    error,
-    mutate,
-  } = useSWR(`${backUrl}/api/main/posts?page=${currentPage}&search=${searchTerm}`, fetcher);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const pageNum = parseInt(params.get('page') || '1', 10);
+  const search = params.get('search') || '';
 
-  const posts = postData?.posts;
-  const totalPosts = postData?.count ?? 0;
-  const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
-  const startIdx = 0;
-  const endIdx = PAGE_SIZE;
-  const [currentPagePosts, setCurrentPagePosts] = useState(posts?.slice(startIdx, endIdx));
+  const { error, handlePostClick, currentPagePosts, totalPages } = usePosts(pageNum, search);
+  const { handlePageChange } = usePagination(search);
 
-  const handlePageChange = useCallback(
-    (pageNum: number) => {
-      setCurrentPage(pageNum);
-      setSearchTerm('');
-      navigate(`/main/posts?page=${pageNum}&search=`);
-      mutate(`${backUrl}/api/main/posts?page=${pageNum}&search=`);
-    },
-    [setCurrentPage, setSearchTerm, mutate, navigate],
-  );
-
-  const handleSearch = useCallback(
-    (keyword: string) => {
-      setSearchTerm(keyword);
-      setCurrentPage(1);
-      navigate(`/main/posts?page=1&search=${keyword}`);
-      mutate(`${backUrl}/api/main/posts?page=1&search=${keyword}`);
-    },
-    [setSearchTerm, setCurrentPage, navigate, mutate],
-  );
-
-  // 게시글 조회 기능
-  const handlePostClick = useCallback(
-    (postId: any) => {
-      axios
-        .post(`${backUrl}/api/main/posts/${postId}/views`, null, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          const updatedPosts = currentPagePosts.map((post: any) => {
-            if (post.id === postId) {
-              return {
-                ...post,
-                views: response.data.post.views,
-              };
-            }
-
-            return post;
-          });
-
-          setCurrentPagePosts(updatedPosts);
-        })
-        .catch((error) => {
-          console.error(error.response.data.message);
-        });
-    },
-    [currentPagePosts],
-  );
-
-  // 추가
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const pageNum = parseInt(params.get('page') || '1', 10);
-    const search = params.get('search');
-
-    setCurrentPage(pageNum);
-
-    if (search) {
-      setSearchTerm(search);
-    } else {
-      setSearchTerm('');
-    }
-
-    mutate(`${backUrl}/api/main/posts?page=${pageNum}&search=${searchTerm}`);
-  }, [location, mutate, searchTerm]);
-
-  //currentPagePosts 변경 될 때마다 업데이트 해줘서 페이지네이션할 때 오류 안나게 해주기 위해 사용
-  useEffect(() => {
-    setCurrentPagePosts(posts?.slice(startIdx, endIdx));
-  }, [postData, startIdx, endIdx]);
+  const handleSearch = (keyword: string) => {
+    navigate(`/main/posts?page=1&search=${keyword}`);
+  };
 
   if (error) return <div>에러가 발생했습니다.</div>;
-  if (!Array.isArray(posts))
-    return <div className="h-screen">게시글 몰록을 불러오는 중입니다.</div>;
 
   return (
     <>
@@ -151,7 +71,7 @@ const PostList = () => {
         </div>
         <div className="flex flex-col items-center justify-center text-center">
           <Pagination
-            currentPage={currentPage}
+            currentPage={pageNum}
             onPageChange={handlePageChange}
             nextLabel=""
             showIcons

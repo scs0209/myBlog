@@ -1,5 +1,5 @@
 import { Button, TextInput } from 'flowbite-react';
-import React, { useCallback, VFC } from 'react';
+import React, { FormEvent, useCallback, VFC } from 'react';
 
 import useInput from '../../utils/useInput';
 
@@ -11,7 +11,7 @@ const Search: VFC<Props> = ({ onSearch }) => {
   const [keyword, onChangeKeyword] = useInput('');
 
   const handleSubmit = useCallback(
-    (e: any) => {
+    (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       onSearch(keyword);
     },
