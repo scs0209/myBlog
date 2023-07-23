@@ -1,7 +1,7 @@
-import axios from 'axios';
+import { signUp } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
 import SignUpErr from 'Components/Signup/SignupErr';
-import React, { useCallback, useState } from 'react';
+import React, { FormEvent, useCallback, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import useSWR from 'swr';
 
@@ -37,38 +37,26 @@ const SignUp = () => {
   );
 
   const onSubmit = useCallback(
-    (e: any) => {
+    async (e: FormEvent) => {
       e.preventDefault();
       if (!mismatchError && name) {
         setSignUpError('');
         setSignUpSuccess(false);
-        axios
-          .post(
-            `${backUrl}/api/users`,
-            {
-              email,
-              name,
-              password,
-            },
-            {
-              withCredentials: true,
-            },
-          )
-          .then((response) => {
-            setSignUpSuccess(true);
-          })
-          .catch((error) => {
-            if (error.response.status === 409) {
-              alert(error.response.data.message);
-              console.log(error);
-            } else {
-              setSignUpError(error.response.data);
-              console.log(error.response);
-            }
-          });
+        try {
+          await signUp(email, name, password);
+          setSignUpSuccess(true);
+        } catch (err) {
+          if (error.response.status === 409) {
+            alert(error.response.data.message);
+            console.log(error);
+          } else {
+            setSignUpError(error.response.data);
+            console.log(error.response);
+          }
+        }
       }
     },
-    [email, password, name, passwordCheck, mismatchError],
+    [email, password, name, passwordCheck, mismatchError, signUp],
   );
 
   if (data === undefined) {

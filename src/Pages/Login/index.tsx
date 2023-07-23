@@ -1,55 +1,31 @@
-import axios from 'axios';
 import HeadInfo from 'Components/common/HeadInfo';
 import SocialBtn from 'Components/LogIn/SocialBtn';
-import React, { useCallback, useState } from 'react';
+import useLogin from 'hooks/useLogin';
+import React, { FormEvent, useCallback } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import useSWR from 'swr';
 
-import { backUrl } from '../../config';
 import styles from '../../styles/Login.module.css';
-import fetcher from '../../utils/fetcher';
 import useInput from '../../utils/useInput';
 
 const Login = () => {
-  const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
-  const [logInError, setLogInError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const { userData, signIn } = useLogin();
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
   //Login 버튼 클릭 이벤트
   const onSubmitLogin = useCallback(
-    (e: any) => {
+    (e: FormEvent) => {
       e.preventDefault();
-      setLogInError(false);
-      axios
-        .post(
-          `${backUrl}/api/users/login`,
-          {
-            email,
-            password,
-          },
-          {
-            withCredentials: true,
-          },
-        )
-        .then((res) => {
-          mutate(res.data, false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setLogInError(err.response.status === 401);
-          setErrorMsg(err.response.data);
-        });
+      signIn(email, password);
     },
-    [email, password, mutate],
+    [email, signIn, password],
   );
 
-  if (data === undefined) {
+  if (userData === undefined) {
     return <div>로딩중...</div>;
   }
 
-  if (data) {
+  if (userData) {
     return <Navigate to="/main/posts" />;
   }
 
@@ -105,7 +81,6 @@ const Login = () => {
                   Forgot password?
                 </Link>
               </div>
-              {logInError && <div className="mt-1 text-red-600 text-xs">{errorMsg}</div>}
               <button
                 type="submit"
                 className={`${styles.signInBtn} dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800`}
