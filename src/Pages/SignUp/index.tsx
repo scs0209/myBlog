@@ -1,7 +1,8 @@
-import { signUp } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
 import SignUpErr from 'Components/Signup/SignupErr';
-import React, { FormEvent, useCallback, useState } from 'react';
+import usePassword from 'hooks/usePassword';
+import useSignUp from 'hooks/useSignUp';
+import React, { FormEvent, useCallback } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import useSWR from 'swr';
 
@@ -14,49 +15,22 @@ const SignUp = () => {
   const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
   const [email, onChangeEmail] = useInput('');
   const [name, onChangeName] = useInput('');
-  const [password, setPassword] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
-  const [mismatchError, setMismatchError] = useState(false);
-  const [signUpError, setSignUpError] = useState('');
-  const [signUpSuccess, setSignUpSuccess] = useState(false);
-
-  const onChangePassword = useCallback(
-    (e: any) => {
-      setPassword(e.target.value);
-      setMismatchError(e.target.value !== passwordCheck);
-    },
-    [passwordCheck],
-  );
-
-  const onChangePasswordCheck = useCallback(
-    (e: any) => {
-      setPasswordCheck(e.target.value);
-      setMismatchError(e.target.value !== password);
-    },
-    [password],
-  );
+  const { signUpError, signUpSuccess, handleSubmit } = useSignUp();
+  const { password, passwordCheck, mismatchError, onChangePassword, onChangePasswordCheck } =
+    usePassword('');
 
   const onSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
       if (!mismatchError && name) {
-        setSignUpError('');
-        setSignUpSuccess(false);
         try {
-          await signUp(email, name, password);
-          setSignUpSuccess(true);
+          await handleSubmit({ email, name, password, mismatchError });
         } catch (err) {
-          if (error.response.status === 409) {
-            alert(error.response.data.message);
-            console.log(error);
-          } else {
-            setSignUpError(error.response.data);
-            console.log(error.response);
-          }
+          console.log(err);
         }
       }
     },
-    [email, password, name, passwordCheck, mismatchError, signUp],
+    [email, password, name, passwordCheck, mismatchError, handleSubmit],
   );
 
   if (data === undefined) {
