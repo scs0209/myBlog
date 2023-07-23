@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { increasePostViews } from 'apis/postList';
 import { backUrl } from 'config';
 import { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
@@ -27,28 +27,25 @@ const usePosts = (currentPage: number, searchTerm: string) => {
   }, [postData]);
 
   const handlePostClick = useCallback(
-    (postId: any) => {
-      axios
-        .post(`${backUrl}/api/main/posts/${postId}/views`, null, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          const updatedPosts = currentPagePosts.map((post: any) => {
-            if (post.id === postId) {
-              return {
-                ...post,
-                views: response.data.post.views,
-              };
-            }
+    async (postId: any) => {
+      try {
+        const response = await increasePostViews(postId);
 
-            return post;
-          });
+        const updatedPosts = currentPagePosts.map((post: any) => {
+          if (post.id === postId) {
+            return {
+              ...post,
+              views: response.data.post.views,
+            };
+          }
 
-          setCurrentPagePosts(updatedPosts);
-        })
-        .catch((error) => {
-          console.error(error.response.data.message);
+          return post;
         });
+
+        setCurrentPagePosts(updatedPosts);
+      } catch (error: any) {
+        console.error(error.response.data.message);
+      }
     },
     [currentPagePosts],
   );
