@@ -1,20 +1,18 @@
 /* eslint-disable */
-import axios from 'axios';
 import HeadInfo from 'Components/common/HeadInfo';
 import CommentSection from 'Components/PostDetail/CommentSection';
 import LikeSection from 'Components/PostDetail/LikeSection';
 import PostInfo from 'Components/PostDetail/PostInfo';
-import React, { useCallback } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 
 import { backUrl } from '../../config';
 import styles from '../../styles/PostDetail.module.css';
 import fetcher from '../../utils/fetcher';
+import useDeletePost from 'hooks/PostDetail/useDelete';
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { data: user } = useSWR(`${backUrl}/api/users`, fetcher);
   const {
     data: post,
@@ -22,30 +20,7 @@ const PostDetail = () => {
     mutate: mutatePost,
   } = useSWR(`${backUrl}/api/main/posts/${id}`, fetcher);
 
-  // 글 삭제
-  const handleDeleteClick = useCallback(() => {
-    const confirmResult = window.confirm('정말로 삭제하시겠습니까?');
-
-    if (confirmResult) {
-      axios
-        .delete(`${backUrl}/api/main/posts/${id}`, {
-          withCredentials: true,
-        })
-        .then(() => {
-          mutatePost(`${backUrl}/api/main/posts`, false);
-          navigate('/');
-        })
-        .catch((error) => {
-          if (error.response.status === 403) {
-            alert('삭제 권한이 없습니다.');
-          } else if (error.response && error.response.status === 401) {
-            alert(error.response.data);
-          } else {
-            console.error(error);
-          }
-        });
-    }
-  }, [id, navigate, mutatePost]);
+  const handleDeleteClick = useDeletePost(id, mutatePost);
 
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!post) return <div className="h-screen">로딩 중...</div>;

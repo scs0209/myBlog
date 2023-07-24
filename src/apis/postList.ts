@@ -1,7 +1,7 @@
-import { client } from 'apis';
+import { clientWithoutContentType } from 'apis';
 
 export const increasePostViews = (postId: any) => {
-  return client.post(`/api/main/posts/${postId}/views`, null, {
+  return clientWithoutContentType.post(`/api/main/posts/${postId}/views`, null, {
     withCredentials: true,
   });
 };

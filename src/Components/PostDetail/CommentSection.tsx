@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { backUrl } from 'config';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
@@ -13,11 +13,6 @@ import { Comment, Reply } from '../../typings/db';
 const CommentSection = () => {
   const { id } = useParams<{ id: string }>();
   const { data: user } = useSWR(`${backUrl}/api/users`, fetcher);
-  const {
-    data: post,
-    error,
-    mutate: mutatePost,
-  } = useSWR(`${backUrl}/api/main/posts/${id}`, fetcher);
   const { data: commentsData, mutate: mutateComments } = useSWR(
     `${backUrl}/api/posts/${id}/comments`,
     fetcher,

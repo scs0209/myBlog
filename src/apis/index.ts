@@ -18,3 +18,14 @@ client.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export const clientWithoutContentType = axios.create({
+  baseURL: BASE_URL,
+});
+
+clientWithoutContentType.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    return Promise.reject(error);
+  },
+);
