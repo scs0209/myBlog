@@ -10,6 +10,7 @@ import { backUrl } from '../../config';
 import styles from '../../styles/PostDetail.module.css';
 import fetcher from '../../utils/fetcher';
 import useDeletePost from 'hooks/PostDetail/useDelete';
+import { formatDate } from 'utils/dateUtil';
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,19 +30,14 @@ const PostDetail = () => {
   const { title, content, createdAt } = post;
 
   const createdDate = new Date(createdAt);
-  const dateString = `${createdDate.getFullYear()} - ${
-    createdDate.getMonth() + 1
-  } - ${createdDate.getDate()}`;
+  const dateString = formatDate(createdDate);
 
-  //이걸 해주지 않으면 중간에 NaN이 나온다.
   if (`${createdDate.getFullYear()}` === 'NaN') return <div>로딩중...</div>;
 
   return (
     <>
       <HeadInfo title={post.title} />
-      <div
-        className={`${styles.postDetailContainer} dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700`}
-      >
+      <div className={`${styles.postDetailContainer} dark:bg-gray-800 dark:border-gray-700`}>
         {post && (
           <>
             <PostInfo title={title} content={content} createdAt={dateString} />
