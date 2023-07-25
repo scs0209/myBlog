@@ -1,6 +1,5 @@
-import axios from 'axios';
+import { updatePassword } from 'apis/password';
 import HeadInfo from 'Components/common/HeadInfo';
-import { backUrl } from 'config';
 import React, { FormEvent, useCallback, useState } from 'react';
 
 import styles from '../../styles/ChangePassword.module.css';
@@ -12,26 +11,18 @@ const ChangePassword = () => {
   const [message, setMessage] = useState('');
 
   const onSubmitForm = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      axios
-        .put(
-          `${backUrl}/api/users/password`,
-          { currentPassword: password, newPassword },
-          {
-            withCredentials: true,
-          },
-        )
-        .then((res) => {
-          setMessage(res.data.message);
-          setPassword('');
-          setNewPassword('');
-        })
-        .catch((err) => {
-          setMessage(err.response.data.message);
-          setPassword('');
-          setNewPassword('');
-        });
+      try {
+        const res = await updatePassword(password, newPassword);
+
+        setMessage(res.data.message);
+      } catch (err: any) {
+        setMessage(err.response.data.message);
+      } finally {
+        setPassword('');
+        setNewPassword('');
+      }
     },
     [password, newPassword],
   );

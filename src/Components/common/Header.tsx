@@ -9,6 +9,7 @@ import useSWR from 'swr';
 import { backUrl } from '../../config';
 import fetcher from '../../utils/fetcher';
 import ProfileModal from '../ProfileModal';
+import { logout } from 'apis/auth';
 
 interface Props {
   toggleSidebar: () => void;
@@ -20,15 +21,14 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
   const [showProfile, setShowProfile] = useState(false);
   const navigate = useNavigate();
 
-  const onLogout = useCallback(() => {
-    axios
-      .post(`${backUrl}/api/users/logout`, null, {
-        withCredentials: true,
-      })
-      .then(() => {
-        navigate('/');
-        mutate(false, false);
-      });
+  const onLogout = useCallback(async () => {
+    try {
+      await logout();
+      navigate('/');
+      mutate(false, false);
+    } catch (error) {
+      console.error('로그아웃 중 에러 발생:', error);
+    }
   }, [mutate, navigate]);
 
   const onClickShowPost = useCallback(() => {

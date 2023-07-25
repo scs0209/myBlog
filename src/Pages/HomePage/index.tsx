@@ -3,7 +3,6 @@ import HeadInfo from 'Components/common/HeadInfo';
 import Carousels from 'Components/HomePage/Carousels';
 import News from 'Components/HomePage/News';
 import Popular from 'Components/HomePage/Popular';
-import React from 'react';
 
 const Home = () => {
   return (

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { deleteUser } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
 import { backUrl } from 'config';
 import { Card, Dropdown } from 'flowbite-react';
@@ -13,19 +13,15 @@ const MyPage = () => {
   const { data: userData, error, mutate } = useSWR(`${backUrl}/api/users/${id}`, fetcher);
   const navigate = useNavigate();
 
-  const handleWithdraw = useCallback(() => {
-    axios
-      .delete(`${backUrl}/api/users/${userData.id}`, {
-        withCredentials: true,
-      })
-      .then(() => {
-        alert('회원 탈퇴가 완료되었습니다.');
-        navigate('/');
-      })
-      .catch((error) => {
-        console.error('회원 탈퇴 중 에러 발생:', error);
-        alert(error.message);
-      });
+  const handleWithdraw = useCallback(async () => {
+    try {
+      await deleteUser(userData.id);
+      alert('회원 탈퇴가 완료되었습니다.');
+      navigate('/');
+    } catch (error: any) {
+      console.error('회원 탈퇴 중 에러 발생:', error);
+      alert(error.message);
+    }
   }, [navigate, userData]);
 
   if (!userData) return <div className="h-screen">데이터를 불러오는 중입니다...</div>;

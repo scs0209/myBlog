@@ -1,8 +1,7 @@
-import axios from 'axios';
+import { findPassword } from 'apis/password';
 import HeadInfo from 'Components/common/HeadInfo';
 import React, { FormEvent, useCallback, useState } from 'react';
 
-import { backUrl } from '../../config';
 import styles from '../../styles/FindPassword.module.css';
 import useInput from '../../utils/useInput';
 
@@ -12,26 +11,19 @@ const FindPassword = () => {
   const [message, setMessage] = useState('');
 
   const onSubmitForm = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      axios
-        .post(
-          `${backUrl}/api/users/findPassword`,
-          { email, receiveEmail },
-          {
-            withCredentials: true,
-          },
-        )
-        .then((res) => {
-          setMessage(res.data.message);
-          setEmail('');
-          setReceiveEmail('');
-        })
-        .catch((err) => {
-          setMessage(err.response.data.message);
-          setEmail('');
-          setReceiveEmail('');
-        });
+      try {
+        const res = await findPassword(email, receiveEmail);
+
+        setMessage(res.data.message);
+      } catch (err: any) {
+        setMessage(err.response.data.message);
+        console.log(err);
+      } finally {
+        setEmail('');
+        setReceiveEmail('');
+      }
     },
     [email, receiveEmail],
   );

@@ -10,6 +10,7 @@ export const client = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 client.interceptors.response.use(

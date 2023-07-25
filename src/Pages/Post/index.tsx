@@ -1,8 +1,8 @@
 import MDEditor from '@uiw/react-md-editor';
 import { Select } from 'antd';
-import axios from 'axios';
+import { createPost, PostData } from 'apis/write';
 import HeadInfo from 'Components/common/HeadInfo';
-import React, { useCallback, useState } from 'react';
+import React, { FormEvent, useCallback, useState } from 'react';
 import useSWR from 'swr';
 
 import PostSubmit from '../../Components/PostSubmit';
@@ -17,10 +17,6 @@ const Post = () => {
   const [content, setContent] = useState<string | undefined>('');
   const [category, setCategory] = useState(''); // 카테고리 추가
 
-  const { data: postData, mutate } = useSWR(`${backUrl}/api/main/posts`, fetcher, {
-    dedupingInterval: 10000,
-  });
-
   const { data: categoryData } = useSWR(`${backUrl}/api/categories`, fetcher);
 
   const onChangeCategory = useCallback((value: string) => {
@@ -28,44 +24,33 @@ const Post = () => {
   }, []);
 
   const onSubmit = useCallback(
-    (e: any) => {
+    async (e: FormEvent) => {
       e.preventDefault();
       if (!title || !content || !category) {
         alert('제목과 내용, 카테고리를 입력해주세요!');
 
         return;
       }
-      axios
-        .post(
-          `${backUrl}/api/main/posts`,
-          {
-            title,
-            content,
-            categoryId: category,
-            UserId: currentUser.id,
-          },
-          {
-            withCredentials: true,
-          },
-        )
-        .then((res) => {
-          alert('게시글이 작성되었습니다.');
-          setTitle('');
-          setContent('');
-          setCategory('');
-          mutate((cachedData: any) => {
-            if (Array.isArray(cachedData)) {
-              return [...cachedData, res.data];
-            }
+      try {
+        const postData: PostData = {
+          title,
+          content,
+          categoryId: category,
+          UserId: currentUser.id,
+        };
 
-            return cachedData;
-          }, false);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+        await createPost(postData);
+
+        alert('게시글이 작성되었습니다.');
+        setTitle('');
+        setContent('');
+        setCategory('');
+      } catch (err: any) {
+        alert(err.response.data);
+        console.error(err);
+      }
     },
-    [title, content, category, mutate, setTitle, setContent, setContent, currentUser.id],
+    [title, content, category, setTitle, setContent, setCategory, currentUser.id],
   );
 
   return (

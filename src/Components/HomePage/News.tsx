@@ -1,5 +1,4 @@
 import { backUrl } from 'config';
-import React from 'react';
 import useSWR from 'swr';
 import { NewsArticle } from 'typings/db';
 import fetcher from 'utils/fetcher';
