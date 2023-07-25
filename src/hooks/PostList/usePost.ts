@@ -44,7 +44,7 @@ const usePosts = (currentPage: number, searchTerm: string) => {
 
         setCurrentPagePosts(updatedPosts);
       } catch (error: any) {
-        console.error(error.response.data.message);
+        console.error(error.response.data);
       }
     },
     [currentPagePosts],

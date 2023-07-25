@@ -1,20 +1,19 @@
 /* eslint-disable */
 import { Textarea } from 'flowbite-react';
-import React, { useCallback, useState, VFC } from 'react';
+import React, { useCallback, VFC } from 'react';
 import useInput from 'utils/useInput';
 
 import { Comment } from '../../typings/db';
+import { useCommentContext } from 'contexts/commentContext';
 
 interface Props {
   comment: Comment;
-  onReply: (commentId: number, content: string) => void;
 }
 
-const ReplyForm: VFC<Props> = ({ onReply, comment }) => {
-  const [replyId, setReplyId] = useState<number | null>(null);
+const ReplyForm: VFC<Props> = ({ comment }) => {
+  const { replyActions } = useCommentContext();
   const [replyContent, onChangeReplyContent, setReplyContent] = useInput<string>('');
   const handleReplyCancel = useCallback(() => {
-    setReplyId(null);
     setReplyContent('');
   }, []);
 
@@ -24,11 +23,10 @@ const ReplyForm: VFC<Props> = ({ onReply, comment }) => {
         return;
       }
 
-      onReply(commentId, replyContent);
-      setReplyId(null);
+      replyActions.create(commentId, replyContent);
       setReplyContent('');
     },
-    [replyContent, onReply],
+    [replyContent, replyActions],
   );
 
   return (

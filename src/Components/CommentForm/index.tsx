@@ -4,23 +4,20 @@ import { Textarea } from 'flowbite-react';
 import React, { FormEvent, useCallback, useEffect, useRef, VFC } from 'react';
 
 import useInput from '../../utils/useInput';
+import { useCommentContext } from 'contexts/commentContext';
 
-interface Props {
-  onSubmit: (content: string) => void;
-  error: string;
-}
-
-const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
+const CommentForm = () => {
+  const { commentActions } = useCommentContext();
   const [content, onChangeContent, setContent] = useInput('');
   const textareaRef = useRef(null);
 
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      onSubmit(content);
+      commentActions.create(content);
       setContent('');
     },
-    [content, onSubmit],
+    [content, commentActions],
   );
 
   useEffect(() => {
@@ -55,7 +52,6 @@ const CommentForm: VFC<Props> = ({ onSubmit, error }) => {
       >
         comment
       </button>
-      {error && <div>{error}</div>}
     </form>
   );
 };

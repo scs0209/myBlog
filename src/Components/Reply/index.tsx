@@ -1,3 +1,4 @@
+import { useCommentContext } from 'contexts/commentContext';
 import { Dropdown } from 'flowbite-react';
 import React, { ChangeEvent, useCallback, useState, VFC } from 'react';
 import { Reply as ReplyType } from 'typings/db';
@@ -6,11 +7,10 @@ import ReplyEdit from './ReplyEdit';
 
 interface Props {
   reply: ReplyType;
-  onEdit: (commentId: number, replyId: number, content: string) => void;
-  onDelete: (commentId: number, replyId: number) => void;
 }
 
-const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
+const ReplyComp: VFC<Props> = ({ reply }) => {
+  const { replyActions } = useCommentContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(reply.content);
 
@@ -23,17 +23,17 @@ const ReplyComp: VFC<Props> = ({ reply, onEdit, onDelete }) => {
   }, []);
 
   const handleEditSave = useCallback(() => {
-    onEdit(reply.CommentId, reply.id, editContent);
+    replyActions.update(reply.CommentId, reply.id, editContent);
     setIsEditing(false);
-  }, [onEdit, reply.id, editContent]);
+  }, [replyActions, reply.id, editContent]);
 
   const handleContentChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     setEditContent(e.target.value);
   }, []);
 
   const handleDelete = useCallback(() => {
-    onDelete(reply.CommentId, reply.id);
-  }, [onDelete, reply]);
+    replyActions.delete(reply.CommentId, reply.id);
+  }, [replyActions, reply]);
 
   return (
     <>
