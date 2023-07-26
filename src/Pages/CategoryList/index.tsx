@@ -1,68 +1,26 @@
 import HeadInfo from 'Components/common/HeadInfo';
 import { Pagination } from 'flowbite-react';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useCategoryList } from 'hooks/CategoryList/useCategoryList';
+import { usePagination } from 'hooks/CategoryList/usePagination';
+import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import useSWR from 'swr';
+import { formatDate } from 'utils/dateUtil';
 
-import { backUrl } from '../../config';
-import fetcher from '../../utils/fetcher';
+const PAGE_SIZE = 10;
 
 const CategoryList = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const PAGE_SIZE = 10;
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const { data: categoryData, error: categoryError } = useSWR(
-    `${backUrl}/api/categories/${categoryId}`,
-    fetcher,
-  );
-
-  const {
-    data: postData,
-    error: postError,
-    mutate,
-  } = useSWR(`${backUrl}/api/categories/${categoryId}/posts?page=${currentPage}`, fetcher);
+  const { postData, postError, currentPage } = useCategoryList(categoryId);
+  const { handlePageChange } = usePagination(categoryId);
 
   const posts = postData?.posts;
   const totalPosts = postData?.count ?? 0;
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
-  const startIdx = 0;
-  const endIdx = PAGE_SIZE;
-  const [currentPagePosts, setCurrentPagePosts] = useState([]);
 
-  const handlePageChange = useCallback(
-    (pageNum: number) => {
-      setCurrentPage(pageNum);
-      navigate(`/main/categories/${categoryId}?page=${pageNum}`);
-      mutate(`${backUrl}/api/categories/${categoryId}/posts?page=${pageNum}`);
-    },
-    [setCurrentPage, categoryId, mutate, navigate],
-  );
-
-  // 추가
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const pageNum = parseInt(params.get('page') || '1', 10);
-
-    setCurrentPage(pageNum);
-    mutate(`${backUrl}/api/categories/${categoryId}/posts?page=${pageNum}`);
-  }, [location, mutate]);
-
-  //currentPagePosts 변경 될 때마다 업데이트 해줘서 페이지네이션할 때 오류 안나게 해주기 위해 사용
-  useEffect(() => {
-    if (posts) {
-      setCurrentPagePosts(posts?.slice(startIdx, endIdx));
-    }
-  }, [postData, startIdx, endIdx]);
-
-  if (categoryError || postError) return <div>에러가 발생했습니다.</div>;
-  if (!categoryData || !postData) return <div className="h-screen">로딩중</div>;
+  if (postError) return <div>에러가 발생했습니다.</div>;
+  if (!postData) return <div className="h-screen">로딩중</div>;
   if (!Array.isArray(posts))
-    return <div className="h-screen">게시글 몰록을 불러오는 중입니다.</div>;
+    return <div className="h-screen">게시글 목록을 불러오는 중입니다.</div>;
 
   return (
     <>
@@ -85,11 +43,9 @@ const CategoryList = () => {
               </tr>
             </thead>
             <tbody>
-              {currentPagePosts?.map((post: any) => {
+              {posts?.map((post: any) => {
                 const createdDate = new Date(post.createdAt);
-                const dateString = `${createdDate.getFullYear()} - ${
-                  createdDate.getMonth() + 1
-                } - ${createdDate.getDate()}`;
+                const dateString = formatDate(createdDate);
 
                 return (
                   <tr

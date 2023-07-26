@@ -3,6 +3,7 @@ import { Pagination } from 'flowbite-react';
 import usePagination from 'hooks/PostList/usePagination';
 import usePosts from 'hooks/PostList/usePost';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { formatDate } from 'utils/dateUtil';
 
 import Search from '../../Components/Search';
 
@@ -45,9 +46,7 @@ const PostList = () => {
             <tbody>
               {currentPagePosts?.map((post: any) => {
                 const createdDate = new Date(post.createdAt);
-                const dateString = `${createdDate.getFullYear()} - ${
-                  createdDate.getMonth() + 1
-                } - ${createdDate.getDate()}`;
+                const dateString = formatDate(createdDate);
 
                 return (
                   <tr
