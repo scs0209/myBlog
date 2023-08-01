@@ -1,3 +1,4 @@
+import UserDropDown from 'Components/common/DropDown';
 import { useCommentContext } from 'contexts/commentContext';
 import { Dropdown } from 'flowbite-react';
 import React, { ChangeEvent, useCallback, useState, VFC } from 'react';
@@ -37,19 +38,13 @@ const ReplyComp: VFC<Props> = ({ reply }) => {
 
   return (
     <>
-      <footer className="flex items-center justify-between mb-2">
-        <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-          {reply.User.name}
-        </p>
-        <Dropdown size="xs" label="...">
-          <Dropdown.Item>
-            <button onClick={handleEdit}>수정</button>
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <button onClick={handleDelete}>삭제</button>
-          </Dropdown.Item>
-        </Dropdown>
-      </footer>
+      <UserDropDown
+        username={reply.User.name}
+        isEditing={isEditing}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
+
       <p className="text-gray-500 dark:text-gray-400 mb-4">{reply.content}</p>
       {isEditing && (
         <ReplyEdit

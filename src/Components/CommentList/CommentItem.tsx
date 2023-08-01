@@ -8,6 +8,7 @@ import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 import ReplySection from 'Components/Reply/ReplySection';
 import CommentContent from './CommentContent';
 import useEditComment from 'hooks/PostDetail/useEditComment';
+import UserDropDown from 'Components/common/DropDown';
 
 const CommentItem = () => {
   const { commentActions } = useCommentContext();
@@ -36,25 +37,12 @@ const CommentItem = () => {
   return (
     <>
       <article className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900">
-        <footer className="flex justify-between items-center mb-2">
-          <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-            {comment?.User?.name}
-          </p>
-          <Dropdown size="xs" label="..." style={{ backgroundColor: ' #2d3748' }}>
-            {editId === comment?.id ? null : (
-              <>
-                <Dropdown.Item>
-                  <button onClick={() => handleEditClick(comment?.id!, comment?.content!)}>
-                    수정
-                  </button>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <button onClick={() => handleDeleteClick(comment?.id)}>삭제</button>
-                </Dropdown.Item>
-              </>
-            )}
-          </Dropdown>
-        </footer>
+        <UserDropDown
+          username={comment?.User?.name}
+          isEditing={editId === comment?.id}
+          onEdit={() => handleEditClick(comment?.id!, comment?.content!)}
+          onDelete={() => handleDeleteClick(comment?.id)}
+        />
 
         {editId === comment?.id ? (
           <CommentEditForm
