@@ -1,18 +1,16 @@
 /* eslint-disable */
 import { Textarea } from 'flowbite-react';
-import React, { useCallback, VFC } from 'react';
+import React, { useCallback } from 'react';
 import useInput from 'utils/useInput';
 
-import { Comment } from '../../typings/db';
 import { useCommentContext } from 'contexts/commentContext';
+import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 
-interface Props {
-  comment: Comment;
-}
-
-const ReplyForm: VFC<Props> = ({ comment }) => {
+const ReplyForm = () => {
   const { replyActions } = useCommentContext();
+  const { comment } = useRepliesVisibilityContext();
   const [replyContent, onChangeReplyContent, setReplyContent] = useInput<string>('');
+
   const handleReplyCancel = useCallback(() => {
     setReplyContent('');
   }, []);

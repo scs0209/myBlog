@@ -1,20 +1,26 @@
 /* eslint-disable */
 import { Dropdown } from 'flowbite-react';
 import React, { useCallback, useState } from 'react';
-import useInput from 'utils/useInput';
 
 import CommentEditForm from './CommentEditForm';
 import { useCommentContext } from 'contexts/commentContext';
-import ReplyComp from 'Components/Reply';
-import ReplyForm from 'Components/Reply/ReplyForm';
 import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
+import ReplySection from 'Components/Reply/ReplySection';
+import CommentContent from './CommentContent';
+import useEditComment from 'hooks/PostDetail/useEditComment';
 
 const CommentItem = () => {
-  const { replies, commentActions } = useCommentContext();
-  const { isRepliesVisible, handleRepliesClick, comment } = useRepliesVisibilityContext();
+  const { commentActions } = useCommentContext();
+  const { comment } = useRepliesVisibilityContext();
+  const {
+    editId,
+    editContent,
+    handleEditCancel,
+    handleEditSubmit,
+    handleEditClick,
+    onChangeEditContent,
+  } = useEditComment(commentActions);
   const [show, setShow] = useState(false);
-  const [editId, setEditId] = useState<number | null>(null);
-  const [editContent, onChangeEditContent, setEditContent] = useInput('');
 
   const handleDeleteClick = useCallback(
     (commentId: number) => {
@@ -22,26 +28,6 @@ const CommentItem = () => {
     },
     [commentActions],
   );
-
-  const handleEditClick = useCallback((commentId: number, content: string) => {
-    setEditId(commentId);
-    setEditContent(content);
-  }, []);
-
-  const handleEditCancel = useCallback(() => {
-    setEditId(null);
-    setEditContent('');
-  }, []);
-
-  const handleEditSubmit = useCallback(() => {
-    if (editId === null) {
-      return;
-    }
-
-    commentActions.update(editId, editContent);
-    setEditId(null);
-    setEditContent('');
-  }, [editId, editContent, commentActions]);
 
   const toggleShow = useCallback(() => {
     setShow((prev) => !prev);
@@ -78,55 +64,10 @@ const CommentItem = () => {
             onSubmit={handleEditSubmit}
           />
         ) : (
-          <>
-            <p className="text-gray-500 dark:text-gray-400">{comment?.content}</p>
-            <div className="flex items-center mt-4 space-x-4">
-              <button
-                type="button"
-                onClick={toggleShow}
-                className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="mr-1 w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  ></path>
-                </svg>
-                답글
-              </button>
-              <button
-                type="button"
-                className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400"
-                onClick={() => handleRepliesClick(comment?.id)}
-              >
-                {isRepliesVisible[comment?.id!] ? '숨기기' : '보기'}{' '}
-                {`(${replies?.filter((reply) => reply.CommentId === comment?.id).length})`}
-              </button>
-            </div>
-          </>
+          <CommentContent toggleShow={toggleShow} />
         )}
       </article>
-      <article className="p-6 mb-6 ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-800 dark:text-white">
-        {show && <ReplyForm comment={comment} />}
-        {isRepliesVisible[comment?.id!] && (
-          <>
-            {replies
-              ?.filter((reply) => reply.CommentId === comment?.id)
-              .map((reply) => (
-                <ReplyComp key={reply.id} reply={reply} />
-              ))}
-          </>
-        )}
-      </article>
+      <ReplySection show={show} />
     </>
   );
 };
