@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { RepliesProvider } from 'contexts/repliesContext';
+import { RepliesVisibilityProvider } from 'contexts/repliesVisibilityContext';
 import CommentItem from './CommentItem';
 import { useCommentContext } from 'contexts/commentContext';
 
@@ -8,13 +8,11 @@ const CommentList = () => {
 
   return (
     <>
-      <RepliesProvider>
-        {comments?.map((comment) => (
-          <div key={comment?.id}>
-            <CommentItem comment={comment} />
-          </div>
-        ))}
-      </RepliesProvider>
+      {comments?.map((comment) => (
+        <RepliesVisibilityProvider key={comment?.id} comment={comment}>
+          <CommentItem />
+        </RepliesVisibilityProvider>
+      ))}
     </>
   );
 };

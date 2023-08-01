@@ -1,22 +1,17 @@
 /* eslint-disable */
-import RepliesButton from 'Components/RepliesButton';
 import { Dropdown } from 'flowbite-react';
-import React, { useCallback, useState, VFC } from 'react';
+import React, { useCallback, useState } from 'react';
 import useInput from 'utils/useInput';
 
-import { Comment } from '../../typings/db';
 import CommentEditForm from './CommentEditForm';
 import { useCommentContext } from 'contexts/commentContext';
 import ReplyComp from 'Components/Reply';
 import ReplyForm from 'Components/Reply/ReplyForm';
+import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 
-interface Props {
-  comment: Comment;
-}
-
-const CommentItem: VFC<Props> = ({ comment }) => {
+const CommentItem = () => {
   const { replies, commentActions } = useCommentContext();
-  const [isRepliesVisible, setIsRepliesVisible] = useState<{ [commentId: number]: boolean }>({});
+  const { isRepliesVisible, handleRepliesClick, comment } = useRepliesVisibilityContext();
   const [show, setShow] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [editContent, onChangeEditContent, setEditContent] = useInput('');
@@ -48,33 +43,12 @@ const CommentItem: VFC<Props> = ({ comment }) => {
     setEditContent('');
   }, [editId, editContent, commentActions]);
 
-  const handleRepliesClick = useCallback((commentId: number) => {
-    setIsRepliesVisible((prev) => {
-      return {
-        ...prev,
-        [commentId]: !prev[commentId],
-      };
-    });
-  }, []);
-
   const toggleShow = useCallback(() => {
     setShow((prev) => !prev);
   }, []);
 
   return (
     <>
-      <article className="p-6 mb-6 ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-800 dark:text-white">
-        {isRepliesVisible[comment?.id!] && (
-          <>
-            {replies
-              ?.filter((reply) => reply.CommentId === comment?.id)
-              .map((reply) => (
-                <ReplyComp key={reply.id} reply={reply} />
-              ))}
-          </>
-        )}
-        {show && <ReplyForm comment={comment} />}
-      </article>
       <article className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900">
         <footer className="flex justify-between items-center mb-2">
           <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
@@ -129,13 +103,27 @@ const CommentItem: VFC<Props> = ({ comment }) => {
                 </svg>
                 답글
               </button>
-              <RepliesButton
+              <button
+                type="button"
+                className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400"
                 onClick={() => handleRepliesClick(comment?.id)}
-                isRepliesVisible={isRepliesVisible[comment?.id!]}
               >
+                {isRepliesVisible[comment?.id!] ? '숨기기' : '보기'}{' '}
                 {`(${replies?.filter((reply) => reply.CommentId === comment?.id).length})`}
-              </RepliesButton>
+              </button>
             </div>
+          </>
+        )}
+      </article>
+      <article className="p-6 mb-6 ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-800 dark:text-white">
+        {show && <ReplyForm comment={comment} />}
+        {isRepliesVisible[comment?.id!] && (
+          <>
+            {replies
+              ?.filter((reply) => reply.CommentId === comment?.id)
+              .map((reply) => (
+                <ReplyComp key={reply.id} reply={reply} />
+              ))}
           </>
         )}
       </article>

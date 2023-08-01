@@ -42,16 +42,12 @@ const ReplyComp: VFC<Props> = ({ reply }) => {
           {reply.User.name}
         </p>
         <Dropdown size="xs" label="...">
-          {!isEditing && (
-            <>
-              <Dropdown.Item>
-                <button onClick={handleEdit}>수정</button>
-              </Dropdown.Item>
-              <Dropdown.Item>
-                <button onClick={handleDelete}>삭제</button>
-              </Dropdown.Item>
-            </>
-          )}
+          <Dropdown.Item>
+            <button onClick={handleEdit}>수정</button>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <button onClick={handleDelete}>삭제</button>
+          </Dropdown.Item>
         </Dropdown>
       </footer>
       <p className="text-gray-500 dark:text-gray-400 mb-4">{reply.content}</p>

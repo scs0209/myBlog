@@ -41,19 +41,6 @@ export const CommentProvider: FC<Props> = ({ children }) => {
   const { data: commentsData } = useSWR(`${backUrl}/api/posts/${id}/comments`, fetcher);
   const { data: repliesData } = useSWR(`${backUrl}/api/posts/${id}/replies`, fetcher);
 
-  // 댓글 및 답글 데이터 받아오면 상태 갱신
-  useEffect(() => {
-    if (commentsData) {
-      setComments(commentsData);
-    }
-  }, [commentsData]);
-
-  useEffect(() => {
-    if (repliesData) {
-      setReplies(repliesData);
-    }
-  }, [repliesData]);
-
   const commentActions = {
     // 댓글 등록
     create: async (content: string) => {
