@@ -10,7 +10,7 @@
 
 ## 배포 주소
 
-> **프론트 서버** : https://web-myblog-p8xrq2mlfsc6kg2.sel3.cloudtype.app/
+> **배포 서버** : https://web-myblog-p8xrq2mlfsc6kg2.sel3.cloudtype.app/
 
 ## 개발자 소개
 
@@ -66,6 +66,9 @@ npm run start
 
 ### UI 개선 후
 
+- 다크 모드 지원
+- 반응형 디자인
+- 그 외의 전체적인 UI/UX 개선
 <div style="display: flex; height: 400px;">
   <img src="https://github.com/scs0209/myBlog/assets/110822847/51cc943b-3980-4eb0-979a-bcd05b90f291" alt="블로그 최신1" style="width: 50%; display:inline-block; margin-right: 15px;">
   
@@ -116,10 +119,110 @@ npm run start
 
 ## 앞으로 개선할 계획
 
-- Context API나 Redux를 도입하여 전역 상태 관리를 통해 컴포넌트 간 상태 전달 및 관리를 보다 효과적으로 할 것입니다.
-- API 요청 함수를 별도의 폴더로 분리하여 코드의 가독성과 유지보수성을 높일 것입니다.
+- Context API나 Redux를 도입하여 전역 상태 관리를 통해 컴포넌트 간 상태 전달 및 관리를 보다 효과적으로 할 것입니다. (완)
+- API 요청 함수를 별도의 폴더로 분리하여 코드의 가독성과 유지보수성을 높일 것입니다. (완)
 
 이러한 계획을 실현함으로써 코드의 구조가 개선되고 전체 프로젝트의 품질이 향상될 것으로 기대합니다.
+
+## 리팩토링
+
+### 리팩토링 기준
+
+1. 기능별 컴포넌트 분리
+
+- 기능별로 서로 다른 파일로 분리하여 개별 컴포넌트의 관심사와 책임을 명확히 구분합니다.
+
+2. 중복 코드 제거
+
+- 중복되는 코드를 발견하고, 이를 별도의 컴포넌트로 분리하여 코드 중복을 최소화합니다.
+
+3. 코드 간 의존성 관리
+
+- 코드를 분리하면서 서로간의 결합도를 낮게 유지하여 유연한 유지 보수가 가능하도록 설계합니다.
+
+<details>
+<summary>API 호출 함수 중앙화</summary>
+<div markdown="1">      
+ 
+- API 호출 함수를 중앙화하여 코드 중복을 최소화하고, 유지보수성을 향상시켰습니다.
+- 이를 위해, axios 라이브러리를 사용하여 API 호출 함수를 작성하고, 이를 모듈화하여 중앙화하였습니다.
+
+</div>
+</details>
+<details>
+<summary>PostList 페이지 코드 분리</summary>
+<div markdown="1">      
+ 
+- PostList 페이지에서 페이지네이션과 검색 로직을 분리하여 검색 코드 구조와 가독성을 개선하였습니다.
+- 이를 위해, 페이지네이션과 검색 로직을 각각 커스텀 훅으로 분리하였습니다.
+
+</div>
+</details>
+<details>
+<summary>SignUp 페이지 코드 분리</summary>
+<div markdown="1">      
+ 
+- SignUp 페이지에서 회원가입과 관련된 로직을 처리하는 useSignUp 커스텀 훅과 입력 상태를 관리하는 useInput 커스텀 훅을 생성하여 코드 구조와 가독성을 개선하였습니다.
+- 이를 통해, 회원가입과 관련된 로직과 입력 상태를 각각 분리하여 코드 중복을 최소화하고, 유지보수성을 향상시켰습니다.
+
+</div>
+</details>
+<details>
+<summary>PostDetail 페이지 코드 분리</summary>
+<div markdown="1">      
+ 
+- PostDetail 페이지에서 삭제 로직을 커스텀 훅으로 분리하여 코드 구조와 가독성을 개선하였습니다.
+- 이를 통해, 삭제 로직을 간단하게 사용할 수 있게 되었으며, 관심사의 분리 측면에서 코드를 분리하고 유지보수성을 향상시켰습니다.
+
+</div>
+</details>
+<details>
+<summary>LikeSection 컴포넌트 분리</summary>
+<div markdown="1">      
+ 
+- PostDetail 페이지에서 좋아요 상태 관리를 담당하는 로직을 useLikes 커스텀 훅으로 분리하여 코드 구조와 가독성을 개선하였습니다. <br>
+이를 통해, 좋아요 기능과 관련된 모든 상태와 로직을 추상화하여 가독성과 유지보수성을 높였습니다.
+- 또한 종아요 버튼을 누를 때 좋아요 상태를 바로 업데이트하고 서버에 API 호출을 하여 서버 데이터도 동기화하는 방식으로 구현하였습니다. 이를 통해, 좋아요 버튼을 누를 때 더욱 빠르게 상태가 업데이트되며, 사용자 경험을 향상시켰습니다.
+
+</div>
+</details>
+<details>
+<summary>LikeSection 컴포넌트 분리</summary>
+<div markdown="1">      
+ 
+- PostDetail 페이지에서 좋아요 상태 관리를 담당하는 로직을 useLikes 커스텀 훅으로 분리하여 코드 구조와 가독성을 개선하였습니다. <br>
+이를 통해, 좋아요 기능과 관련된 모든 상태와 로직을 추상화하여 가독성과 유지보수성을 높였습니다.
+- 또한 종아요 버튼을 누를 때 좋아요 상태를 바로 업데이트하고 서버에 API 호출을 하여 서버 데이터도 동기화하는 방식으로 구현하였습니다. 이를 통해, 좋아요 버튼을 누를 때 더욱 빠르게 상태가 업데이트되며, 사용자 경험을 향상시켰습니다.
+
+</div>
+</details>
+<details>
+<summary>ReplyComp, CommentItem 컴포넌트 중복제거</summary>
+<div markdown="1">      
+ 
+- CommentItem 컴포넌트와 ReplyComp 컴포넌트에서 중복되는 코드를 발견하고, 이를 별도의 컴포넌트인 UserDropDown 컴포넌트로 분리하였습니다.
+- 이를 통해 재사용할 수 있는 컴포넌트와 코드 중복을 최소화하여, 유지보수성을 향상시켰습니다.
+
+</div>
+</details>
+
+### 어려웠던 점과 고려 사항
+
+1. 적절한 구조로 코드를 분리하는 가이드라인 찾기
+
+- 코드를 직관적이고 재사용 가능한 방식으로 분리하기 위한 기준을 찾는 것이 중요합니다.
+
+2. 각 파일 간의 의존성 관리
+
+- 코드를 분리하면서 서로간의 결합도를 낮게 유지하여 유연한 유지 보수가 가능하도록 설계해야 합니다.
+
+3. 유지 보수 시 장점
+
+- 코드의 재사용성: 함수 및 로직을 분리함으로써 코드의 중복을 최소홯하고, 필요한 부분에서 쉽게 재사용 가능
+
+4. Context API 성능 이슈
+
+- Context API를 사용할 때 발생할 수 있는 성능 이슈가 있음
 
 ## 주요 기능 📦
 
@@ -139,10 +242,23 @@ npm run start
 
 - 게시글을 검색할 수 있는 검색창 구현
 
+### ⭐️ 오늘 방문자 수와 총 방문자 수 카운트
+
+### ⭐️ 소셜 로그인
+
 ## 디렉터리 구조
 
 ```
 📦src
+ ┣ 📂apis
+ ┃ ┣ 📜auth.ts
+ ┃ ┣ 📜comment.ts
+ ┃ ┣ 📜index.ts
+ ┃ ┣ 📜password.ts
+ ┃ ┣ 📜post.ts
+ ┃ ┣ 📜postList.ts
+ ┃ ┣ 📜reply.ts
+ ┃ ┗ 📜write.ts
  ┣ 📂Components
  ┃ ┣ 📂Category
  ┃ ┃ ┣ 📜EditButton.tsx
@@ -155,11 +271,13 @@ npm run start
  ┃ ┣ 📂CommentForm
  ┃ ┃ ┗ 📜index.tsx
  ┃ ┣ 📂CommentList
+ ┃ ┃ ┣ 📜CommentContent.tsx
  ┃ ┃ ┣ 📜CommentEditForm.tsx
  ┃ ┃ ┣ 📜CommentItem.tsx
  ┃ ┃ ┗ 📜index.tsx
  ┃ ┣ 📂common
  ┃ ┃ ┣ 📜CategoryButton.tsx
+ ┃ ┃ ┣ 📜DropDown.tsx
  ┃ ┃ ┣ 📜Footer.tsx
  ┃ ┃ ┣ 📜Header.tsx
  ┃ ┃ ┗ 📜HeadInfo.tsx
@@ -187,18 +305,34 @@ npm run start
  ┃ ┃ ┗ 📜RightItem.tsx
  ┃ ┣ 📂ProfileModal
  ┃ ┃ ┗ 📜index.tsx
- ┃ ┣ 📂RepliesButton
- ┃ ┃ ┗ 📜index.tsx
  ┃ ┣ 📂Reply
  ┃ ┃ ┣ 📜index.tsx
  ┃ ┃ ┣ 📜ReplyEdit.tsx
- ┃ ┃ ┗ 📜ReplyForm.tsx
+ ┃ ┃ ┣ 📜ReplyForm.tsx
+ ┃ ┃ ┗ 📜ReplySection.tsx
  ┃ ┣ 📂Search
  ┃ ┃ ┗ 📜index.tsx
  ┃ ┗ 📂Signup
  ┃ ┃ ┗ 📜SignupErr.tsx
  ┣ 📂config
  ┃ ┗ 📜index.ts
+ ┣ 📂contexts
+ ┃ ┣ 📜commentContext.tsx
+ ┃ ┗ 📜repliesVisibilityContext.tsx
+ ┣ 📂hooks
+ ┃ ┣ 📂CategoryList
+ ┃ ┃ ┣ 📜useCategoryList.ts
+ ┃ ┃ ┗ 📜usePagination.ts
+ ┃ ┣ 📂PostDetail
+ ┃ ┃ ┣ 📜useDelete.ts
+ ┃ ┃ ┣ 📜useEditComment.ts
+ ┃ ┃ ┗ 📜useLikes.ts
+ ┃ ┣ 📂PostList
+ ┃ ┃ ┣ 📜usePagination.ts
+ ┃ ┃ ┗ 📜usePost.ts
+ ┃ ┣ 📜useLogin.ts
+ ┃ ┣ 📜usePassword.ts
+ ┃ ┗ 📜useSignUp.ts
  ┣ 📂images
  ┃ ┣ 📜banner.jpg
  ┃ ┣ 📜FilmFinder.PNG
@@ -253,12 +387,24 @@ npm run start
  ┣ 📂typings
  ┃ ┗ 📜db.ts
  ┣ 📂utils
+ ┃ ┣ 📜dateUtil.ts
  ┃ ┣ 📜fetcher.ts
  ┃ ┗ 📜useInput.ts
- ┣ 📜.env
  ┣ 📜index.css
  ┣ 📜index.tsx
  ┣ 📜react-app-env.d.ts
  ┣ 📜setupProxy.js
- ┗ 📜setupTests.ts
 ```
+
+## ❤ git commit message 컨벤션
+
+| 커밋 유형 | 의미                       |
+| --------- | -------------------------- |
+| feat      | 새로운 기능 추가           |
+| fix       | 버그, 기능 수정            |
+| Docs      | 문서 수정                  |
+| style     | 스타일 코드 추가           |
+| refactor  | 코드 리팩토링              |
+| chore     | 기능과 관련 없는 내용 수정 |
+
+---
