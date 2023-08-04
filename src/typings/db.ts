@@ -26,6 +26,7 @@ export interface Reply {
 export interface Category {
   id: number;
   name: string;
+  hidden: boolean;
 }
 
 export interface Post {

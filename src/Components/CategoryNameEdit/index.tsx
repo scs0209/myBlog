@@ -16,6 +16,7 @@ interface Props {
   onDeleteCategory: (categoryId: number) => void;
   handleClickCategory: (id: number) => void;
   activeCategoryId: any;
+  onToggleHidden: (categoryId: number, hidden: boolean) => void;
 }
 
 const CategoryNameEdit: VFC<Props> = ({
@@ -29,6 +30,7 @@ const CategoryNameEdit: VFC<Props> = ({
   onDeleteCategory,
   handleClickCategory,
   activeCategoryId,
+  onToggleHidden,
 }) => {
   return (
     <>
@@ -45,7 +47,11 @@ const CategoryNameEdit: VFC<Props> = ({
               {/* 카테고리 이름 */}
               <Link
                 to={`/main/categories/${category.id}`}
-                className={`flex items-center p-2 text-gray-700 rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 ${
+                className={`${
+                  !category.hidden
+                    ? 'flex items-center p-2 text-gray-700 rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300'
+                    : 'hidden'
+                } ${
                   activeCategoryId === category.id ? 'font-bold bg-gray-300 dark:bg-gray-600' : ''
                 }`}
                 onClick={() => handleClickCategory(category.id)}
@@ -60,6 +66,12 @@ const CategoryNameEdit: VFC<Props> = ({
                   </CategoryButton>
                   <CategoryButton type="button" onClick={() => onDeleteCategory(category.id)}>
                     🗑
+                  </CategoryButton>
+                  <CategoryButton
+                    type="button"
+                    onClick={() => onToggleHidden(category.id, !category.hidden)}
+                  >
+                    {category.hidden ? '🔓' : '🔒'}
                   </CategoryButton>
                 </div>
               )}

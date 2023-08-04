@@ -105,10 +105,12 @@ router.delete('/categories/:id', isLoggedIn, async (req, res) => {
 router.put('/categories/:id', isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, hidden } = req.body;
+
     const updatedCategory = await Category.update(
       {
         name,
+        hidden,
       },
       {
         where: {
@@ -157,6 +159,9 @@ router.get('/categories/:categoryId/posts', async (req, res, next) => {
       include: [
         {
           model: Category,
+          where: {
+            hidden: false, // 숨겨진 카테고리는 조회되지 않도록 조건 추가
+          },
           as: 'category',
         },
       ],
@@ -227,7 +232,6 @@ router.post('/posts/:postId/comments', isLoggedIn, async (req, res) => {
 });
 
 //댓글 수정하기
-// put 대신 patch를 사용하는 이유는 put 메소드는 전체 데이터를 업데이트 할 때 사용하고, patch 메소드는 일부 업데이트 할 때 사용한다. 따라서 댓글 수정에는 일부 데이터를 업데이트 하므로 patch 메소드가 적절하다.
 router.put('/posts/comments/:commentId', isLoggedIn, async (req, res) => {
   try {
     const commentId = req.params.commentId;
@@ -378,14 +382,30 @@ router.delete('/posts/comments/:commentId/replies/:replyId', isLoggedIn, async (
   }
 });
 
-//개시글 가져오기
+// 게시글 가져오기
 router.get('/main/posts', async (req, res) => {
   const { page, search } = req.query;
   const limit = 10; // 한 페이지에 보여줄 게시글 수
   const offset = (page - 1) * limit;
-  const where = search ? { title: { [Op.like]: `%${search}%` } } : {};
 
   try {
+    // 숨겨진 카테고리를 가져옵니다.
+    const hiddenCategories = await Category.findAll({
+      where: {
+        hidden: true,
+      },
+    });
+
+    // 숨겨진 카테고리 ID를 배열로 가져옵니다.
+    const hiddenCategoryIds = hiddenCategories.map((category) => category.id);
+
+    // 검색 조건을 설정합니다.
+    const where = {
+      ...((search && { title: { [Op.like]: `%${search}%` } }) || {}),
+      // 숨겨진 카테고리에 속한 게시글을 제외합니다.
+      CategoryId: { [Op.notIn]: hiddenCategoryIds },
+    };
+
     const { rows: posts, count } = await Post.findAndCountAll({
       where,
       order: [['createdAt', 'DESC']],

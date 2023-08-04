@@ -1,3 +1,4 @@
+import { deleteCategory, editCategory, toggleCategoryHidden } from 'apis/category';
 import axios from 'axios';
 import React, { FormEvent, useCallback, useEffect, useState, VFC } from 'react';
 import { Link } from 'react-router-dom';
@@ -43,7 +44,7 @@ const Category: VFC<Props> = ({ showSidebar }) => {
   }, []);
 
   const onSubmitEdit = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!editedCategoryName || !editedCategoryName.trim()) {
         alert('글자를 입력해주세요.');
@@ -55,45 +56,47 @@ const Category: VFC<Props> = ({ showSidebar }) => {
 
         return;
       }
-      axios
-        .put(
-          `${backUrl}/api/categories/${editedCategoryId}`,
-          {
-            name: editedCategoryName,
-          },
-          {
-            withCredentials: true,
-          },
-        )
-        .then(() => {
-          mutate();
-          toggleEdit(null);
-        })
-        .catch((error) => {
-          console.error(error);
-          alert('카테고리 수정에 실패했습니다.');
-        });
+      try {
+        await editCategory(editedCategoryId, editedCategoryName);
+        mutate();
+        toggleEdit(null);
+      } catch (error) {
+        console.error(error);
+        alert('카테고리 수정에 실패했습니다.');
+      }
     },
     [editedCategoryName, toggleEdit, mutate, editedCategoryId, userData],
   );
 
+  const onToggleHidden = useCallback(
+    async (categoryId: number, hidden: boolean) => {
+      if (userData?.role !== 'admin') {
+        alert('관리자만 카테고리를 숨길 수 있습니다.');
+
+        return;
+      }
+
+      try {
+        await toggleCategoryHidden(categoryId, hidden);
+        mutate();
+      } catch (error) {
+        console.error(error);
+        alert('카테고리 숨기기/보이기 변경에 실패했습니다.');
+      }
+    },
+    [mutate, userData],
+  );
+
   // 카테고리 삭제
   const onDeleteCategory = useCallback(
-    (categoryId: number) => {
-      axios
-        .delete(`${backUrl}/api/categories/${categoryId}`, {
-          withCredentials: true,
-        })
-        .then(() => {
-          mutate();
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 403) {
-            alert('권한이 없습니다.');
-          } else {
-            console.error(error);
-          }
-        });
+    async (categoryId: number) => {
+      try {
+        await deleteCategory(categoryId);
+        mutate();
+      } catch (error: any) {
+        alert(error.response.data);
+        console.error(error);
+      }
     },
     [mutate],
   );
@@ -151,6 +154,7 @@ const Category: VFC<Props> = ({ showSidebar }) => {
             onDeleteCategory={onDeleteCategory}
             handleClickCategory={handleClickCategory}
             activeCategoryId={activeCategoryId}
+            onToggleHidden={onToggleHidden}
           />
         </ul>
         {userData?.role === 'admin' && (

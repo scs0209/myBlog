@@ -13,6 +13,11 @@ class Category extends Sequelize.Model {
           type: Sequelize.STRING,
           allowNull: false,
         },
+        hidden: {
+          // hidden 속성 추가
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
+        },
       },
       {
         sequelize,
