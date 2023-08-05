@@ -1,13 +1,14 @@
 /* eslint-disable */
-import axios from 'axios';
 import Modal from 'Components/Modal';
 import { backUrl } from 'config';
-import React, { useCallback } from 'react';
+import React, { FormEvent, useCallback } from 'react';
 import useSWR from 'swr';
 
 import fetcher from '../../utils/fetcher';
 import useInput from '../../utils/useInput';
 import { useCategory } from 'contexts/categoryContext';
+import { createCategory } from 'apis/category';
+import { Category } from 'typings/db';
 
 const CreateCategoryModal = () => {
   const [newCategory, onChangeNewCategory, setNewCategory] = useInput('');
@@ -15,43 +16,29 @@ const CreateCategoryModal = () => {
   const { onCloseModal, setShowCreateCategoryModal, showCreateCategoryModal } = useCategory();
 
   const onCreateCategory = useCallback(
-    (e: any) => {
+    async (e: FormEvent) => {
       e.preventDefault();
       // 중복 확인
-      if (categories?.some((category: any) => category.name === newCategory.trim())) {
+      if (categories?.some((category: Category) => category.name === newCategory.trim())) {
         alert('이미 존재하는 카테고리입니다.');
-
         return;
       }
       // 입력창 비우면 생성 x
       if (!newCategory || !newCategory.trim()) {
         alert('제목을 입력해주세요!');
-
         return;
       }
-      axios
-        .post(
-          `${backUrl}/api/categories`,
-          {
-            name: newCategory,
-          },
-          {
-            withCredentials: true,
-          },
-        )
-        .then(() => {
-          setShowCreateCategoryModal(false);
-          setNewCategory('');
-          alert('카테고리가 추가되었습니다.');
-          mutate([...(categories ?? []), newCategory], false); // 생성한 카테고리를 화면에 바로 반영
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 403) {
-            alert('권한이 없습니다.');
-          } else {
-            console.error(error);
-          }
-        });
+
+      try {
+        await createCategory(newCategory);
+        setShowCreateCategoryModal(false);
+        setNewCategory('');
+        alert('카테고리가 추가되었습니다.');
+        mutate([...(categories ?? []), newCategory], false); // 생성한 카테고리를 화면에 바로 반영
+      } catch (error: any) {
+        alert(error.response.data);
+        console.error(error);
+      }
     },
     [newCategory, setNewCategory, setShowCreateCategoryModal, categories, mutate],
   );
