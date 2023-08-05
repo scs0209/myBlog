@@ -1,16 +1,14 @@
 import { deleteCategory, editCategory, toggleCategoryHidden } from 'apis/category';
-import { FormEvent, useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { User } from 'typings/db';
 
-const useCategoryActions = (userData: User, mutate: any) => {
+export const useCategoryActions = (userData: User, mutate: any) => {
   const onSubmitEdit = useCallback(
     async (
-      e: FormEvent<HTMLFormElement>,
-      editedCategoryName: string,
       editedCategoryId: number | null,
+      editedCategoryName: string,
       toggleEdit: (categoryId: any) => void,
     ) => {
-      e.preventDefault();
       if (!editedCategoryName || !editedCategoryName.trim()) {
         alert('글자를 입력해주세요.');
 
@@ -25,8 +23,8 @@ const useCategoryActions = (userData: User, mutate: any) => {
         await editCategory(editedCategoryId, editedCategoryName);
         mutate();
         toggleEdit(null);
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        console.error(error.response.data);
         alert('카테고리 수정에 실패했습니다.');
       }
     },
@@ -44,8 +42,8 @@ const useCategoryActions = (userData: User, mutate: any) => {
       try {
         await toggleCategoryHidden(categoryId, hidden);
         mutate();
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        console.error(error.response.data);
         alert('카테고리 숨기기/보이기 변경에 실패했습니다.');
       }
     },
@@ -65,7 +63,14 @@ const useCategoryActions = (userData: User, mutate: any) => {
     [mutate],
   );
 
-  return { onSubmitEdit, onToggleHidden, onDeleteCategory };
-};
+  const actions = useMemo(
+    () => ({
+      onSubmitEdit,
+      onToggleHidden,
+      onDeleteCategory,
+    }),
+    [onSubmitEdit, onToggleHidden, onDeleteCategory],
+  );
 
-export default useCategoryActions;
+  return actions;
+};

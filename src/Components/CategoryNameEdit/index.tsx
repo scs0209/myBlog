@@ -1,8 +1,8 @@
-import { deleteCategory, editCategory, toggleCategoryHidden } from 'apis/category';
 import EditButton from 'Components/Category/EditButton';
 import { backUrl } from 'config';
 import { useCategory } from 'contexts/categoryContext';
-import React, { FormEvent, memo, useCallback, useEffect, useState, VFC } from 'react';
+import { useCategoryActions } from 'hooks/Category/useCategoryAction';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
@@ -20,6 +20,7 @@ const CategoryName = () => {
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
   const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
   const { openCreateCategory } = useCategory();
+  const { onSubmitEdit, onToggleHidden, onDeleteCategory } = useCategoryActions(userData, mutate);
 
   const handleClickCategory = (id: number) => {
     setActiveCategoryId(id);
@@ -37,62 +38,12 @@ const CategoryName = () => {
     setEditedCategoryId(categoryId);
   }, []);
 
-  const onSubmitEdit = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmitEdit = useCallback(
+    (e: FormEvent) => {
       e.preventDefault();
-      if (!editedCategoryName || !editedCategoryName.trim()) {
-        alert('글자를 입력해주세요.');
-
-        return;
-      }
-      if (userData?.role !== 'admin') {
-        alert('관리자만 카테고리를 수정할 수 있습니다.');
-
-        return;
-      }
-      try {
-        await editCategory(editedCategoryId, editedCategoryName);
-        mutate();
-        toggleEdit(null);
-      } catch (error) {
-        console.error(error);
-        alert('카테고리 수정에 실패했습니다.');
-      }
+      onSubmitEdit(editedCategoryId, editedCategoryName, toggleEdit);
     },
-    [editedCategoryName, toggleEdit, mutate, editedCategoryId, userData],
-  );
-
-  const onToggleHidden = useCallback(
-    async (categoryId: number, hidden: boolean) => {
-      if (userData?.role !== 'admin') {
-        alert('관리자만 카테고리를 숨길 수 있습니다.');
-
-        return;
-      }
-
-      try {
-        await toggleCategoryHidden(categoryId, hidden);
-        mutate();
-      } catch (error) {
-        console.error(error);
-        alert('카테고리 숨기기/보이기 변경에 실패했습니다.');
-      }
-    },
-    [mutate, userData],
-  );
-
-  // 카테고리 삭제
-  const onDeleteCategory = useCallback(
-    async (categoryId: number) => {
-      try {
-        await deleteCategory(categoryId);
-        mutate();
-      } catch (error: any) {
-        alert(error.response.data);
-        console.error(error);
-      }
-    },
-    [mutate],
+    [editedCategoryId, editedCategoryName, onSubmitEdit, toggleEdit],
   );
 
   useEffect(() => {
@@ -126,7 +77,7 @@ const CategoryName = () => {
               <CategoryEditForm
                 editedCategoryName={editedCategoryName}
                 onChangeCategoryName={onChangeCategoryName}
-                onSubmitEdit={onSubmitEdit}
+                onSubmitEdit={handleSubmitEdit}
               />
             ) : (
               <div className="flex justify-between items-center text-sm">
@@ -182,4 +133,4 @@ const CategoryName = () => {
   );
 };
 
-export default memo(CategoryName);
+export default CategoryName;
