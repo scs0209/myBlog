@@ -2,21 +2,17 @@
 import axios from 'axios';
 import Modal from 'Components/Modal';
 import { backUrl } from 'config';
-import React, { useCallback, VFC } from 'react';
+import React, { useCallback } from 'react';
 import useSWR from 'swr';
 
 import fetcher from '../../utils/fetcher';
 import useInput from '../../utils/useInput';
+import { useCategory } from 'contexts/categoryContext';
 
-interface Props {
-  show: boolean;
-  onCloseModal: (e: any) => void;
-  setShowCreateCategoryModal: (flag: boolean) => void;
-}
-
-const CreateCategoryModal: VFC<Props> = ({ show, onCloseModal, setShowCreateCategoryModal }) => {
+const CreateCategoryModal = () => {
   const [newCategory, onChangeNewCategory, setNewCategory] = useInput('');
   const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
+  const { onCloseModal, setShowCreateCategoryModal, showCreateCategoryModal } = useCategory();
 
   const onCreateCategory = useCallback(
     (e: any) => {
@@ -61,7 +57,7 @@ const CreateCategoryModal: VFC<Props> = ({ show, onCloseModal, setShowCreateCate
   );
 
   return (
-    <Modal show={show} onCloseModal={onCloseModal}>
+    <Modal show={showCreateCategoryModal} onCloseModal={onCloseModal}>
       <div className="px-10 mt-3 lg:px-8">
         <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">Create Category</h3>
         <form className="space-y-6" onSubmit={onCreateCategory}>

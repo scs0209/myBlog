@@ -1,6 +1,7 @@
 import { deleteCategory, editCategory, toggleCategoryHidden } from 'apis/category';
 import EditButton from 'Components/Category/EditButton';
 import { backUrl } from 'config';
+import { useCategory } from 'contexts/categoryContext';
 import React, { FormEvent, memo, useCallback, useEffect, useState, VFC } from 'react';
 import { Link } from 'react-router-dom';
 import useSWR from 'swr';
@@ -11,17 +12,14 @@ import { Category } from '../../typings/db';
 import CategoryButton from '../common/CategoryButton';
 import CategoryEditForm from './CategoryEditForm';
 
-interface Props {
-  openCreateCategory: () => void;
-}
-
-const CategoryName: VFC<Props> = ({ openCreateCategory }) => {
+const CategoryName = () => {
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput('');
   const { data: userData } = useSWR(`${backUrl}/api/users`, fetcher);
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
   const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
+  const { openCreateCategory } = useCategory();
 
   const handleClickCategory = (id: number) => {
     setActiveCategoryId(id);
