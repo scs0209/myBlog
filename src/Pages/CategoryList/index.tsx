@@ -1,3 +1,4 @@
+import { increasePostViews } from 'apis/postList';
 import HeadInfo from 'Components/common/HeadInfo';
 import { Pagination } from 'flowbite-react';
 import { useCategoryList } from 'hooks/CategoryList/useCategoryList';
@@ -16,6 +17,15 @@ const CategoryList = () => {
   const posts = postData?.posts;
   const totalPosts = postData?.count ?? 0;
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
+
+  const handlePostClick = async (postId: any) => {
+    try {
+      await increasePostViews(postId);
+    } catch (error: any) {
+      alert(error.response.data);
+      console.error(error.response.data);
+    }
+  };
 
   if (postError) return <div>에러가 발생했습니다.</div>;
   if (!postData) return <div className="h-screen">로딩중</div>;
@@ -50,6 +60,7 @@ const CategoryList = () => {
                 return (
                   <tr
                     key={post.id}
+                    onClick={() => handlePostClick(post.id)}
                     className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                   >
                     <th

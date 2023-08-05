@@ -13,12 +13,12 @@ import CategoryButton from '../common/CategoryButton';
 import CategoryEditForm from './CategoryEditForm';
 
 const CategoryName = () => {
+  const { data: userData } = useSWR(`${backUrl}/api/users`, fetcher);
+  const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput('');
-  const { data: userData } = useSWR(`${backUrl}/api/users`, fetcher);
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
-  const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
   const { openCreateCategory } = useCategory();
   const { onSubmitEdit, onToggleHidden, onDeleteCategory } = useCategoryActions(userData, mutate);
 
@@ -30,8 +30,7 @@ const CategoryName = () => {
     setActiveCategoryId(null);
   };
 
-  //categoryId를 인자로 받아서 해당 ID가 'editedCategoryId'와 같으면 편집 모드를 토글하고, 다르면
-  //editedCategoryId를 해당 ID로 변경한다.
+  //categoryId를 인자로 받아서 해당 ID가 'editedCategoryId'와 같으면 편집 모드를 토글하고, 다르면 editedCategoryId를 해당 ID로 변경한다.
   const toggleEdit = useCallback((categoryId: any) => {
     setEdit((prev) => !prev);
     setEditedCategoryName('');
