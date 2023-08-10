@@ -205,6 +205,7 @@ npm run start
 
 </div>
 </details>
+<details>
 <summary>Category 컴포넌트 코드 분리</summary>
 <div markdown="1">      
  
@@ -277,12 +278,19 @@ npm run start
 
 ### ⭐️ 로그인/회원가입
 
+## 앞으로 더 해볼 것들
+
+- Context API 대신 zustand 사용해서 더 간편하게 전역적으로 state 관리
+- swr대신 react-query 사용해보고 뭐가 더 편하고 유용한지 확인해보기
+- react-hook-form 라이브러리를 로그인과 회원가입에 적용
+
 ## 디렉터리 구조
 
 ```
 📦src
  ┣ 📂apis
  ┃ ┣ 📜auth.ts
+ ┃ ┣ 📜category.ts
  ┃ ┣ 📜comment.ts
  ┃ ┣ 📜index.ts
  ┃ ┣ 📜password.ts
@@ -348,9 +356,12 @@ npm run start
  ┣ 📂config
  ┃ ┗ 📜index.ts
  ┣ 📂contexts
+ ┃ ┣ 📜categoryContext.tsx
  ┃ ┣ 📜commentContext.tsx
  ┃ ┗ 📜repliesVisibilityContext.tsx
  ┣ 📂hooks
+ ┃ ┣ 📂Category
+ ┃ ┃ ┗ 📜useCategoryAction.ts
  ┃ ┣ 📂CategoryList
  ┃ ┃ ┣ 📜useCategoryList.ts
  ┃ ┃ ┗ 📜usePagination.ts
@@ -423,8 +434,7 @@ npm run start
  ┃ ┗ 📜useInput.ts
  ┣ 📜index.css
  ┣ 📜index.tsx
- ┣ 📜react-app-env.d.ts
- ┣ 📜setupProxy.js
+ ┗ 📜setupProxy.js
 ```
 
 ## ❤ git commit message 컨벤션

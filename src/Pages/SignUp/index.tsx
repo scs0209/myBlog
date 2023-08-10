@@ -1,37 +1,38 @@
+import { signUp } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
-import SignUpErr from 'Components/Signup/SignupErr';
-import usePassword from 'hooks/usePassword';
-import useSignUp from 'hooks/useSignUp';
-import React, { FormEvent, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
 import useSWR from 'swr';
 
 import { backUrl } from '../../config';
 import styles from '../../styles/SignUp.module.css';
 import fetcher from '../../utils/fetcher';
-import useInput from '../../utils/useInput';
+
+interface FormValue {
+  email: string;
+  name: string;
+  password: string;
+  passwordCheck: string;
+}
 
 const SignUp = () => {
   const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
-  const [email, onChangeEmail] = useInput('');
-  const [name, onChangeName] = useInput('');
-  const { signUpError, signUpSuccess, handleSubmit } = useSignUp();
-  const { password, passwordCheck, mismatchError, onChangePassword, onChangePasswordCheck } =
-    usePassword('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm<FormValue>({ mode: 'onChange' });
 
-  const onSubmit = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault();
-      if (!mismatchError && name) {
-        try {
-          await handleSubmit({ email, name, password, mismatchError });
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    },
-    [email, password, name, passwordCheck, mismatchError, handleSubmit],
-  );
+  const onSubmit = handleSubmit(async (formData) => {
+    try {
+      await signUp(formData.email, formData.name, formData.password);
+      alert('회원가입 완료!');
+      mutate();
+    } catch (error) {
+      alert('회원가입에 실패했습니다.');
+    }
+  });
 
   if (data === undefined) {
     return <div>로딩중...</div>;
@@ -58,13 +59,18 @@ const SignUp = () => {
                 </label>
                 <input
                   type="email"
-                  name="email"
                   id="email"
                   className={`${styles.input} dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  value={email}
-                  onChange={onChangeEmail}
+                  {...register('email', {
+                    required: '이메일은 필수입니다.',
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: '이메일 형식이 올바르지 않습니다.',
+                    },
+                  })}
                   placeholder="name@company.com"
                 />
+                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
               </div>
               <div>
                 <label
@@ -75,12 +81,13 @@ const SignUp = () => {
                 </label>
                 <input
                   type="text"
-                  name="name"
                   id="name"
                   className={`${styles.input} dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  value={name}
-                  onChange={onChangeName}
+                  {...register('name', {
+                    required: '이름은 필수입니다.',
+                  })}
                 />
+                {errors.name && <p className="text-red-500">{errors.name.message}</p>}
               </div>
               <div>
                 <label
@@ -91,13 +98,18 @@ const SignUp = () => {
                 </label>
                 <input
                   type="password"
-                  name="password"
                   id="password"
                   placeholder="••••••••"
                   className={`${styles.input} dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  value={password}
-                  onChange={onChangePassword}
+                  {...register('password', {
+                    required: '비밀번호는 필수입니다.',
+                    minLength: {
+                      value: 8,
+                      message: '비밀번호는 최소 8자리 이상이어야 합니다.',
+                    },
+                  })}
                 />
+                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
               </div>
               <div>
                 <label
@@ -108,20 +120,23 @@ const SignUp = () => {
                 </label>
                 <input
                   type="password"
-                  name="password"
-                  id="password"
+                  id="password-check"
                   placeholder="••••••••"
                   className={`${styles.input} dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  value={passwordCheck}
-                  onChange={onChangePasswordCheck}
+                  {...register('passwordCheck', {
+                    required: '비밀번호 확인은 필수입니다.',
+                    minLength: {
+                      value: 8,
+                      message: '비밀번호 확인은 최소 8자리 이상이어야 합니다.',
+                    },
+                    validate: (value) =>
+                      value === getValues('password') || '비밀번호가 일치하지 않습니다.',
+                  })}
                 />
+                {errors.passwordCheck && (
+                  <p className="text-red-500">{errors.passwordCheck.message}</p>
+                )}
               </div>
-              <SignUpErr
-                mismatchError={mismatchError}
-                name={name}
-                signUpError={signUpError}
-                signUpSuccess={signUpSuccess}
-              />
               <button
                 type="submit"
                 className={`${styles.btn} dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800`}
