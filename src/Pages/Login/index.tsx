@@ -1,25 +1,36 @@
+import { login } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
 import SocialBtn from 'Components/LogIn/SocialBtn';
-import useLogin from 'hooks/useLogin';
-import React, { FormEvent, useCallback } from 'react';
+import { backUrl } from 'config';
+import { useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
+import useSWR from 'swr';
+import fetcher from 'utils/fetcher';
 
 import styles from '../../styles/Login.module.css';
-import useInput from '../../utils/useInput';
+
+interface FormValue {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
-  const { userData, signIn } = useLogin();
-  const [email, onChangeEmail] = useInput('');
-  const [password, onChangePassword] = useInput('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValue>({ mode: 'onChange' });
+  const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
 
   //Login 버튼 클릭 이벤트
-  const onSubmitLogin = useCallback(
-    (e: FormEvent) => {
-      e.preventDefault();
-      signIn(email, password);
-    },
-    [email, signIn, password],
-  );
+  const onSubmit = handleSubmit(async (formData) => {
+    try {
+      await login(formData.email, formData.password);
+      mutate();
+    } catch (error) {
+      alert('로그인에 실패했습니다.');
+    }
+  });
 
   if (userData === undefined) {
     return <div>로딩중...</div>;
@@ -36,20 +47,25 @@ const Login = () => {
         <div className={`${styles.card} dark:bg-gray-800 dark:border-gray-700`}>
           <div className={styles.cardContent}>
             <h1 className={`${styles.title} dark:text-white`}>Sign in to your account</h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={onSubmitLogin}>
+            <form className="space-y-4 md:space-y-6" onSubmit={onSubmit}>
               <div>
                 <label htmlFor="email" className={`${styles.label} dark:text-white`}>
                   Your email
                 </label>
                 <input
                   type="email"
-                  name="email"
                   id="email"
                   className={`${styles.input} dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  value={email}
-                  onChange={onChangeEmail}
+                  {...register('email', {
+                    required: '이메일은 필수입니다.',
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: '이메일 형식이 올바르지 않습니다.',
+                    },
+                  })}
                   placeholder="name@company.com"
                 />
+                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
               </div>
               <div>
                 <label htmlFor="password" className={`${styles.label} dark:text-white`}>
@@ -57,13 +73,18 @@ const Login = () => {
                 </label>
                 <input
                   type="password"
-                  name="password"
                   id="password"
                   placeholder="••••••••"
                   className={`${styles.input} dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  value={password}
-                  onChange={onChangePassword}
+                  {...register('password', {
+                    required: '비밀번호는 필수입니다.',
+                    minLength: {
+                      value: 8,
+                      message: '비밀번호는 최소 8자리 이상이어야 합니다.',
+                    },
+                  })}
                 />
+                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
