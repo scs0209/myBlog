@@ -104,6 +104,7 @@ npm run start
 - prettier: 코드 포맷팅을 자동화하여 일관된 스타일을 유지하기 위해 사용
 - axios: HTTP 요청을 쉽게 처리하기 위해 사용
 - swr: 데이터 패칭과 캐싱을 자동화하여 API 요청을 최적화하기 위해 사용
+- react-hook-form: 비제어 컴포넌트의 장점은 그대로 살리면서 제어 컴포넌트에서만 다룰 수 있는 실시간 유효성 검사, 실시간 동기화 등의 API를 제공함. 또 리렌더링을 최소화시켜 마운팅 속도를 높여줌
 
 ## 고려 사항
 
@@ -280,9 +281,9 @@ npm run start
 
 ## 앞으로 더 해볼 것들
 
-- Context API 대신 zustand 사용해서 더 간편하게 전역적으로 state 관리
+- Context API 대신 zustand나 reocoil 사용해서 더 간편하게 전역적으로 state 관리
 - swr대신 react-query 사용해보고 뭐가 더 편하고 유용한지 확인해보기
-- react-hook-form 라이브러리를 로그인과 회원가입에 적용
+- react-hook-form 라이브러리를 로그인과 회원가입에 적용(완)
 
 ## 디렉터리 구조
 
