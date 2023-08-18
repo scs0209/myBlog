@@ -1,11 +1,17 @@
 import HeadInfo from 'Components/common/HeadInfo';
-import { Pagination } from 'flowbite-react';
+import { CustomFlowbiteTheme, Pagination } from 'flowbite-react';
 import usePagination from 'hooks/PostList/usePagination';
 import usePosts from 'hooks/PostList/usePost';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { formatDate } from 'utils/dateUtil';
 
 import Search from '../../Components/Search';
+
+const customTheme: CustomFlowbiteTheme['pagination'] = {
+  pages: {
+    base: 'list-none xs:mt-0 mt-2 inline-flex items-center -space-x-px',
+  },
+};
 
 const PostList = () => {
   const navigate = useNavigate();
@@ -76,6 +82,7 @@ const PostList = () => {
             showIcons
             previousLabel=""
             totalPages={totalPages}
+            theme={customTheme}
             className="mt-4"
           />
           <Search onSearch={handleSearch} />

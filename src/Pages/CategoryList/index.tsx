@@ -1,11 +1,17 @@
 import { increasePostViews } from 'apis/postList';
 import HeadInfo from 'Components/common/HeadInfo';
-import { Pagination } from 'flowbite-react';
+import { CustomFlowbiteTheme, Pagination } from 'flowbite-react';
 import { useCategoryList } from 'hooks/CategoryList/useCategoryList';
 import { usePagination } from 'hooks/CategoryList/usePagination';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { formatDate } from 'utils/dateUtil';
+
+const customTheme: CustomFlowbiteTheme['pagination'] = {
+  pages: {
+    base: 'list-none xs:mt-0 mt-2 inline-flex items-center -space-x-px',
+  },
+};
 
 const PAGE_SIZE = 10;
 
@@ -85,6 +91,7 @@ const CategoryList = () => {
             showIcons
             previousLabel=""
             totalPages={totalPages}
+            theme={customTheme}
             className="mt-4"
           />
         </div>

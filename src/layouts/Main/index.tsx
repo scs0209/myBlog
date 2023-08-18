@@ -1,4 +1,5 @@
 import loadable from '@loadable/component';
+import Footer from 'Components/common/Footer';
 import { Route, Routes } from 'react-router-dom';
 
 import CategoryList from '../../Pages/CategoryList';
@@ -34,6 +35,7 @@ const MainPage = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/my-page/:id" element={<MyPage />} />
           </Routes>
+          <Footer />
         </div>
       </div>
     </>
