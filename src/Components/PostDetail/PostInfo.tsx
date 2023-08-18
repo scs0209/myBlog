@@ -17,7 +17,7 @@ const PostInfo: VFC<Props> = ({ title, content, createdAt }) => {
         <span className={styles.date}>{createdAt}</span>
       </div>
       <MDEditor.Markdown
-        className="rounded-lg bg-gray-400"
+        className="rounded-lg list-disc list-inside bg-gray-400"
         style={{ padding: 10 }}
         source={content}
       />
