@@ -1,7 +1,7 @@
 import MDEditor from '@uiw/react-md-editor';
-import { Select } from 'antd';
 import { createPost, PostData } from 'apis/write';
 import HeadInfo from 'Components/common/HeadInfo';
+import { Select } from 'flowbite-react';
 import React, { FormEvent, useCallback, useState } from 'react';
 import useSWR from 'swr';
 
@@ -10,7 +10,6 @@ import { backUrl } from '../../config';
 import fetcher from '../../utils/fetcher';
 import useInput from '../../utils/useInput';
 
-const { Option } = Select;
 const Post = () => {
   const { data: currentUser } = useSWR(`${backUrl}/api/users`, fetcher);
   const [title, onChangeTitle, setTitle] = useInput('');
@@ -19,8 +18,8 @@ const Post = () => {
 
   const { data: categoryData } = useSWR(`${backUrl}/api/categories`, fetcher);
 
-  const onChangeCategory = useCallback((value: string) => {
-    setCategory(value);
+  const onChangeCategory = useCallback((e: any) => {
+    setCategory(e.target.value);
   }, []);
 
   const onSubmit = useCallback(
@@ -77,14 +76,14 @@ const Post = () => {
               />
             </div>
           </div>
-          <div className="mt-5 text-center">
-            <Select value={category} onChange={onChangeCategory}>
-              <Option value="">카테고리 선택</Option>
+          <div className="flex mt-5 text-center justify-center">
+            <Select value={category} onChange={onChangeCategory} color="blue">
+              <option value="">카테고리 선택</option>
               {categoryData &&
                 categoryData.map((category: any) => (
-                  <Option key={category.id} value={category.id}>
+                  <option key={category.id} value={category.id}>
                     {category.name}
-                  </Option>
+                  </option>
                 ))}
             </Select>
           </div>

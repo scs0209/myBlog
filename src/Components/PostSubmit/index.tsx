@@ -3,7 +3,7 @@ const PostSubmit = () => {
     <div>
       <div className="text-center mt-3">
         <button
-          className="w-32 p-2 rounded-lg cursor-pointer hover:bg-rose-400 hover:text-white"
+          className="w-32 p-2 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white"
           style={{ border: 'solid 1px lightgray' }}
           type="submit"
         >
