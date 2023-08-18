@@ -57,7 +57,7 @@ const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout, onClose, id
           {userData.email}
         </span>
       </div>
-      <ul className="py-2" aria-labelledby="user-menu-button">
+      <ul className="py-2 list-none" aria-labelledby="user-menu-button">
         <li>
           {userData?.role === 'admin' && (
             <Link

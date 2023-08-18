@@ -66,7 +66,7 @@ const Post = () => {
             onChange={onChangeTitle}
             placeholder="제목"
           />
-          <div className="markarea">
+          <div className="markarea list-inside list-disc">
             <div data-color-mode="light">
               <MDEditor
                 style={{ width: '100%' }}
