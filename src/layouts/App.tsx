@@ -1,10 +1,13 @@
 import loadable from '@loadable/component';
 import { Flowbite } from 'flowbite-react';
 import React, { useCallback, useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Route, Routes } from 'react-router';
 
 import Category from '../Components/Category';
 import Header from '../Components/common/Header';
+
+const queryClient = new QueryClient();
 
 const MainPage = loadable(() => import('./Main'));
 const Home = loadable(() => import('../Pages/HomePage'));
@@ -40,16 +43,18 @@ const App = () => {
 
   return (
     <Flowbite>
-      <div className="dark:bg-slate-700">
-        <Header toggleSidebar={toggleSidebar} />
-        <Category showSidebar={showSidebar} />
-        <div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/main/*" element={<MainPage />} />
-          </Routes>
+      <QueryClientProvider client={queryClient}>
+        <div className="dark:bg-slate-700">
+          <Header toggleSidebar={toggleSidebar} />
+          <Category showSidebar={showSidebar} />
+          <div>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/main/*" element={<MainPage />} />
+            </Routes>
+          </div>
         </div>
-      </div>
+      </QueryClientProvider>
     </Flowbite>
   );
 };

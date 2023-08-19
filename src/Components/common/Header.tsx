@@ -1,5 +1,4 @@
 /* eslint-disable */
-import axios from 'axios';
 import { DarkThemeToggle } from 'flowbite-react';
 import React, { memo, useCallback, useState, VFC } from 'react';
 import Avatar from 'react-avatar';
@@ -9,7 +8,7 @@ import useSWR from 'swr';
 import { backUrl } from '../../config';
 import fetcher from '../../utils/fetcher';
 import ProfileModal from '../ProfileModal';
-import { logout } from 'apis/auth';
+import { useLogout } from 'apis/auth';
 
 interface Props {
   toggleSidebar: () => void;
@@ -19,6 +18,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
   const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
   const [showPost, setShowPost] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const { mutateAsync: logout } = useLogout();
   const navigate = useNavigate();
 
   const onLogout = useCallback(async () => {
