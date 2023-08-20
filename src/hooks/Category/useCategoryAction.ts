@@ -1,8 +1,12 @@
-import { deleteCategory, editCategory, toggleCategoryHidden } from 'apis/category';
+import { useDeleteCategory, useEditCategory, useToggleCategoryHidden } from 'apis/category';
 import { useCallback, useMemo } from 'react';
 import { User } from 'typings/db';
 
-export const useCategoryActions = (userData: User, mutate: any) => {
+export const useCategoryActions = (userData: User) => {
+  const { mutateAsync: editCategory } = useEditCategory();
+  const { mutateAsync: toggleCategoryHidden } = useToggleCategoryHidden();
+  const { mutateAsync: deleteCategory } = useDeleteCategory();
+
   const onSubmitEdit = useCallback(
     async (
       editedCategoryId: number | null,
@@ -20,15 +24,14 @@ export const useCategoryActions = (userData: User, mutate: any) => {
         return;
       }
       try {
-        await editCategory(editedCategoryId, editedCategoryName);
-        mutate();
+        await editCategory({ categoryId: editedCategoryId, categoryName: editedCategoryName });
         toggleEdit(null);
       } catch (error: any) {
         console.error(error.response.data);
         alert('카테고리 수정에 실패했습니다.');
       }
     },
-    [mutate, userData],
+    [userData],
   );
 
   const onToggleHidden = useCallback(
@@ -40,28 +43,23 @@ export const useCategoryActions = (userData: User, mutate: any) => {
       }
 
       try {
-        await toggleCategoryHidden(categoryId, hidden);
-        mutate();
+        await toggleCategoryHidden({ categoryId, hidden });
       } catch (error: any) {
         console.error(error.response.data);
         alert('카테고리 숨기기/보이기 변경에 실패했습니다.');
       }
     },
-    [mutate, userData],
+    [userData],
   );
 
-  const onDeleteCategory = useCallback(
-    async (categoryId: number) => {
-      try {
-        await deleteCategory(categoryId);
-        mutate();
-      } catch (error: any) {
-        alert(error.response.data);
-        console.error(error);
-      }
-    },
-    [mutate],
-  );
+  const onDeleteCategory = useCallback(async (categoryId: number) => {
+    try {
+      await deleteCategory(categoryId);
+    } catch (error: any) {
+      alert(error.response.data);
+      console.error(error);
+    }
+  }, []);
 
   const actions = useMemo(
     () => ({

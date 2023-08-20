@@ -1,18 +1,16 @@
 /* eslint-disable */
 import Modal from 'Components/Modal';
-import { backUrl } from 'config';
 import React, { FormEvent, useCallback } from 'react';
-import useSWR from 'swr';
 
-import fetcher from '../../utils/fetcher';
 import useInput from '../../utils/useInput';
 import { useCategory } from 'contexts/categoryContext';
-import { createCategory } from 'apis/category';
+import { useCategories, useCreateCategory } from 'apis/category';
 import { Category } from 'typings/db';
 
 const CreateCategoryModal = () => {
   const [newCategory, onChangeNewCategory, setNewCategory] = useInput('');
-  const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
+  const { data: categories, isLoading } = useCategories();
+  const { mutateAsync: createCategory } = useCreateCategory();
   const { onCloseModal, setShowCreateCategoryModal, showCreateCategoryModal } = useCategory();
 
   const onCreateCategory = useCallback(
@@ -34,14 +32,15 @@ const CreateCategoryModal = () => {
         setShowCreateCategoryModal(false);
         setNewCategory('');
         alert('카테고리가 추가되었습니다.');
-        mutate([...(categories ?? []), newCategory], false); // 생성한 카테고리를 화면에 바로 반영
       } catch (error: any) {
         alert(error.response.data);
         console.error(error);
       }
     },
-    [newCategory, setNewCategory, setShowCreateCategoryModal, categories, mutate],
+    [newCategory, setNewCategory, setShowCreateCategoryModal, categories],
   );
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <Modal show={showCreateCategoryModal} onCloseModal={onCloseModal}>

@@ -1,14 +1,12 @@
 import MDEditor from '@uiw/react-md-editor';
 import { useUser } from 'apis/auth';
+import { useCategories } from 'apis/category';
 import { createPost, PostData } from 'apis/write';
 import HeadInfo from 'Components/common/HeadInfo';
 import { Select } from 'flowbite-react';
 import React, { FormEvent, useCallback, useState } from 'react';
-import useSWR from 'swr';
 
 import PostSubmit from '../../Components/PostSubmit';
-import { backUrl } from '../../config';
-import fetcher from '../../utils/fetcher';
 import useInput from '../../utils/useInput';
 
 const Post = () => {
@@ -17,7 +15,7 @@ const Post = () => {
   const [content, setContent] = useState<string | undefined>('');
   const [category, setCategory] = useState(''); // 카테고리 추가
 
-  const { data: categoryData } = useSWR(`${backUrl}/api/categories`, fetcher);
+  const { data: categories } = useCategories();
 
   const onChangeCategory = useCallback((e: any) => {
     setCategory(e.target.value);
@@ -53,6 +51,8 @@ const Post = () => {
     [title, content, category, setTitle, setContent, setCategory, currentUser.id],
   );
 
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <>
       <HeadInfo title="Write" />
@@ -80,8 +80,8 @@ const Post = () => {
           <div className="flex justify-center mt-5 text-center">
             <Select value={category} onChange={onChangeCategory} color="blue">
               <option value="">카테고리 선택</option>
-              {categoryData &&
-                categoryData.map((category: any) => (
+              {categories &&
+                categories.map((category: any) => (
                   <option key={category.id} value={category.id}>
                     {category.name}
                   </option>

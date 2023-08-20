@@ -1,4 +1,4 @@
-import { signUp, useUser } from 'apis/auth';
+import { useSignUp, useUser } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
 import { useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ interface FormValue {
 
 const SignUp = () => {
   const { data, isLoading, isError } = useUser();
+  const { mutateAsync: signUp } = useSignUp();
   const {
     register,
     handleSubmit,
@@ -23,7 +24,7 @@ const SignUp = () => {
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      await signUp(formData.email, formData.name, formData.password);
+      await signUp({ email: formData.email, name: formData.name, password: formData.password });
       alert('회원가입 완료!');
     } catch (error) {
       alert('회원가입에 실패했습니다.');

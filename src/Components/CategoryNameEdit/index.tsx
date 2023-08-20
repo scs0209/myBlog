@@ -1,12 +1,10 @@
 import { useUser } from 'apis/auth';
+import { useCategories } from 'apis/category';
 import EditButton from 'Components/Category/EditButton';
-import { backUrl } from 'config';
 import { useCategory } from 'contexts/categoryContext';
 import { useCategoryActions } from 'hooks/Category/useCategoryAction';
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import useSWR from 'swr';
-import fetcher from 'utils/fetcher';
 import useInput from 'utils/useInput';
 
 import { Category } from '../../typings/db';
@@ -15,13 +13,13 @@ import CategoryEditForm from './CategoryEditForm';
 
 const CategoryName = () => {
   const { data: userData, isLoading, isError } = useUser();
-  const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
+  const { data: categories, isLoading: categoryLoading } = useCategories();
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput('');
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
   const { openCreateCategory } = useCategory();
-  const { onSubmitEdit, onToggleHidden, onDeleteCategory } = useCategoryActions(userData, mutate);
+  const { onSubmitEdit, onToggleHidden, onDeleteCategory } = useCategoryActions(userData);
 
   const handleClickCategory = (id: number) => {
     setActiveCategoryId(id);
@@ -56,8 +54,8 @@ const CategoryName = () => {
     }
   }, [editedCategoryId, categories]);
 
-  if (error) return <div>에러가 발생했습니다</div>;
-  if (!categories) return <div>로딩중...</div>;
+  if (isError) return <div>에러가 발생했습니다</div>;
+  if (isLoading || categoryLoading) return <div>로딩중...</div>;
 
   return (
     <>

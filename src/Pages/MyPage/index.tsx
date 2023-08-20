@@ -1,16 +1,14 @@
-import { deleteUser } from 'apis/auth';
+import { useDeleteUser, useUserById } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
-import { backUrl } from 'config';
 import { Card, Dropdown } from 'flowbite-react';
 import { useCallback } from 'react';
 import Avatar from 'react-avatar';
 import { useNavigate, useParams } from 'react-router';
-import useSWR from 'swr';
-import fetcher from 'utils/fetcher';
 
 const MyPage = () => {
   const { id } = useParams();
-  const { data: userData, error, mutate } = useSWR(`${backUrl}/api/users/${id}`, fetcher);
+  const { data: userData } = useUserById(id);
+  const { mutateAsync: deleteUser } = useDeleteUser();
   const navigate = useNavigate();
 
   const handleWithdraw = useCallback(async () => {
@@ -57,9 +55,9 @@ const MyPage = () => {
             {userData.name}
           </h5>
           <span className="text-sm text-gray-500 dark:text-gray-400">{userData.email}</span>
-          <div className="mt-4 flex space-x-3 lg:mt-6">
+          <div className="flex mt-4 space-x-3 lg:mt-6">
             <button
-              className="inline-flex items-center rounded-lg bg-blue-400 px-6 py-2 text-center text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-cyan-800"
+              className="inline-flex items-center px-6 py-2 text-sm font-medium text-center text-white bg-blue-400 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-cyan-800"
               onClick={handleWithdraw}
             >
               <p>Withdrawal</p>
