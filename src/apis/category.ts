@@ -70,3 +70,13 @@ export const useDeleteCategory = () => {
 
   return deleteCategoryMutation;
 };
+
+export const useCategoryPosts = (categoryId: string | undefined, currentPage: number) => {
+  return useQuery(
+    ['categoryPosts', categoryId, currentPage],
+    () => client.get(`/api/categories/${categoryId}/posts?page=${currentPage}`),
+    {
+      keepPreviousData: true, // 이 옵션은 페이지 변경 시 이전 데이터를 유지하도록 합니다.
+    },
+  );
+};

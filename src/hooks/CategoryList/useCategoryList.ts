@@ -1,8 +1,6 @@
-import { backUrl } from 'config';
+import { useCategoryPosts } from 'apis/category';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import useSWR from 'swr';
-import fetcher from 'utils/fetcher';
 
 export const useCategoryList = (categoryId: string | undefined) => {
   const params = new URLSearchParams(useLocation().search);
@@ -14,10 +12,13 @@ export const useCategoryList = (categoryId: string | undefined) => {
     setCurrentPage(pageNum);
   }, [pageNum]);
 
-  const { data: postData, error: postError } = useSWR(
-    `${backUrl}/api/categories/${categoryId}/posts?page=${currentPage}`,
-    fetcher,
-  );
+  const {
+    data: postData,
+    isError: postError,
+    isLoading,
+  } = useCategoryPosts(categoryId, currentPage);
+
+  console.log(postData);
 
   return { postData, postError, currentPage };
 };

@@ -20,8 +20,8 @@ const CategoryList = () => {
   const { postData, postError, currentPage } = useCategoryList(categoryId);
   const { handlePageChange } = usePagination(categoryId);
 
-  const posts = postData?.posts;
-  const totalPosts = postData?.count ?? 0;
+  const posts = postData?.data.posts;
+  const totalPosts = postData?.data.count ?? 0;
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
 
   const handlePostClick = async (postId: any) => {
@@ -42,18 +42,18 @@ const CategoryList = () => {
     <>
       <HeadInfo title="Category" />
       <div className="h-screen">
-        <h1 className="text-3xl font-bold mb-3 dark:text-white">게시글 목록</h1>
+        <h1 className="mb-3 text-3xl font-bold dark:text-white">게시글 목록</h1>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" className="px-3 md:px-6 py-3">
+                <th scope="col" className="px-3 py-3 md:px-6">
                   title
                 </th>
-                <th scope="col" className="hidden md:table-cell px-6 py-3">
+                <th scope="col" className="hidden px-6 py-3 md:table-cell">
                   views
                 </th>
-                <th scope="col" className="px-1 md:px-6 py-3">
+                <th scope="col" className="px-1 py-3 md:px-6">
                   dates
                 </th>
               </tr>
@@ -75,8 +75,8 @@ const CategoryList = () => {
                     >
                       <Link to={`/main/posts/${post.id}`}>{post.title}</Link>
                     </th>
-                    <td className="hidden md:table-cell px-6 py-3">{post.views}</td>
-                    <td className="px-1 md:px-6 py-4">{dateString}</td>
+                    <td className="hidden px-6 py-3 md:table-cell">{post.views}</td>
+                    <td className="px-1 py-4 md:px-6">{dateString}</td>
                   </tr>
                 );
               })}
