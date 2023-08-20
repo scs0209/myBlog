@@ -1,12 +1,9 @@
-import { signUp } from 'apis/auth';
+import { signUp, useUser } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
 import { useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
-import useSWR from 'swr';
 
-import { backUrl } from '../../config';
 import styles from '../../styles/SignUp.module.css';
-import fetcher from '../../utils/fetcher';
 
 interface FormValue {
   email: string;
@@ -16,7 +13,7 @@ interface FormValue {
 }
 
 const SignUp = () => {
-  const { data, error, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
+  const { data, isLoading, isError } = useUser();
   const {
     register,
     handleSubmit,
@@ -28,13 +25,12 @@ const SignUp = () => {
     try {
       await signUp(formData.email, formData.name, formData.password);
       alert('회원가입 완료!');
-      mutate();
     } catch (error) {
       alert('회원가입에 실패했습니다.');
     }
   });
 
-  if (data === undefined) {
+  if (isLoading) {
     return <div>로딩중...</div>;
   }
 

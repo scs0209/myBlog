@@ -11,10 +11,11 @@ import styles from '../../styles/PostDetail.module.css';
 import fetcher from '../../utils/fetcher';
 import useDeletePost from 'hooks/PostDetail/useDelete';
 import { formatDate } from 'utils/dateUtil';
+import { useUser } from 'apis/auth';
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: user } = useSWR(`${backUrl}/api/users`, fetcher);
+  const { data: user, isLoading, isError } = useUser();
   const {
     data: post,
     error,
@@ -46,7 +47,7 @@ const PostDetail = () => {
               <div>
                 {user && user.role === 'admin' && (
                   <>
-                    <div className="flex items-center flex-wrap ">
+                    <div className="flex flex-wrap items-center ">
                       <span className={styles.deleteSpan} onClick={handleDeleteClick}>
                         삭제
                       </span>

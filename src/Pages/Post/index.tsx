@@ -1,4 +1,5 @@
 import MDEditor from '@uiw/react-md-editor';
+import { useUser } from 'apis/auth';
 import { createPost, PostData } from 'apis/write';
 import HeadInfo from 'Components/common/HeadInfo';
 import { Select } from 'flowbite-react';
@@ -11,7 +12,7 @@ import fetcher from '../../utils/fetcher';
 import useInput from '../../utils/useInput';
 
 const Post = () => {
-  const { data: currentUser } = useSWR(`${backUrl}/api/users`, fetcher);
+  const { data: currentUser, isLoading, isError } = useUser();
   const [title, onChangeTitle, setTitle] = useInput('');
   const [content, setContent] = useState<string | undefined>('');
   const [category, setCategory] = useState(''); // 카테고리 추가
@@ -76,7 +77,7 @@ const Post = () => {
               />
             </div>
           </div>
-          <div className="flex mt-5 text-center justify-center">
+          <div className="flex justify-center mt-5 text-center">
             <Select value={category} onChange={onChangeCategory} color="blue">
               <option value="">카테고리 선택</option>
               {categoryData &&

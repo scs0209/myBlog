@@ -1,3 +1,4 @@
+import { useUser } from 'apis/auth';
 import EditButton from 'Components/Category/EditButton';
 import { backUrl } from 'config';
 import { useCategory } from 'contexts/categoryContext';
@@ -13,7 +14,7 @@ import CategoryButton from '../common/CategoryButton';
 import CategoryEditForm from './CategoryEditForm';
 
 const CategoryName = () => {
-  const { data: userData } = useSWR(`${backUrl}/api/users`, fetcher);
+  const { data: userData, isLoading, isError } = useUser();
   const { data: categories, error, mutate } = useSWR(`${backUrl}/api/categories`, fetcher);
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
@@ -64,7 +65,7 @@ const CategoryName = () => {
         <li>
           <Link
             to="/main/posts"
-            className="border-b-2 font-bold border-blue-600 flex justify-center items-center p-2 text-black dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
+            className="flex items-center justify-center p-2 font-bold text-black border-b-2 border-blue-600 dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
             onClick={handleClickAllPosts}
           >
             <span className="ml-3">전체 게시글</span>
@@ -79,7 +80,7 @@ const CategoryName = () => {
                 onSubmitEdit={handleSubmitEdit}
               />
             ) : (
-              <div className="flex justify-between items-center text-sm">
+              <div className="flex items-center justify-between text-sm">
                 {/* 카테고리 이름 */}
                 <Link
                   to={`/main/categories/${category.id}`}
@@ -96,7 +97,7 @@ const CategoryName = () => {
                 </Link>
                 {/* 편집버튼 */}
                 {edit && (
-                  <div className="flex max-h-10 items-center">
+                  <div className="flex items-center max-h-10">
                     <CategoryButton type="button" onClick={() => toggleEdit(category.id)}>
                       ✏
                     </CategoryButton>

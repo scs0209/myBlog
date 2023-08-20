@@ -1,3 +1,4 @@
+import { useUser } from 'apis/auth';
 import { createComment, deleteComment, updateComment } from 'apis/comment';
 import { createReply, deleteReply, updateReply } from 'apis/reply';
 import { backUrl } from 'config';
@@ -37,7 +38,7 @@ export const CommentProvider: FC<Props> = ({ children }) => {
   const [replies, setReplies] = useState<Reply[]>([]);
   const [newComment, setNewComment] = useState('');
   const { id } = useParams<{ id: string }>();
-  const { data: user } = useSWR(`${backUrl}/api/users`, fetcher);
+  const { data: user, isLoading, isError } = useUser();
   const { data: commentsData } = useSWR(`${backUrl}/api/posts/${id}/comments`, fetcher);
   const { data: repliesData } = useSWR(`${backUrl}/api/posts/${id}/replies`, fetcher);
 

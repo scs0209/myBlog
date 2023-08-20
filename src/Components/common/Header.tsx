@@ -3,10 +3,7 @@ import { DarkThemeToggle } from 'flowbite-react';
 import React, { memo, useCallback, useState, VFC } from 'react';
 import Avatar from 'react-avatar';
 import { Link, useNavigate } from 'react-router-dom';
-import useSWR from 'swr';
 
-import { backUrl } from '../../config';
-import fetcher from '../../utils/fetcher';
 import ProfileModal from '../ProfileModal';
 import { useLogout, useUser } from 'apis/auth';
 
