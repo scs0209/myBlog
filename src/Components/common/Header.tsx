@@ -8,14 +8,14 @@ import useSWR from 'swr';
 import { backUrl } from '../../config';
 import fetcher from '../../utils/fetcher';
 import ProfileModal from '../ProfileModal';
-import { useLogout } from 'apis/auth';
+import { useLogout, useUser } from 'apis/auth';
 
 interface Props {
   toggleSidebar: () => void;
 }
 
 const Header: VFC<Props> = ({ toggleSidebar }) => {
-  const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
+  const { data: userData, isLoading, isError } = useUser();
   const [showPost, setShowPost] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { mutateAsync: logout } = useLogout();
@@ -25,11 +25,10 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
     try {
       await logout();
       navigate('/');
-      mutate(false, false);
     } catch (error) {
       console.error('로그아웃 중 에러 발생:', error);
     }
-  }, [mutate, navigate]);
+  }, [navigate]);
 
   const onClickShowPost = useCallback(() => {
     setShowPost((prev) => !prev);
@@ -46,12 +45,12 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
   return (
     <>
       <nav className="fixed top-0 z-50 w-full bg-gray-200 dark:bg-gray-800 dark:border-gray-700">
-        <div className="flex flex-wrap items-center justify-between mx-auto p-4">
+        <div className="flex flex-wrap items-center justify-between p-4 mx-auto">
           <div className="flex items-center justify-start">
             <button
               type="button"
               onClick={toggleSidebar}
-              className="mr-2 inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             >
               <span className="sr-only">Open sidebar</span>
               <svg
@@ -71,7 +70,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
             <Link to="/" className="flex items-center">
               <img
                 src="/favicon.png"
-                className="h-10 w-10 mr-3 rounded-full bg-gray-500"
+                className="w-10 h-10 mr-3 bg-gray-500 rounded-full"
                 alt="Blog Logo"
               />
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
@@ -90,7 +89,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
               >
                 <Link
                   to="/main/login"
-                  className="text-white cursor-pointer p-2 hover:text-slate-500"
+                  className="p-2 text-white cursor-pointer hover:text-slate-500"
                 >
                   Log in
                 </Link>

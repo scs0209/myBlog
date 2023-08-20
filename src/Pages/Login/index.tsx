@@ -1,11 +1,8 @@
-import { login } from 'apis/auth';
+import { useLogin, useUser } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
 import SocialBtn from 'Components/LogIn/SocialBtn';
-import { backUrl } from 'config';
 import { useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
-import useSWR from 'swr';
-import fetcher from 'utils/fetcher';
 
 import styles from '../../styles/Login.module.css';
 
@@ -20,19 +17,19 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValue>({ mode: 'onChange' });
-  const { data: userData, mutate } = useSWR(`${backUrl}/api/users`, fetcher);
+  const { data: userData, isLoading, isError } = useUser();
+  const { mutateAsync: login } = useLogin();
 
   //Login 버튼 클릭 이벤트
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      await login(formData.email, formData.password);
-      mutate();
+      await login({ email: formData.email, password: formData.password });
     } catch (error) {
       alert('로그인에 실패했습니다.');
     }
   });
 
-  if (userData === undefined) {
+  if (isLoading) {
     return <div>로딩중...</div>;
   }
 
