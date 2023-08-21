@@ -1,12 +1,9 @@
 import { useUser } from 'apis/auth';
-import { createComment, deleteComment, updateComment } from 'apis/comment';
-import { createReply, deleteReply, updateReply } from 'apis/reply';
-import { backUrl } from 'config';
+import { createComment, deleteComment, updateComment, useGetComment } from 'apis/comment';
+import { createReply, deleteReply, updateReply, useGetReply } from 'apis/reply';
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import useSWR from 'swr';
 import { Comment, Reply } from 'typings/db';
-import fetcher from 'utils/fetcher';
 
 interface CommentContextValue {
   comments: Comment[];
@@ -39,8 +36,8 @@ export const CommentProvider: FC<Props> = ({ children }) => {
   const [newComment, setNewComment] = useState('');
   const { id } = useParams<{ id: string }>();
   const { data: user, isLoading, isError } = useUser();
-  const { data: commentsData } = useSWR(`${backUrl}/api/posts/${id}/comments`, fetcher);
-  const { data: repliesData } = useSWR(`${backUrl}/api/posts/${id}/replies`, fetcher);
+  const { data: commentsData } = useGetComment(id);
+  const { data: repliesData } = useGetReply(id);
 
   const commentActions = {
     // 댓글 등록
@@ -85,7 +82,7 @@ export const CommentProvider: FC<Props> = ({ children }) => {
       }
 
       try {
-        const response = await updateComment(commentId, content);
+        await updateComment(commentId, content);
 
         setComments((prevComments) => {
           const newComments = [...prevComments];

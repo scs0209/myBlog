@@ -1,16 +1,14 @@
-import { backUrl } from 'config';
-import useSWR from 'swr';
+import { useNews } from 'apis/news';
 import { NewsArticle } from 'typings/db';
-import fetcher from 'utils/fetcher';
 
 const News = () => {
-  const { data: newsData, error: newsError } = useSWR(`${backUrl}/api/news/latest`, fetcher); // news 데이터 가져오기
+  const { data: newsData, isError: newsError, isLoading } = useNews(); // news 데이터 가져오기
 
   if (newsError) {
-    return <div>Error occurred: {newsError.message}</div>;
+    return <div>Error occurred: {newsError}</div>;
   }
 
-  if (!newsData) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 

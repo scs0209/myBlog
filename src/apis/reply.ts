@@ -1,4 +1,12 @@
 import { client } from 'apis';
+import { useQuery } from 'react-query';
+
+export const useGetReply = (id: string | undefined) =>
+  useQuery(['replies', id], async () => {
+    const { data } = await client.get(`/api/posts/${id}/replies`);
+
+    return data;
+  });
 
 export const createReply = async (commentId: number, newReply: object): Promise<any> => {
   const response = await client.post(`/api/posts/comments/${commentId}/replies`, newReply, {

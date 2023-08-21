@@ -1,18 +1,15 @@
-import { backUrl } from 'config';
-import React from 'react';
+import { useGetPopularPosts } from 'apis/post';
 import { Link } from 'react-router-dom';
-import useSWR from 'swr';
 import { Post } from 'typings/db';
-import fetcher from 'utils/fetcher';
 
 const Popular = () => {
-  const { data, error } = useSWR(`${backUrl}/api/main/popular_posts?limit=5`, fetcher);
+  const { data, isError, isLoading } = useGetPopularPosts();
 
-  if (error) {
-    return <div>Error occurred: {error.message}</div>;
+  if (isError) {
+    return <div>Error occurred: {isError}</div>;
   }
 
-  if (!data) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 

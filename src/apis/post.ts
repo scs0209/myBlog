@@ -33,3 +33,10 @@ export const usePostDelete = () => {
 
   return deletePostMutation;
 };
+
+export const useGetPopularPosts = () =>
+  useQuery('popularPosts', async () => {
+    const { data } = await client.get('/api/main/popular_posts?limit=5');
+
+    return data;
+  });
