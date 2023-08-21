@@ -1,11 +1,8 @@
 import MDEditor from '@uiw/react-md-editor';
-import { usePostById } from 'apis/post';
-import axios from 'axios';
+import { usePostById, usePostUpdate } from 'apis/post';
 import HeadInfo from 'Components/common/HeadInfo';
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-
-import { backUrl } from '../../config';
 
 const PostEdit = () => {
   const { id } = useParams<{ id: string }>();
@@ -13,43 +10,29 @@ const PostEdit = () => {
   const { data: post } = usePostById(id);
   const [title, setTitle] = useState(post?.title || '');
   const [content, setContent] = useState(post?.content || '');
+  const { mutateAsync: updatePost } = usePostUpdate();
 
   const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   }, []);
 
   const handleSubmit = useCallback(
-    (e: any) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!title || !content) {
         alert('제목과 내용, 카테고리를 입력해주세요!');
 
         return;
       }
-      axios
-        .put(
-          `${backUrl}/api/main/posts/${id}`,
-          {
-            title,
-            content,
-          },
-          {
-            withCredentials: true,
-          },
-        )
-        .then(() => {
-          navigate(`/main/posts/${id}`);
-        })
-        .catch((error) => {
-          console.error(error);
-          if (error.response && error.response.status === 403) {
-            alert('게시글 작성자만 수정할 수 있습니다.');
-          } else if (error.response && error.response.status === 401) {
-            alert(error.response.data);
-          } else {
-            alert('게시글을 수정하는 도중 오류가 발생했습니다.');
-          }
-        });
+      try {
+        // usePostUpdate hook을 사용하여 게시글을 수정합니다.
+        await updatePost({ id, title, content });
+
+        navigate(`/main/posts/${id}`);
+      } catch (error) {
+        console.error(error);
+        alert('게시글을 수정하는 도중 오류가 발생했습니다.');
+      }
     },
     [id, title, content, navigate],
   );

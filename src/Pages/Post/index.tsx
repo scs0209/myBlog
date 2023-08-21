@@ -1,7 +1,7 @@
 import MDEditor from '@uiw/react-md-editor';
 import { useUser } from 'apis/auth';
 import { useCategories } from 'apis/category';
-import { createPost, PostData } from 'apis/write';
+import { PostData, useCreatePost } from 'apis/post';
 import HeadInfo from 'Components/common/HeadInfo';
 import { Select } from 'flowbite-react';
 import React, { FormEvent, useCallback, useState } from 'react';
@@ -16,6 +16,8 @@ const Post = () => {
   const [category, setCategory] = useState(''); // 카테고리 추가
 
   const { data: categories } = useCategories();
+
+  const { mutateAsync: createPost } = useCreatePost();
 
   const onChangeCategory = useCallback((e: any) => {
     setCategory(e.target.value);
