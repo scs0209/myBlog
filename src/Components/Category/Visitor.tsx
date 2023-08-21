@@ -1,13 +1,8 @@
-import useSWR from 'swr';
-
-import { backUrl } from '../../config';
-import fetcher from '../../utils/fetcher';
+import { useTodayVisitors, useTotalVisitors } from 'apis/visitor';
 
 const Visitor = () => {
-  const { data: todayVisitorsData } = useSWR(`${backUrl}/api/visitors`, fetcher, {
-    dedupingInterval: 5000,
-  });
-  const { data: totalVisitorsData } = useSWR(`${backUrl}/api/total-visitors`, fetcher);
+  const { data: todayVisitorsData } = useTodayVisitors();
+  const { data: totalVisitorsData } = useTotalVisitors();
 
   const todayVisitors = todayVisitorsData || 0;
   const totalVisitors = totalVisitorsData?.totalVisitors || 0;

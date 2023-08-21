@@ -1,5 +1,5 @@
 import { useUser } from 'apis/auth';
-import { useLikeInfo, useLikePost, useUnlikePost } from 'apis/post';
+import { useLikeInfo, useLikePost, useUnlikePost } from 'apis/like';
 import { useCallback } from 'react';
 
 const useLikes = (postId: string | undefined) => {
