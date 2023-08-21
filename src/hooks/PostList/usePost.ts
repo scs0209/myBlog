@@ -1,17 +1,11 @@
+import { usePost } from 'apis/post';
 import { increasePostViews } from 'apis/postList';
-import { backUrl } from 'config';
 import { useCallback, useEffect, useState } from 'react';
-import useSWR from 'swr';
-import fetcher from 'utils/fetcher';
 
 const PAGE_SIZE = 10;
 
 const usePosts = (currentPage: number, searchTerm: string) => {
-  const {
-    data: postData,
-    error,
-    mutate,
-  } = useSWR(`${backUrl}/api/main/posts?page=${currentPage}&search=${searchTerm}`, fetcher);
+  const { data: postData } = usePost(currentPage, searchTerm);
 
   const posts = postData?.posts;
   const totalPosts = postData?.count ?? 0;
@@ -52,8 +46,6 @@ const usePosts = (currentPage: number, searchTerm: string) => {
 
   return {
     postData,
-    error,
-    mutate,
     handlePostClick,
     currentPagePosts,
     totalPages,

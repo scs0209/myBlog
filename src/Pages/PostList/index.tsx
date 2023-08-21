@@ -20,14 +20,12 @@ const PostList = () => {
   const pageNum = parseInt(params.get('page') || '1', 10);
   const search = params.get('search') || '';
 
-  const { error, handlePostClick, currentPagePosts, totalPages } = usePosts(pageNum, search);
+  const { handlePostClick, currentPagePosts, totalPages } = usePosts(pageNum, search);
   const { handlePageChange } = usePagination(search);
 
   const handleSearch = (keyword: string) => {
     navigate(`/main/posts?page=1&search=${keyword}`);
   };
-
-  if (error) return <div>에러가 발생했습니다.</div>;
 
   return (
     <>

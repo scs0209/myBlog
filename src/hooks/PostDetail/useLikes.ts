@@ -1,45 +1,28 @@
-import { likePostAPI, unlikePostAPI } from 'apis/post';
-import { backUrl } from 'config';
-import { useCallback, useEffect, useState } from 'react';
-import useSWR from 'swr';
-import fetcher from 'utils/fetcher';
+import { useUser } from 'apis/auth';
+import { useLikeInfo, useLikePost, useUnlikePost } from 'apis/post';
+import { useCallback } from 'react';
 
 const useLikes = (postId: string | undefined) => {
-  const { data: user } = useSWR(`${backUrl}/api/users`, fetcher);
-  const { data: likeInfo, mutate: mutateLikeInfo } = useSWR(
-    `${backUrl}/api/posts/${postId}/like-info`,
-    fetcher,
-  );
-
-  const [likeCount, setLikeCount] = useState<number>(0);
-  const [liked, setLiked] = useState<boolean>(false);
+  const { data: user } = useUser();
+  const { data: likeInfo } = useLikeInfo(postId);
+  const { mutateAsync: likePost, isLoading } = useLikePost();
+  const { mutateAsync: unlikePost } = useUnlikePost();
 
   const handleLikedClick = useCallback(async () => {
     try {
-      if (liked) await unlikePostAPI(postId);
-      else await likePostAPI(postId, user.id);
-
-      mutateLikeInfo((prev: any) => ({
-        ...prev,
-        count: liked ? prev.count - 1 : prev.count + 1,
-        liked: !liked,
-      }));
+      if (likeInfo.liked) await unlikePost(postId);
+      else await likePost({ postId, userId: user.id });
     } catch (error) {
       console.error(error);
     }
-  }, [postId, liked, mutateLikeInfo, user]);
+  }, [postId, likeInfo, user]);
 
-  useEffect(() => {
-    if (likeInfo) {
-      setLikeCount(likeInfo.likeCount);
-      setLiked(likeInfo.liked);
-    }
-  }, [likeInfo]);
+  console.log(likeInfo);
 
   return {
     user,
-    likeCount,
-    liked,
+    likeInfo,
+    isLoading,
     handleLikedClick,
   };
 };

@@ -1,10 +1,10 @@
-import { deletePost } from 'apis/post';
-import { backUrl } from 'config';
+import { usePostDelete } from 'apis/post';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const useDeletePost = (postId: string | undefined, mutatePost: any) => {
+const useDeletePost = (postId: string | undefined) => {
   const navigate = useNavigate();
+  const { mutateAsync: deletePost } = usePostDelete();
 
   const handleDeleteClick = useCallback(async () => {
     const confirmResult = window.confirm('정말로 삭제하시겠습니까?');
@@ -12,14 +12,14 @@ const useDeletePost = (postId: string | undefined, mutatePost: any) => {
     if (confirmResult) {
       try {
         await deletePost(postId);
-        mutatePost(`${backUrl}/api/main/posts`, false);
+
         navigate('/');
       } catch (error: any) {
         alert(error.response.data);
         console.error(error);
       }
     }
-  }, [postId, navigate, mutatePost]);
+  }, [postId, navigate]);
 
   return handleDeleteClick;
 };

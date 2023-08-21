@@ -18,7 +18,5 @@ export const useCategoryList = (categoryId: string | undefined) => {
     isLoading,
   } = useCategoryPosts(categoryId, currentPage);
 
-  console.log(postData);
-
   return { postData, postError, currentPage };
 };

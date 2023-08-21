@@ -6,12 +6,12 @@ import LikeButton from '../../Components/LikedButton';
 
 const LikeSection = () => {
   const { id } = useParams<{ id: string }>();
-  const { user, likeCount, liked, handleLikedClick } = useLikes(id);
+  const { user, likeInfo, handleLikedClick } = useLikes(id);
 
   return (
     <div>
-      <span className="text-gray-400 text-xs dark:text-white">좋아요: {likeCount}</span>
-      {user && <LikeButton liked={liked} onClick={handleLikedClick} />}
+      <span className="text-gray-400 text-xs dark:text-white">좋아요: {likeInfo?.likeCount}</span>
+      {user && <LikeButton liked={likeInfo?.liked} onClick={handleLikedClick} />}
     </div>
   );
 };
