@@ -1,6 +1,6 @@
 import { useUser } from 'apis/auth';
 import { useCreateComment, useDeleteComment, useGetComment, useUpdateComment } from 'apis/comment';
-import { createReply, deleteReply, updateReply, useGetReply } from 'apis/reply';
+import { useCreateReply, useDeleteReply, useGetReply, useUpdateReply } from 'apis/reply';
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Comment, Reply } from 'typings/db';
@@ -41,6 +41,9 @@ export const CommentProvider: FC<Props> = ({ children }) => {
   const { mutateAsync: createComment } = useCreateComment();
   const { mutateAsync: updateComment } = useUpdateComment();
   const { mutateAsync: deleteComment } = useDeleteComment();
+  const { mutateAsync: createReply } = useCreateReply();
+  const { mutateAsync: updateReply } = useUpdateReply();
+  const { mutateAsync: deleteReply } = useDeleteReply();
 
   const commentActions = {
     // 댓글 등록
@@ -52,7 +55,7 @@ export const CommentProvider: FC<Props> = ({ children }) => {
       }
 
       try {
-        const response = await createComment({ postId: id, content: content });
+        const response = await createComment({ postId: id, content });
         const newComment = {
           id: response.id,
           content,
@@ -132,7 +135,7 @@ export const CommentProvider: FC<Props> = ({ children }) => {
       };
 
       try {
-        const addedReply = await createReply(commentId, newReply);
+        const addedReply = await createReply({ commentId, newReply });
 
         setReplies((prev) => [...prev, addedReply]);
       } catch (error: any) {
@@ -150,7 +153,7 @@ export const CommentProvider: FC<Props> = ({ children }) => {
       }
 
       try {
-        const editedReply = await updateReply(commentId, replyId, editedContent);
+        const editedReply = await updateReply({ commentId, replyId, content: editedContent });
 
         setReplies((prev) =>
           prev.map((reply) => {
@@ -171,7 +174,7 @@ export const CommentProvider: FC<Props> = ({ children }) => {
     delete: async (commentId: number, replyId: number) => {
       if (window.confirm('정말 삭제하시겠습니까?')) {
         try {
-          await deleteReply(commentId, replyId);
+          await deleteReply({ commentId, replyId });
 
           setReplies((prev) => prev.filter((reply) => reply.id !== replyId));
         } catch (error: any) {
