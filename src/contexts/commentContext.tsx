@@ -1,5 +1,5 @@
 import { useUser } from 'apis/auth';
-import { createComment, deleteComment, updateComment, useGetComment } from 'apis/comment';
+import { useCreateComment, useDeleteComment, useGetComment, useUpdateComment } from 'apis/comment';
 import { createReply, deleteReply, updateReply, useGetReply } from 'apis/reply';
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
@@ -38,6 +38,9 @@ export const CommentProvider: FC<Props> = ({ children }) => {
   const { data: user, isLoading, isError } = useUser();
   const { data: commentsData } = useGetComment(id);
   const { data: repliesData } = useGetReply(id);
+  const { mutateAsync: createComment } = useCreateComment();
+  const { mutateAsync: updateComment } = useUpdateComment();
+  const { mutateAsync: deleteComment } = useDeleteComment();
 
   const commentActions = {
     // 댓글 등록
@@ -49,7 +52,7 @@ export const CommentProvider: FC<Props> = ({ children }) => {
       }
 
       try {
-        const response = await createComment(id, content);
+        const response = await createComment({ postId: id, content: content });
         const newComment = {
           id: response.id,
           content,
@@ -82,7 +85,7 @@ export const CommentProvider: FC<Props> = ({ children }) => {
       }
 
       try {
-        await updateComment(commentId, content);
+        await updateComment({ commentId, content });
 
         setComments((prevComments) => {
           const newComments = [...prevComments];
