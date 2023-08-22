@@ -13,7 +13,7 @@ import { usePostById } from 'apis/post';
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: user, isLoading, isError } = useUser();
+  const { data: user, isError } = useUser();
   const { data: post, isError: postError } = usePostById(id);
 
   const handleDeleteClick = useDeletePost(id);

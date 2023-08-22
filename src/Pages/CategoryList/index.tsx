@@ -33,10 +33,9 @@ const CategoryList = () => {
     }
   };
 
-  if (postError) return <div>에러가 발생했습니다.</div>;
-  if (!postData) return <div className="h-screen">로딩중</div>;
-  if (!Array.isArray(posts))
-    return <div className="h-screen">게시글 목록을 불러오는 중입니다.</div>;
+  // if (postError) return <div>에러가 발생했습니다.</div>;
+  // if (!Array.isArray(posts))
+  //   return <div className="h-screen">게시글 목록을 불러오는 중입니다.</div>;
 
   return (
     <>

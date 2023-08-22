@@ -13,7 +13,7 @@ interface FormValue {
 }
 
 const SignUp = () => {
-  const { data, isLoading, isError } = useUser();
+  const { data, isError } = useUser();
   const { mutateAsync: signUp } = useSignUp();
   const {
     register,
@@ -30,10 +30,6 @@ const SignUp = () => {
       alert('회원가입에 실패했습니다.');
     }
   });
-
-  if (isLoading) {
-    return <div>로딩중...</div>;
-  }
 
   if (data) {
     return <Navigate to="/main/posts" />;

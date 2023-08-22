@@ -12,8 +12,8 @@ import CategoryButton from '../common/CategoryButton';
 import CategoryEditForm from './CategoryEditForm';
 
 const CategoryName = () => {
-  const { data: userData, isLoading, isError } = useUser();
-  const { data: categories, isLoading: categoryLoading } = useCategories();
+  const { data: userData, isError } = useUser();
+  const { data: categories } = useCategories();
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput('');
@@ -55,7 +55,6 @@ const CategoryName = () => {
   }, [editedCategoryId, categories]);
 
   if (isError) return <div>에러가 발생했습니다</div>;
-  if (isLoading || categoryLoading) return <div>로딩중...</div>;
 
   return (
     <>

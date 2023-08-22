@@ -1,4 +1,5 @@
 import loadable from '@loadable/component';
+import GlobalLoading from 'Components/common/GlobalLoading';
 import { Flowbite } from 'flowbite-react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -47,6 +48,7 @@ const App = () => {
         <div className="dark:bg-slate-700">
           <Header toggleSidebar={toggleSidebar} />
           <Category showSidebar={showSidebar} />
+          <GlobalLoading />
           <div>
             <Routes>
               <Route path="/" element={<Home />} />

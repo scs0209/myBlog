@@ -9,7 +9,7 @@ import { Category } from 'typings/db';
 
 const CreateCategoryModal = () => {
   const [newCategory, onChangeNewCategory, setNewCategory] = useInput('');
-  const { data: categories, isLoading } = useCategories();
+  const { data: categories } = useCategories();
   const { mutateAsync: createCategory } = useCreateCategory();
   const { onCloseModal, setShowCreateCategoryModal, showCreateCategoryModal } = useCategory();
 
@@ -39,8 +39,6 @@ const CreateCategoryModal = () => {
     },
     [newCategory, setNewCategory, setShowCreateCategoryModal, categories],
   );
-
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <Modal show={showCreateCategoryModal} onCloseModal={onCloseModal}>

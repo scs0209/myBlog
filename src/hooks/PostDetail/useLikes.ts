@@ -17,8 +17,6 @@ const useLikes = (postId: string | undefined) => {
     }
   }, [postId, likeInfo, user]);
 
-  console.log(likeInfo);
-
   return {
     user,
     likeInfo,

@@ -12,7 +12,7 @@ interface Props {
 }
 
 const Header: VFC<Props> = ({ toggleSidebar }) => {
-  const { data: userData, isLoading, isError } = useUser();
+  const { data: userData, isError } = useUser();
   const [showPost, setShowPost] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { mutateAsync: logout } = useLogout();

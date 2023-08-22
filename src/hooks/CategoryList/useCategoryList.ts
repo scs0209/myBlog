@@ -12,11 +12,7 @@ export const useCategoryList = (categoryId: string | undefined) => {
     setCurrentPage(pageNum);
   }, [pageNum]);
 
-  const {
-    data: postData,
-    isError: postError,
-    isLoading,
-  } = useCategoryPosts(categoryId, currentPage);
+  const { data: postData, isError: postError } = useCategoryPosts(categoryId, currentPage);
 
   return { postData, postError, currentPage };
 };

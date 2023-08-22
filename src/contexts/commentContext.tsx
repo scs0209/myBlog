@@ -35,7 +35,7 @@ export const CommentProvider: FC<Props> = ({ children }) => {
   const [replies, setReplies] = useState<Reply[]>([]);
   const [newComment, setNewComment] = useState('');
   const { id } = useParams<{ id: string }>();
-  const { data: user, isLoading, isError } = useUser();
+  const { data: user, isError } = useUser();
   const { data: commentsData } = useGetComment(id);
   const { data: repliesData } = useGetReply(id);
   const { mutateAsync: createComment } = useCreateComment();

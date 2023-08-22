@@ -10,7 +10,7 @@ import PostSubmit from '../../Components/PostSubmit';
 import useInput from '../../utils/useInput';
 
 const Post = () => {
-  const { data: currentUser, isLoading, isError } = useUser();
+  const { data: currentUser, isError } = useUser();
   const [title, onChangeTitle, setTitle] = useInput('');
   const [content, setContent] = useState<string | undefined>('');
   const [category, setCategory] = useState(''); // 카테고리 추가
@@ -52,8 +52,6 @@ const Post = () => {
     },
     [title, content, category, setTitle, setContent, setCategory, currentUser.id],
   );
-
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <>

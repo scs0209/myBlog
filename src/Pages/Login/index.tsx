@@ -17,7 +17,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValue>({ mode: 'onChange' });
-  const { data: userData, isLoading, isError } = useUser();
+  const { data: userData, isError } = useUser();
   const { mutateAsync: login } = useLogin();
 
   //Login 버튼 클릭 이벤트
@@ -28,10 +28,6 @@ const Login = () => {
       alert('로그인에 실패했습니다.');
     }
   });
-
-  if (isLoading) {
-    return <div>로딩중...</div>;
-  }
 
   if (userData) {
     return <Navigate to="/main/posts" />;

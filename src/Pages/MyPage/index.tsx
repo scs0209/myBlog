@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router';
 
 const MyPage = () => {
   const { id } = useParams();
-  const { data: userData, isLoading } = useUserById(id);
+  const { data: userData } = useUserById(id);
   const { mutateAsync: deleteUser } = useDeleteUser();
   const navigate = useNavigate();
 
@@ -21,8 +21,6 @@ const MyPage = () => {
       alert(error.message);
     }
   }, [navigate, userData]);
-
-  if (isLoading) return <div className="h-screen">데이터를 불러오는 중입니다...</div>;
 
   return (
     <>
