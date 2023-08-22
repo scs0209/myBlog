@@ -1,8 +1,8 @@
 import loadable from '@loadable/component';
 import GlobalLoading from 'Components/common/GlobalLoading';
-import ErrorBoundary, { FallbackProps } from 'ErrorHandling/ErrorBoundary';
-import ErrorFallback from 'ErrorHandling/ErrorFallback';
-import { Flowbite, Toast } from 'flowbite-react';
+import ErrorBoundary, { FallbackProps } from 'Components/ErrorHandling/ErrorBoundary';
+import ErrorFallback from 'Components/ErrorHandling/ErrorFallback';
+import { Flowbite } from 'flowbite-react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from 'react-query';
 import { Route, Routes } from 'react-router';
@@ -11,11 +11,7 @@ import Category from '../Components/Category';
 import Header from '../Components/common/Header';
 
 export const queryErrorHandler = (error: any) => {
-  return (
-    <Toast>
-      <div>{error.massage}</div>
-    </Toast>
-  );
+  return <div className="fixed bottom-0 h-screen text-8xl">{error.message}</div>;
 };
 
 const queryClient = new QueryClient({
