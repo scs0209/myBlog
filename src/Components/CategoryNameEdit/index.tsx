@@ -13,7 +13,7 @@ import CategoryEditForm from './CategoryEditForm';
 
 const CategoryName = () => {
   const { data: userData, isError } = useUser();
-  const { data: categories } = useCategories();
+  const { data: categories, isFetching } = useCategories();
   const [edit, setEdit] = useState(false);
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput('');
@@ -55,6 +55,8 @@ const CategoryName = () => {
   }, [editedCategoryId, categories]);
 
   if (isError) return <div>에러가 발생했습니다</div>;
+
+  if (isFetching) return <div>Loading...</div>;
 
   return (
     <>

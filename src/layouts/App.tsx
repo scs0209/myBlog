@@ -1,19 +1,38 @@
 import loadable from '@loadable/component';
 import GlobalLoading from 'Components/common/GlobalLoading';
-import { Flowbite } from 'flowbite-react';
+import ErrorBoundary, { FallbackProps } from 'ErrorHandling/ErrorBoundary';
+import ErrorFallback from 'ErrorHandling/ErrorFallback';
+import { Flowbite, Toast } from 'flowbite-react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from 'react-query';
 import { Route, Routes } from 'react-router';
 
 import Category from '../Components/Category';
 import Header from '../Components/common/Header';
 
-const queryClient = new QueryClient();
+export const queryErrorHandler = (error: any) => {
+  return (
+    <Toast>
+      <div>{error.massage}</div>
+    </Toast>
+  );
+};
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      onError: queryErrorHandler,
+      retry: 0,
+      suspense: true,
+    },
+  },
+});
 
 const MainPage = loadable(() => import('./Main'));
 const Home = loadable(() => import('../Pages/HomePage'));
 
 const App = () => {
+  const { reset } = useQueryErrorResetBoundary();
   const [showSidebar, setShowSidebar] = useState(false);
 
   const toggleSidebar = useCallback(() => {
@@ -44,19 +63,24 @@ const App = () => {
 
   return (
     <Flowbite>
-      <QueryClientProvider client={queryClient}>
-        <div className="dark:bg-slate-700">
-          <Header toggleSidebar={toggleSidebar} />
-          <Category showSidebar={showSidebar} />
-          <GlobalLoading />
-          <div>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/main/*" element={<MainPage />} />
-            </Routes>
+      <ErrorBoundary
+        fallback={(props: FallbackProps) => <ErrorFallback {...props} />}
+        onReset={reset}
+      >
+        <QueryClientProvider client={queryClient}>
+          <div className="dark:bg-slate-700">
+            <Header toggleSidebar={toggleSidebar} />
+            <Category showSidebar={showSidebar} />
+            <GlobalLoading />
+            <div>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/main/*" element={<MainPage />} />
+              </Routes>
+            </div>
           </div>
-        </div>
-      </QueryClientProvider>
+        </QueryClientProvider>
+      </ErrorBoundary>
     </Flowbite>
   );
 };

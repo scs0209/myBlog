@@ -5,6 +5,8 @@ export const useCategories = () =>
   useQuery('categories', async () => {
     const { data } = await client.get('/api/categories');
 
+    console.log(data);
+
     return data;
   });
 

@@ -71,8 +71,6 @@ export const CommentProvider: FC<Props> = ({ children }) => {
 
           return [...prevComments, newComment];
         });
-
-        mutateComments();
       } catch (error: any) {
         alert(error.response.data);
         console.error(error);
@@ -224,7 +222,3 @@ export const useCommentContext = () => {
 
   return context;
 };
-
-function mutateComments() {
-  throw new Error('Function not implemented.');
-}
