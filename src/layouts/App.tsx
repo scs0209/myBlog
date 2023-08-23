@@ -9,7 +9,7 @@ import { Flowbite } from 'flowbite-react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from 'react-query';
 import { Route, Routes } from 'react-router';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import Category from '../Components/Category';
 import Header from '../Components/common/Header';
@@ -28,11 +28,14 @@ const queryClient = new QueryClient({
   },
 });
 
-const MainPage = loadable(() => import('./Main'));
-const Home = loadable(() => import('../Pages/HomePage'));
+const MainPage = loadable(() => import('./Main'), {
+  fallback: <div>Loading...</div>,
+});
+const Home = loadable(() => import('../Pages/HomePage'), {
+  fallback: <div>Loading...</div>,
+});
 
 const App = () => {
-  const notify = () => toast('Wow so easy!');
   const { reset } = useQueryErrorResetBoundary();
   const [showSidebar, setShowSidebar] = useState(false);
 

@@ -23,24 +23,20 @@ const usePosts = (currentPage: number, searchTerm: string) => {
 
   const handlePostClick = useCallback(
     async (postId: any) => {
-      try {
-        const response = await increasePostViews(postId);
+      const response = await increasePostViews(postId);
 
-        const updatedPosts = currentPagePosts.map((post: any) => {
-          if (post.id === postId) {
-            return {
-              ...post,
-              views: response.data.post.views,
-            };
-          }
+      const updatedPosts = currentPagePosts.map((post: any) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            views: response.data.post.views,
+          };
+        }
 
-          return post;
-        });
+        return post;
+      });
 
-        setCurrentPagePosts(updatedPosts);
-      } catch (error: any) {
-        console.error(error.response.data);
-      }
+      setCurrentPagePosts(updatedPosts);
     },
     [currentPagePosts],
   );

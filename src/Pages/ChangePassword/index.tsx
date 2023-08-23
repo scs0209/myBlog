@@ -8,22 +8,15 @@ import useInput from '../../utils/useInput';
 const ChangePassword = () => {
   const [password, onChangePassword, setPassword] = useInput('');
   const [newPassword, onChangeNewPassword, setNewPassword] = useInput('');
-  const [message, setMessage] = useState('');
   const { mutateAsync: updatePassword } = useUpdatePassword();
 
   const onSubmitForm = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      try {
-        const res = await updatePassword({ currentPassword: password, newPassword });
+      await updatePassword({ currentPassword: password, newPassword });
 
-        setMessage(res.data.message);
-      } catch (err: any) {
-        setMessage(err.response.data.message);
-      } finally {
-        setPassword('');
-        setNewPassword('');
-      }
+      setPassword('');
+      setNewPassword('');
     },
     [password, newPassword],
   );
@@ -71,7 +64,6 @@ const ChangePassword = () => {
                 submit
               </button>
             </form>
-            {message && <div className={styles.message}>{message}</div>}
           </div>
         </div>
       </div>

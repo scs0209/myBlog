@@ -17,16 +17,12 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValue>({ mode: 'onChange' });
-  const { data: userData, isError } = useUser();
+  const { data: userData } = useUser();
   const { mutateAsync: login } = useLogin();
 
   //Login 버튼 클릭 이벤트
   const onSubmit = handleSubmit(async (formData) => {
-    try {
-      await login({ email: formData.email, password: formData.password });
-    } catch (error) {
-      alert('로그인에 실패했습니다.');
-    }
+    await login({ email: formData.email, password: formData.password });
   });
 
   if (userData) {

@@ -9,12 +9,8 @@ const useLikes = (postId: string | undefined) => {
   const { mutateAsync: unlikePost } = useUnlikePost();
 
   const handleLikedClick = useCallback(async () => {
-    try {
-      if (likeInfo.liked) await unlikePost(postId);
-      else await likePost({ postId, userId: user.id });
-    } catch (error) {
-      console.error(error);
-    }
+    if (likeInfo.liked) await unlikePost(postId);
+    else await likePost({ postId, userId: user.id });
   }, [postId, likeInfo, user]);
 
   return {

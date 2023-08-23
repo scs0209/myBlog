@@ -23,43 +23,26 @@ export const useCategoryActions = (userData: User) => {
 
         return;
       }
-      try {
-        await editCategory({ categoryId: editedCategoryId, categoryName: editedCategoryName });
-        toggleEdit(null);
-      } catch (error: any) {
-        console.error(error.response.data);
-        alert('카테고리 수정에 실패했습니다.');
-      }
+
+      await editCategory({ categoryId: editedCategoryId, categoryName: editedCategoryName });
+      toggleEdit(null);
     },
     [userData],
   );
 
-  const onToggleHidden = useCallback(
-    async (categoryId: number, hidden: boolean) => {
-      if (userData?.role !== 'admin') {
-        alert('관리자만 카테고리를 숨길 수 있습니다.');
+  const onToggleHidden = async (categoryId: number, hidden: boolean) => {
+    if (userData?.role !== 'admin') {
+      alert('관리자만 카테고리를 숨길 수 있습니다.');
 
-        return;
-      }
-
-      try {
-        await toggleCategoryHidden({ categoryId, hidden });
-      } catch (error: any) {
-        console.error(error.response.data);
-        alert('카테고리 숨기기/보이기 변경에 실패했습니다.');
-      }
-    },
-    [userData],
-  );
-
-  const onDeleteCategory = useCallback(async (categoryId: number) => {
-    try {
-      await deleteCategory(categoryId);
-    } catch (error: any) {
-      alert(error.response.data);
-      console.error(error);
+      return;
     }
-  }, []);
+
+    await toggleCategoryHidden({ categoryId, hidden });
+  };
+
+  const onDeleteCategory = async (categoryId: number) => {
+    await deleteCategory(categoryId);
+  };
 
   const actions = useMemo(
     () => ({

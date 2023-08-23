@@ -19,7 +19,7 @@ const getErrorMessage = (status: number) => {
 };
 
 const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
-  const { status } = error.response;
+  const status = error.response?.status;
   const { title, content } = getErrorMessage(Number(status));
   const isNotAuthorized = status === 401 || status === 403;
   const buttonMessage = isNotAuthorized ? '로그인' : '새로고침';

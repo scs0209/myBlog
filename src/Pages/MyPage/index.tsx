@@ -1,7 +1,6 @@
 import { useDeleteUser, useUserById } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
 import { Card, Dropdown } from 'flowbite-react';
-import { useCallback } from 'react';
 import Avatar from 'react-avatar';
 import { useNavigate, useParams } from 'react-router';
 
@@ -11,16 +10,11 @@ const MyPage = () => {
   const { mutateAsync: deleteUser } = useDeleteUser();
   const navigate = useNavigate();
 
-  const handleWithdraw = useCallback(async () => {
-    try {
-      await deleteUser(userData.id);
-      alert('회원 탈퇴가 완료되었습니다.');
-      navigate('/');
-    } catch (error: any) {
-      console.error('회원 탈퇴 중 에러 발생:', error);
-      alert(error.message);
-    }
-  }, [navigate, userData]);
+  const handleWithdraw = async () => {
+    await deleteUser(userData.id);
+    alert('회원 탈퇴가 완료되었습니다.');
+    navigate('/');
+  };
 
   return (
     <>

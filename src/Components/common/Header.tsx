@@ -18,14 +18,10 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
   const { mutateAsync: logout } = useLogout();
   const navigate = useNavigate();
 
-  const onLogout = useCallback(async () => {
-    try {
-      await logout();
-      navigate('/');
-    } catch (error) {
-      console.error('로그아웃 중 에러 발생:', error);
-    }
-  }, [navigate]);
+  const onLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   const onClickShowPost = useCallback(() => {
     setShowPost((prev) => !prev);

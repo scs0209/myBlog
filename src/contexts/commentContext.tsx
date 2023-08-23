@@ -53,28 +53,22 @@ export const CommentProvider: FC<Props> = ({ children }) => {
 
         return;
       }
+      const response = await createComment({ postId: id, content });
+      const newComment = {
+        id: response.id,
+        content,
+        User: { id: response.User.id, name: response.User.name },
+      };
 
-      try {
-        const response = await createComment({ postId: id, content });
-        const newComment = {
-          id: response.id,
-          content,
-          User: { id: response.User.id, name: response.User.name },
-        };
+      setComments((prevComments) => {
+        if (!Array.isArray(prevComments)) {
+          console.warn('prevComments is not an array:', prevComments);
 
-        setComments((prevComments) => {
-          if (!Array.isArray(prevComments)) {
-            console.warn('prevComments is not an array:', prevComments);
+          return [newComment];
+        }
 
-            return [newComment];
-          }
-
-          return [...prevComments, newComment];
-        });
-      } catch (error: any) {
-        alert(error.response.data);
-        console.error(error);
-      }
+        return [...prevComments, newComment];
+      });
     },
 
     // 댓글 수정
@@ -85,35 +79,25 @@ export const CommentProvider: FC<Props> = ({ children }) => {
         return;
       }
 
-      try {
-        await updateComment({ commentId, content });
+      await updateComment({ commentId, content });
 
-        setComments((prevComments) => {
-          const newComments = [...prevComments];
-          const commentIndex = newComments.findIndex((comment) => comment.id === commentId);
+      setComments((prevComments) => {
+        const newComments = [...prevComments];
+        const commentIndex = newComments.findIndex((comment) => comment.id === commentId);
 
-          newComments[commentIndex] = {
-            ...newComments[commentIndex],
-            content,
-          };
+        newComments[commentIndex] = {
+          ...newComments[commentIndex],
+          content,
+        };
 
-          return newComments;
-        });
-      } catch (error: any) {
-        alert(error.response.data);
-        console.error(error);
-      }
+        return newComments;
+      });
     },
 
     // 댓글 삭제
     delete: async (commentId: number) => {
-      try {
-        await deleteComment(commentId);
-        setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
-      } catch (error: any) {
-        alert(error.response.data);
-        console.error(error);
-      }
+      await deleteComment(commentId);
+      setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
     },
   };
 
@@ -131,15 +115,9 @@ export const CommentProvider: FC<Props> = ({ children }) => {
         User: { name: user.name },
         CommentId: commentId,
       };
+      const addedReply = await createReply({ commentId, newReply });
 
-      try {
-        const addedReply = await createReply({ commentId, newReply });
-
-        setReplies((prev) => [...prev, addedReply]);
-      } catch (error: any) {
-        alert(error.response.data);
-        console.error(error);
-      }
+      setReplies((prev) => [...prev, addedReply]);
     },
 
     // 답글 수정
@@ -150,35 +128,25 @@ export const CommentProvider: FC<Props> = ({ children }) => {
         return;
       }
 
-      try {
-        const editedReply = await updateReply({ commentId, replyId, content: editedContent });
+      const editedReply = await updateReply({ commentId, replyId, content: editedContent });
 
-        setReplies((prev) =>
-          prev.map((reply) => {
-            if (reply.id === replyId) {
-              return editedReply;
-            }
+      setReplies((prev) =>
+        prev.map((reply) => {
+          if (reply.id === replyId) {
+            return editedReply;
+          }
 
-            return reply;
-          }),
-        );
-      } catch (error: any) {
-        alert(error.response.data);
-        console.log(error);
-      }
+          return reply;
+        }),
+      );
     },
 
     // 답글 삭제
     delete: async (commentId: number, replyId: number) => {
       if (window.confirm('정말 삭제하시겠습니까?')) {
-        try {
-          await deleteReply({ commentId, replyId });
+        await deleteReply({ commentId, replyId });
 
-          setReplies((prev) => prev.filter((reply) => reply.id !== replyId));
-        } catch (error: any) {
-          alert(error.response.data);
-          console.log(error);
-        }
+        setReplies((prev) => prev.filter((reply) => reply.id !== replyId));
       }
     },
   };

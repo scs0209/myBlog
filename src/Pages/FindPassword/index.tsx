@@ -1,6 +1,6 @@
 import { useFindPassword } from 'apis/password';
 import HeadInfo from 'Components/common/HeadInfo';
-import React, { FormEvent, useCallback, useState } from 'react';
+import React, { FormEvent } from 'react';
 
 import styles from '../../styles/FindPassword.module.css';
 import useInput from '../../utils/useInput';
@@ -8,26 +8,15 @@ import useInput from '../../utils/useInput';
 const FindPassword = () => {
   const [email, onChangeEmail, setEmail] = useInput('');
   const [receiveEmail, onChangeReceiveEmail, setReceiveEmail] = useInput('');
-  const [message, setMessage] = useState('');
   const { mutateAsync: findPassword } = useFindPassword();
 
-  const onSubmitForm = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      try {
-        const res = await findPassword({ email, receiveEmail });
+  const onSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await findPassword({ email, receiveEmail });
 
-        setMessage(res.data.message);
-      } catch (err: any) {
-        setMessage(err.response.data.message);
-        console.log(err);
-      } finally {
-        setEmail('');
-        setReceiveEmail('');
-      }
-    },
-    [email, receiveEmail],
-  );
+    setEmail('');
+    setReceiveEmail('');
+  };
 
   return (
     <>
@@ -73,7 +62,6 @@ const FindPassword = () => {
                 submit
               </button>
             </form>
-            {message && <div className={styles.message}>{message}</div>}
           </div>
         </div>
       </div>

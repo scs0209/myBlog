@@ -13,7 +13,7 @@ interface FormValue {
 }
 
 const SignUp = () => {
-  const { data, isError } = useUser();
+  const { data } = useUser();
   const { mutateAsync: signUp } = useSignUp();
   const {
     register,
@@ -23,12 +23,8 @@ const SignUp = () => {
   } = useForm<FormValue>({ mode: 'onChange' });
 
   const onSubmit = handleSubmit(async (formData) => {
-    try {
-      await signUp({ email: formData.email, name: formData.name, password: formData.password });
-      alert('회원가입 완료!');
-    } catch (error) {
-      alert('회원가입에 실패했습니다.');
-    }
+    await signUp({ email: formData.email, name: formData.name, password: formData.password });
+    alert('회원가입 완료!');
   });
 
   if (data) {

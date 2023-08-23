@@ -26,12 +26,7 @@ const CategoryList = () => {
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
 
   const handlePostClick = async (postId: any) => {
-    try {
-      await increasePostViews(postId);
-    } catch (error: any) {
-      alert(error.response.data);
-      console.error(error.response.data);
-    }
+    await increasePostViews(postId);
   };
 
   if (postError) return <div>에러가 발생했습니다.</div>;

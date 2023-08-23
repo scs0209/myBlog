@@ -24,15 +24,10 @@ const PostEdit = () => {
 
         return;
       }
-      try {
-        // usePostUpdate hook을 사용하여 게시글을 수정합니다.
-        await updatePost({ id, title, content });
+      // usePostUpdate hook을 사용하여 게시글을 수정합니다.
+      await updatePost({ id, title, content });
 
-        navigate(`/main/posts/${id}`);
-      } catch (error) {
-        console.error(error);
-        alert('게시글을 수정하는 도중 오류가 발생했습니다.');
-      }
+      navigate(`/main/posts/${id}`);
     },
     [id, title, content, navigate],
   );
@@ -66,9 +61,9 @@ const PostEdit = () => {
               </div>
             </div>
           </div>
-          <div className="text-center mt-8">
+          <div className="mt-8 text-center">
             <button
-              className="w-32 p-2 rounded-lg  bg-white cursor-pointer hover:bg-rose-400 hover:text-white"
+              className="w-32 p-2 bg-white rounded-lg cursor-pointer hover:bg-rose-400 hover:text-white"
               style={{ border: 'solid 1px lightgray' }}
               type="submit"
             >

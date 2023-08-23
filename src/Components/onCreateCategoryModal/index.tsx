@@ -27,15 +27,10 @@ const CreateCategoryModal = () => {
         return;
       }
 
-      try {
-        await createCategory(newCategory);
-        setShowCreateCategoryModal(false);
-        setNewCategory('');
-        alert('카테고리가 추가되었습니다.');
-      } catch (error: any) {
-        alert(error.response.data);
-        console.error(error);
-      }
+      await createCategory(newCategory);
+      setShowCreateCategoryModal(false);
+      setNewCategory('');
+      alert('카테고리가 추가되었습니다.');
     },
     [newCategory, setNewCategory, setShowCreateCategoryModal, categories],
   );

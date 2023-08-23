@@ -2,14 +2,6 @@ import { client } from 'apis';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 
-export const findPassword = (email: string, receiveEmail: string) => {
-  return client.post('/api/users/findPassword', { email, receiveEmail });
-};
-
-export const updatePassword = (currentPassword: string, newPassword: string) => {
-  return client.put('/api/users/password', { currentPassword, newPassword });
-};
-
 export const useFindPassword = () => {
   const findPasswordMutation = useMutation(
     async ({ email, receiveEmail }: { email: string; receiveEmail: string }) => {

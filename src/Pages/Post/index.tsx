@@ -31,24 +31,20 @@ const Post = () => {
 
         return;
       }
-      try {
-        const postData: PostData = {
-          title,
-          content,
-          categoryId: category,
-          UserId: currentUser.id,
-        };
 
-        await createPost(postData);
+      const postData: PostData = {
+        title,
+        content,
+        categoryId: category,
+        UserId: currentUser.id,
+      };
 
-        alert('게시글이 작성되었습니다.');
-        setTitle('');
-        setContent('');
-        setCategory('');
-      } catch (err: any) {
-        alert(err.response.data);
-        console.error(err);
-      }
+      await createPost(postData);
+
+      alert('게시글이 작성되었습니다.');
+      setTitle('');
+      setContent('');
+      setCategory('');
     },
     [title, content, category, setTitle, setContent, setCategory, currentUser.id],
   );
