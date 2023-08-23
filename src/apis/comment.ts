@@ -19,6 +19,7 @@ export const useCreateComment = () => {
     },
     {
       onSuccess: () => queryClient.invalidateQueries('comments'),
+      useErrorBoundary: true,
     },
   );
 

@@ -2,10 +2,9 @@ import loadable from '@loadable/component';
 import Footer from 'Components/common/Footer';
 import { Route, Routes } from 'react-router-dom';
 
-import CategoryList from '../../Pages/CategoryList';
-
 const Post = loadable(() => import('../../Pages/Post'));
 const PostList = loadable(() => import('../../Pages/PostList'));
+const CategoryList = loadable(() => import('../../Pages/CategoryList'));
 const PostDetail = loadable(() => import('../../Pages/PostDetail'));
 const PostEdit = loadable(() => import('../../Pages/PostEdit'));
 const Login = loadable(() => import('../../Pages/Login'));

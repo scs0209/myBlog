@@ -1,5 +1,4 @@
 import { Button } from 'flowbite-react';
-import { useNavigate } from 'react-router-dom';
 
 const getErrorMessage = (status: number) => {
   switch (status) {
@@ -21,14 +20,13 @@ const getErrorMessage = (status: number) => {
 
 const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
   const { status } = error.response;
-  const navigate = useNavigate();
   const { title, content } = getErrorMessage(Number(status));
   const isNotAuthorized = status === 401 || status === 403;
   const buttonMessage = isNotAuthorized ? '로그인' : '새로고침';
 
   const onClickHandler = () => {
     if (isNotAuthorized) {
-      navigate('/main/login');
+      window.location.replace('/main/login');
     } else {
       resetErrorBoundary();
     }
@@ -39,9 +37,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
       <div className="inner">
         <h2 className="title">{title}</h2>
         <p className="content">{content}</p>
-        <Button type="button" onClick={onClickHandler}>
-          {buttonMessage}
-        </Button>
+        <Button onClick={onClickHandler}>{buttonMessage}</Button>
       </div>
     </div>
   );
