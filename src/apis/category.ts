@@ -1,19 +1,30 @@
 import { client } from 'apis';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
 export const useCategories = () =>
   useQuery('categories', async () => {
     const { data } = await client.get('/api/categories');
 
-    console.log(data);
-
     return data;
   });
 
 export const useCreateCategory = () => {
-  const createCategoryMutation = useMutation((categoryName: string) => {
-    return client.post('/api/categories', { name: categoryName });
-  });
+  const queryClient = useQueryClient();
+
+  const createCategoryMutation = useMutation(
+    (categoryName: string) => {
+      return client.post('/api/categories', { name: categoryName });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('categories');
+      },
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
+    },
+  );
 
   return createCategoryMutation;
 };
@@ -30,6 +41,9 @@ export const useEditCategory = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('categories'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
+      },
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
       },
     },
   );
@@ -50,6 +64,9 @@ export const useToggleCategoryHidden = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('categories'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
       },
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
     },
   );
 
@@ -67,6 +84,9 @@ export const useDeleteCategory = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('categories'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
       },
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
     },
   );
 
@@ -79,6 +99,9 @@ export const useCategoryPosts = (categoryId: string | undefined, currentPage: nu
     () => client.get(`/api/categories/${categoryId}/posts?page=${currentPage}`),
     {
       keepPreviousData: true,
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
     },
   );
 };

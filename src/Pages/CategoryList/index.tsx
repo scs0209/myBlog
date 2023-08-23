@@ -1,4 +1,4 @@
-import { increasePostViews } from 'apis/postList';
+import { useIncreasePostViews } from 'apis/postList';
 import HeadInfo from 'Components/common/HeadInfo';
 import { CustomFlowbiteTheme, Pagination } from 'flowbite-react';
 import { useCategoryList } from 'hooks/CategoryList/useCategoryList';
@@ -18,6 +18,7 @@ const PAGE_SIZE = 10;
 const CategoryList = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const { postData, postError, currentPage } = useCategoryList(categoryId);
+  const { mutateAsync: increasePostViews } = useIncreasePostViews();
   const { handlePageChange } = usePagination(categoryId);
 
   const posts = postData?.data.posts;

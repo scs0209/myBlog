@@ -1,4 +1,4 @@
-import { findPassword } from 'apis/password';
+import { useFindPassword } from 'apis/password';
 import HeadInfo from 'Components/common/HeadInfo';
 import React, { FormEvent, useCallback, useState } from 'react';
 
@@ -9,12 +9,13 @@ const FindPassword = () => {
   const [email, onChangeEmail, setEmail] = useInput('');
   const [receiveEmail, onChangeReceiveEmail, setReceiveEmail] = useInput('');
   const [message, setMessage] = useState('');
+  const { mutateAsync: findPassword } = useFindPassword();
 
   const onSubmitForm = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       try {
-        const res = await findPassword(email, receiveEmail);
+        const res = await findPassword({ email, receiveEmail });
 
         setMessage(res.data.message);
       } catch (err: any) {

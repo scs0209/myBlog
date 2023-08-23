@@ -1,5 +1,6 @@
 import { client } from 'apis';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
 export const useGetComment = (id: string | undefined) =>
   useQuery(['comments', id], async () => {
@@ -19,7 +20,9 @@ export const useCreateComment = () => {
     },
     {
       onSuccess: () => queryClient.invalidateQueries('comments'),
-      useErrorBoundary: true,
+      onError: (error: any) => {
+        toast.error(`Login failed: ${error.response.data}`);
+      },
     },
   );
 
@@ -39,6 +42,9 @@ export const useUpdateComment = () => {
     },
     {
       onSuccess: () => queryClient.invalidateQueries('comments'),
+      onError: (error: any) => {
+        toast.error(`Login failed: ${error.message}`);
+      },
     },
   );
 
@@ -54,6 +60,9 @@ export const useDeleteComment = () => {
     },
     {
       onSuccess: () => queryClient.invalidateQueries('comments'),
+      onError: (error: any) => {
+        toast.error(`Login failed: ${error.message}`);
+      },
     },
   );
 

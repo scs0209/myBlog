@@ -1,3 +1,6 @@
+/* eslint-disable */
+import 'react-toastify/dist/ReactToastify.css';
+
 import loadable from '@loadable/component';
 import GlobalLoading from 'Components/common/GlobalLoading';
 import ErrorBoundary, { FallbackProps } from 'Components/ErrorHandling/ErrorBoundary';
@@ -6,6 +9,7 @@ import { Flowbite } from 'flowbite-react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from 'react-query';
 import { Route, Routes } from 'react-router';
+import { ToastContainer, toast } from 'react-toastify';
 
 import Category from '../Components/Category';
 import Header from '../Components/common/Header';
@@ -28,6 +32,7 @@ const MainPage = loadable(() => import('./Main'));
 const Home = loadable(() => import('../Pages/HomePage'));
 
 const App = () => {
+  const notify = () => toast('Wow so easy!');
   const { reset } = useQueryErrorResetBoundary();
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -68,6 +73,7 @@ const App = () => {
             <Header toggleSidebar={toggleSidebar} />
             <Category showSidebar={showSidebar} />
             <GlobalLoading />
+            <ToastContainer />
             <div>
               <Routes>
                 <Route path="/" element={<Home />} />

@@ -1,11 +1,12 @@
 import { usePost } from 'apis/post';
-import { increasePostViews } from 'apis/postList';
+import { useIncreasePostViews } from 'apis/postList';
 import { useCallback, useEffect, useState } from 'react';
 
 const PAGE_SIZE = 10;
 
 const usePosts = (currentPage: number, searchTerm: string) => {
   const { data: postData } = usePost(currentPage, searchTerm);
+  const { mutateAsync: increasePostViews } = useIncreasePostViews();
 
   const posts = postData?.posts;
   const totalPosts = postData?.count ?? 0;

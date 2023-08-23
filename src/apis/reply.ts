@@ -1,5 +1,6 @@
 import { client } from 'apis';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
 export const useGetReply = (id: string | undefined) =>
   useQuery(['replies', id], async () => {
@@ -22,6 +23,9 @@ export const useCreateReply = () => {
     },
     {
       onSuccess: () => queryClient.invalidateQueries('replies'),
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
     },
   );
 
@@ -42,6 +46,9 @@ export const useUpdateReply = () => {
     },
     {
       onSuccess: () => queryClient.invalidateQueries('replies'),
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
     },
   );
 
@@ -61,6 +68,9 @@ export const useDeleteReply = () => {
     },
     {
       onSuccess: () => queryClient.invalidateQueries('replies'),
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
     },
   );
 

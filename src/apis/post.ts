@@ -1,5 +1,6 @@
 import { client } from 'apis';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
 export interface PostData {
   title: string;
@@ -37,6 +38,9 @@ export const useCreatePost = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('post');
       },
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
     },
   );
 
@@ -56,6 +60,9 @@ export const usePostUpdate = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('post');
       },
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
     },
   );
 
@@ -72,6 +79,9 @@ export const usePostDelete = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('posts');
+      },
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
       },
     },
   );

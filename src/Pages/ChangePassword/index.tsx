@@ -1,4 +1,4 @@
-import { updatePassword } from 'apis/password';
+import { useUpdatePassword } from 'apis/password';
 import HeadInfo from 'Components/common/HeadInfo';
 import React, { FormEvent, useCallback, useState } from 'react';
 
@@ -9,12 +9,13 @@ const ChangePassword = () => {
   const [password, onChangePassword, setPassword] = useInput('');
   const [newPassword, onChangeNewPassword, setNewPassword] = useInput('');
   const [message, setMessage] = useState('');
+  const { mutateAsync: updatePassword } = useUpdatePassword();
 
   const onSubmitForm = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       try {
-        const res = await updatePassword(password, newPassword);
+        const res = await updatePassword({ currentPassword: password, newPassword });
 
         setMessage(res.data.message);
       } catch (err: any) {

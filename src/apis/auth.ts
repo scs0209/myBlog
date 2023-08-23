@@ -1,5 +1,6 @@
 import { client } from 'apis';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
 export const useUser = () =>
   useQuery('user', async () => {
@@ -28,6 +29,9 @@ export const useLogin = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('user'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
       },
+      onError: (error: any) => {
+        toast.error(`${error.response.data}`);
+      },
     },
   );
 
@@ -45,6 +49,11 @@ export const useSignUp = () => {
 
       return data;
     },
+    {
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
+      },
+    },
   );
 
   return signUpMutation;
@@ -60,6 +69,9 @@ export const useDeleteUser = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user');
+      },
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
       },
     },
   );
@@ -77,6 +89,9 @@ export const useLogout = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user');
+      },
+      onError: (error: any) => {
+        toast.error(`${error.message}`);
       },
     },
   );
