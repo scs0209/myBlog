@@ -24,7 +24,6 @@ const SignUp = () => {
 
   const onSubmit = handleSubmit(async (formData) => {
     await signUp({ email: formData.email, name: formData.name, password: formData.password });
-    alert('회원가입 완료!');
   });
 
   if (data) {

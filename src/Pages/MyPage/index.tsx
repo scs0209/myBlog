@@ -12,7 +12,6 @@ const MyPage = () => {
 
   const handleWithdraw = async () => {
     await deleteUser(userData.id);
-    alert('회원 탈퇴가 완료되었습니다.');
     navigate('/');
   };
 

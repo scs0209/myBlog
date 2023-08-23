@@ -41,7 +41,6 @@ const Post = () => {
 
       await createPost(postData);
 
-      alert('게시글이 작성되었습니다.');
       setTitle('');
       setContent('');
       setCategory('');

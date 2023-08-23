@@ -28,6 +28,7 @@ export const useLogin = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
+        toast.success('로그인에 성공했습니다.');
       },
       onError: (error: any) => {
         toast.error(`${error.response.data}`);
@@ -50,6 +51,9 @@ export const useSignUp = () => {
       return data;
     },
     {
+      onSuccess: () => {
+        toast.success('회원가입이 완료되었습니다.');
+      },
       onError: (error: any) => {
         toast.error(`${error.message}`);
       },
@@ -69,6 +73,7 @@ export const useDeleteUser = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user');
+        toast.success('계정이 삭제되었습니다.');
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
@@ -89,6 +94,7 @@ export const useLogout = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user');
+        toast.success('로그아웃되었습니다.');
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);

@@ -41,6 +41,7 @@ export const useEditCategory = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('categories'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
+        toast.success('카테고리가 수정되었습니다.');
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);

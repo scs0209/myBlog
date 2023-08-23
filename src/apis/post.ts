@@ -37,6 +37,7 @@ export const useCreatePost = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('post');
+        toast.success('게시글이 작성되었습니다.');
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
