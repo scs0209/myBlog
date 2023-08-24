@@ -1,14 +1,16 @@
 import { useCommentContext } from 'contexts/commentContext';
 import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 import { VFC } from 'react';
+import useRepliesVisibilityStore from 'store/repliesVisibilityStore';
 
 interface Props {
   toggleShow: () => void;
 }
 
 const CommentContent: VFC<Props> = ({ toggleShow }) => {
-  const { replies } = useCommentContext();
-  const { isRepliesVisible, handleRepliesClick, comment } = useRepliesVisibilityContext();
+  const { repliesData } = useCommentContext();
+  const { isRepliesVisible, handleRepliesClick } = useRepliesVisibilityStore();
+  const { comment } = useRepliesVisibilityContext();
 
   return (
     <>
@@ -42,7 +44,7 @@ const CommentContent: VFC<Props> = ({ toggleShow }) => {
           onClick={() => handleRepliesClick(comment?.id)}
         >
           {isRepliesVisible[comment?.id] ? '숨기기' : '보기'}{' '}
-          {`(${replies?.filter((reply) => reply.CommentId === comment?.id).length})`}
+          {`(${repliesData?.filter((reply) => reply.CommentId === comment?.id).length})`}
         </button>
       </div>
     </>

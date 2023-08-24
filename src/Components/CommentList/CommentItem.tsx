@@ -1,5 +1,4 @@
 /* eslint-disable */
-import { Dropdown } from 'flowbite-react';
 import React, { useCallback, useState } from 'react';
 
 import CommentEditForm from './CommentEditForm';

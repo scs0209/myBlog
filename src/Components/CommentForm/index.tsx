@@ -26,8 +26,6 @@ const CommentForm = () => {
     }
   });
 
-  if (content === undefined) return <div>로딩중...</div>;
-
   return (
     <form className="mb-6" onSubmit={handleSubmit}>
       <div className="flex justify-between items-center mb-6">

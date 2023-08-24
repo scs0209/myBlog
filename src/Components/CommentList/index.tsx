@@ -4,11 +4,11 @@ import CommentItem from './CommentItem';
 import { useCommentContext } from 'contexts/commentContext';
 
 const CommentList = () => {
-  const { comments } = useCommentContext();
+  const { commentsData } = useCommentContext();
 
   return (
     <>
-      {comments?.map((comment) => (
+      {commentsData?.map((comment) => (
         <RepliesVisibilityProvider key={comment?.id} comment={comment}>
           <CommentItem />
         </RepliesVisibilityProvider>
