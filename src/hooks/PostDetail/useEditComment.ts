@@ -1,11 +1,9 @@
+import { useUpdateComment } from 'apis/comment';
 import { useCallback, useState } from 'react';
 import useInput from 'utils/useInput';
 
-interface CommentActions {
-  update: (id: number, content: string) => void;
-}
-
-const useEditComment = (commentActions: CommentActions) => {
+const useEditComment = () => {
+  const { mutateAsync: updateComment } = useUpdateComment();
   const [editId, setEditId] = useState<number | null>(null);
   const [editContent, onChangeEditContent, setEditContent] = useInput('');
 
@@ -24,10 +22,10 @@ const useEditComment = (commentActions: CommentActions) => {
       return;
     }
 
-    commentActions.update(editId, editContent);
+    updateComment({ commentId: editId, content: editContent });
     setEditId(null);
     setEditContent('');
-  }, [editId, editContent, commentActions]);
+  }, [editId, editContent]);
 
   return {
     editId,

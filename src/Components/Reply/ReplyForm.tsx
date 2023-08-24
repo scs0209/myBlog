@@ -3,11 +3,13 @@ import { Textarea } from 'flowbite-react';
 import React, { useCallback } from 'react';
 import useInput from 'utils/useInput';
 
-import { useCommentContext } from 'contexts/commentContext';
 import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
+import { useCreateReply } from 'apis/reply';
+import { useUser } from 'apis/auth';
 
 const ReplyForm = () => {
-  const { replyActions } = useCommentContext();
+  const { data: user } = useUser();
+  const { mutateAsync: createReply } = useCreateReply();
   const { comment } = useRepliesVisibilityContext();
   const [replyContent, onChangeReplyContent, setReplyContent] = useInput<string>('');
 
@@ -21,10 +23,16 @@ const ReplyForm = () => {
         return;
       }
 
-      replyActions.create(commentId, replyContent);
+      const newReply = {
+        content: replyContent,
+        User: { name: user.name },
+        CommentId: commentId,
+      };
+
+      createReply({ commentId, newReply });
       setReplyContent('');
     },
-    [replyContent, replyActions],
+    [replyContent, createReply],
   );
 
   return (

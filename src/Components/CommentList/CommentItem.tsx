@@ -2,15 +2,15 @@
 import React, { useCallback, useState } from 'react';
 
 import CommentEditForm from './CommentEditForm';
-import { useCommentContext } from 'contexts/commentContext';
 import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 import ReplySection from 'Components/Reply/ReplySection';
 import CommentContent from './CommentContent';
 import useEditComment from 'hooks/PostDetail/useEditComment';
 import UserDropDown from 'Components/common/DropDown';
+import { useDeleteComment } from 'apis/comment';
 
 const CommentItem = () => {
-  const { commentActions } = useCommentContext();
+  const { mutateAsync: deleteComment } = useDeleteComment();
   const { comment } = useRepliesVisibilityContext();
   const {
     editId,
@@ -19,14 +19,14 @@ const CommentItem = () => {
     handleEditSubmit,
     handleEditClick,
     onChangeEditContent,
-  } = useEditComment(commentActions);
+  } = useEditComment();
   const [show, setShow] = useState(false);
 
   const handleDeleteClick = useCallback(
     (commentId: number) => {
-      commentActions.delete(commentId);
+      deleteComment(commentId);
     },
-    [commentActions],
+    [deleteComment],
   );
 
   const toggleShow = useCallback(() => {

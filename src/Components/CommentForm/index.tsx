@@ -1,23 +1,32 @@
 /* eslint-disable */
 import autosize from 'autosize';
 import { Textarea } from 'flowbite-react';
-import React, { FormEvent, useCallback, useEffect, useRef, VFC } from 'react';
+import React, { FormEvent, useCallback, useEffect, useRef } from 'react';
 
 import useInput from '../../utils/useInput';
-import { useCommentContext } from 'contexts/commentContext';
+import { useParams } from 'react-router';
+import { useCreateComment } from 'apis/comment';
 
 const CommentForm = () => {
-  const { commentActions } = useCommentContext();
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync: createComment } = useCreateComment();
   const [content, onChangeContent, setContent] = useInput('');
   const textareaRef = useRef(null);
 
   const handleSubmit = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      commentActions.create(content);
+
+      if (!content || !content.trim()) {
+        alert('내용을 입력해주세요.');
+
+        return;
+      }
+
+      await createComment({ postId: id, content });
       setContent('');
     },
-    [content, commentActions],
+    [content, createComment, id],
   );
 
   useEffect(() => {
