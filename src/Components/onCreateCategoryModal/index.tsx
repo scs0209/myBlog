@@ -3,15 +3,15 @@ import Modal from 'Components/Modal';
 import React, { FormEvent, useCallback } from 'react';
 
 import useInput from '../../utils/useInput';
-import { useCategory } from 'contexts/categoryContext';
 import { useCategories, useCreateCategory } from 'apis/category';
 import { Category } from 'typings/db';
+import useCategoryStore from 'store/categoryStore';
 
 const CreateCategoryModal = () => {
   const [newCategory, onChangeNewCategory, setNewCategory] = useInput('');
   const { data: categories } = useCategories();
   const { mutateAsync: createCategory } = useCreateCategory();
-  const { onCloseModal, setShowCreateCategoryModal, showCreateCategoryModal } = useCategory();
+  const { onCloseModal, setShowCreateCategoryModal, showCreateCategoryModal } = useCategoryStore();
 
   const onCreateCategory = useCallback(
     async (e: FormEvent) => {
