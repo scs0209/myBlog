@@ -1,15 +1,17 @@
 /* eslint-disable */
 import { Textarea } from 'flowbite-react';
 import React, { ChangeEvent, VFC } from 'react';
+import useReplyStore from 'store/replyStore';
 
 interface Props {
   value: string;
-  onCancel: () => void;
   onSave: () => void;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const ReplyEdit: VFC<Props> = ({ onCancel, onSave, value, onChange }) => {
+const ReplyEdit: VFC<Props> = ({ onSave, value, onChange }) => {
+  const { handleEditCancel } = useReplyStore();
+
   return (
     <form className="mb-6">
       <div className="px-4 py-2 mb-4 bg-white border border-gray-200 rounded-lg rounded-t-lg dark:bg-gray-800 dark:border-gray-700">
@@ -26,7 +28,7 @@ const ReplyEdit: VFC<Props> = ({ onCancel, onSave, value, onChange }) => {
       <button
         type="button"
         className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-        onClick={onCancel}
+        onClick={handleEditCancel}
       >
         취소
       </button>

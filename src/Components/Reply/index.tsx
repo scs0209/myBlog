@@ -1,6 +1,7 @@
 import { useDeleteReply, useUpdateReply } from 'apis/reply';
 import UserDropDown from 'Components/common/DropDown';
 import React, { ChangeEvent, useCallback, useState, VFC } from 'react';
+import useReplyStore from 'store/replyStore';
 import { Reply as ReplyType } from 'typings/db';
 
 import ReplyEdit from './ReplyEdit';
@@ -12,16 +13,8 @@ interface Props {
 const ReplyComp: VFC<Props> = ({ reply }) => {
   const { mutateAsync: updateReply } = useUpdateReply();
   const { mutateAsync: deleteReply } = useDeleteReply();
-  const [isEditing, setIsEditing] = useState(false);
+  const { isEditing, setIsEditing, handleEdit } = useReplyStore();
   const [editContent, setEditContent] = useState(reply.content);
-
-  const handleEdit = useCallback(() => {
-    setIsEditing(true);
-  }, []);
-
-  const handleEditCancel = useCallback(() => {
-    setIsEditing(false);
-  }, []);
 
   const handleEditSave = useCallback(() => {
     updateReply({ commentId: reply.CommentId, replyId: reply.id, content: editContent });
@@ -47,12 +40,7 @@ const ReplyComp: VFC<Props> = ({ reply }) => {
 
       <p className="mb-4 text-gray-500 dark:text-gray-400">{reply.content}</p>
       {isEditing && (
-        <ReplyEdit
-          onCancel={handleEditCancel}
-          onSave={handleEditSave}
-          value={editContent}
-          onChange={handleContentChange}
-        />
+        <ReplyEdit onSave={handleEditSave} value={editContent} onChange={handleContentChange} />
       )}
     </>
   );
