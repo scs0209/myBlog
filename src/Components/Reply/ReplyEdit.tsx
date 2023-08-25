@@ -12,7 +12,7 @@ interface Props {
 const ReplyEdit: VFC<Props> = ({ onCancel, onSave, value, onChange }) => {
   return (
     <form className="mb-6">
-      <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <div className="px-4 py-2 mb-4 bg-white border border-gray-200 rounded-lg rounded-t-lg dark:bg-gray-800 dark:border-gray-700">
         <label className="sr-only">Your comment</label>
         <Textarea
           value={value}
