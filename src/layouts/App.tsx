@@ -9,7 +9,7 @@ import { Flowbite } from 'flowbite-react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from 'react-query';
 import { Route, Routes } from 'react-router';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, Zoom } from 'react-toastify';
 
 import Category from '../Components/Category';
 import Header from '../Components/common/Header';
@@ -76,7 +76,13 @@ const App = () => {
             <Header toggleSidebar={toggleSidebar} />
             <Category showSidebar={showSidebar} />
             <GlobalLoading />
-            <ToastContainer />
+            <ToastContainer
+              position="top-center"
+              autoClose={1000}
+              hideProgressBar
+              transition={Zoom}
+              limit={1}
+            />
             <div>
               <Routes>
                 <Route path="/" element={<Home />} />
