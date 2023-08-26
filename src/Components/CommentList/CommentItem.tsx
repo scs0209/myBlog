@@ -1,37 +1,27 @@
 /* eslint-disable */
-import React, { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import CommentEditForm from './CommentEditForm';
 import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 import ReplySection from 'Components/Reply/ReplySection';
 import CommentContent from './CommentContent';
-import useEditComment from 'hooks/PostDetail/useEditComment';
 import UserDropDown from 'Components/common/DropDown';
 import { useDeleteComment } from 'apis/comment';
+import { useCommentStore } from 'store/commentStore';
 
 const CommentItem = () => {
   const { mutateAsync: deleteComment } = useDeleteComment();
   const { comment } = useRepliesVisibilityContext();
-  const {
-    editId,
-    editContent,
-    handleEditCancel,
-    handleEditSubmit,
-    handleEditClick,
-    onChangeEditContent,
-  } = useEditComment();
+  const { editId, handleEditClick } = useCommentStore();
   const [show, setShow] = useState(false);
 
-  const handleDeleteClick = useCallback(
-    (commentId: number) => {
-      deleteComment(commentId);
-    },
-    [deleteComment],
-  );
+  const handleDeleteClick = (commentId: number) => {
+    deleteComment(commentId);
+  };
 
-  const toggleShow = useCallback(() => {
+  const toggleShow = () => {
     setShow((prev) => !prev);
-  }, []);
+  };
 
   return (
     <>
@@ -39,20 +29,11 @@ const CommentItem = () => {
         <UserDropDown
           username={comment?.User?.name}
           isEditing={editId === comment?.id}
-          onEdit={() => handleEditClick(comment?.id!, comment?.content!)}
+          onEdit={() => handleEditClick(comment?.id, comment?.content)}
           onDelete={() => handleDeleteClick(comment?.id)}
         />
 
-        {editId === comment?.id ? (
-          <CommentEditForm
-            value={editContent}
-            onChange={onChangeEditContent}
-            onCancel={handleEditCancel}
-            onSubmit={handleEditSubmit}
-          />
-        ) : (
-          <CommentContent toggleShow={toggleShow} />
-        )}
+        {editId === comment?.id ? <CommentEditForm /> : <CommentContent toggleShow={toggleShow} />}
       </article>
       <ReplySection show={show} />
     </>
