@@ -38,9 +38,10 @@ const ReplyComp: VFC<Props> = ({ reply }) => {
         onDelete={handleDelete}
       />
 
-      <p className="mb-4 text-gray-500 dark:text-gray-400">{reply.content}</p>
-      {isEditing && (
+      {isEditing ? (
         <ReplyEdit onSave={handleEditSave} value={editContent} onChange={handleContentChange} />
+      ) : (
+        <p className="mb-4 text-gray-500 dark:text-gray-400">{reply.content}</p>
       )}
     </>
   );
