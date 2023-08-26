@@ -1,12 +1,12 @@
-import { backUrl } from 'config';
+import { BASE_URL } from 'apis/index';
 
 const SocialBtn = () => {
   const handleGoogleLogin = () => {
-    window.location.href = `${backUrl}/api/auth/google`;
+    window.location.href = `${BASE_URL}/api/auth/google`;
   };
 
   const handleGitHubLogin = () => {
-    window.location.href = `${backUrl}/api/auth/github`;
+    window.location.href = `${BASE_URL}/api/auth/github`;
   };
 
   return (

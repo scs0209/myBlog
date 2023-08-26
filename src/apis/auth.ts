@@ -1,4 +1,5 @@
 import { client } from 'apis';
+import { TOAST_MESSAGE } from 'constants/toastMessage';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 
@@ -28,7 +29,7 @@ export const useLogin = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
-        toast.success('로그인에 성공했습니다.');
+        toast.success(TOAST_MESSAGE.LOGIN_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.response.data}`);
@@ -52,7 +53,7 @@ export const useSignUp = () => {
     },
     {
       onSuccess: () => {
-        toast.success('회원가입이 완료되었습니다.');
+        toast.success(TOAST_MESSAGE.SIGNUP_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
@@ -73,7 +74,7 @@ export const useDeleteUser = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user');
-        toast.success('계정이 삭제되었습니다.');
+        toast.success(TOAST_MESSAGE.DELETE_USER_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
@@ -94,7 +95,7 @@ export const useLogout = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user');
-        toast.success('로그아웃되었습니다.');
+        toast.success(TOAST_MESSAGE.LOGOUT_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);

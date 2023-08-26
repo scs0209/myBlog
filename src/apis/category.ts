@@ -1,4 +1,5 @@
 import { client } from 'apis';
+import { TOAST_MESSAGE } from 'constants/toastMessage';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 
@@ -19,6 +20,7 @@ export const useCreateCategory = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('categories');
+        toast.success(TOAST_MESSAGE.CREATE_CATEGORY_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
@@ -41,7 +43,7 @@ export const useEditCategory = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('categories'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
-        toast.success('카테고리가 수정되었습니다.');
+        toast.success(TOAST_MESSAGE.UPDATE_CATEGORY_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
@@ -63,7 +65,8 @@ export const useToggleCategoryHidden = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('categories'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
+        queryClient.invalidateQueries('categories');
+        toast.success(TOAST_MESSAGE.HIDDEN_CATEGORY_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
@@ -83,7 +86,8 @@ export const useDeleteCategory = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('categories'); // 로그인 성공 시 사용자 쿼리를 무효화합니다.
+        queryClient.invalidateQueries('categories');
+        toast.success(TOAST_MESSAGE.DELETE_CATEGORY_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);

@@ -1,8 +1,8 @@
+import { BASE_URL } from 'apis/index';
 import axios from 'axios';
 import HeadInfo from 'Components/common/HeadInfo';
 import React, { FormEvent, useCallback, useState } from 'react';
 
-import { backUrl } from '../../config';
 import styles from '../../styles/FindId.module.css';
 import useInput from '../../utils/useInput';
 
@@ -16,7 +16,7 @@ const FindId = () => {
       e.preventDefault();
       axios
         .post(
-          `${backUrl}/api/users/findId`,
+          `${BASE_URL}/api/users/findId`,
           { name },
           {
             withCredentials: true,

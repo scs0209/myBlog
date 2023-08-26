@@ -1,4 +1,5 @@
 import { client } from 'apis';
+import { TOAST_MESSAGE } from 'constants/toastMessage';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 
@@ -10,6 +11,9 @@ export const useFindPassword = () => {
       return data;
     },
     {
+      onSuccess: () => {
+        toast.success(TOAST_MESSAGE.FIND_PASSWORD_SUCCESS);
+      },
       onError: (error: any) => {
         toast.error(`Failed to find password: ${error.message}`);
       },
@@ -27,6 +31,9 @@ export const useUpdatePassword = () => {
       return data;
     },
     {
+      onSuccess: () => {
+        toast.success(TOAST_MESSAGE.UPDATE_PASSWORD_SUCCESS);
+      },
       onError: (error: any) => {
         toast.error(`Failed to update password: ${error.message}`);
       },

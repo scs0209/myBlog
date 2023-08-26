@@ -1,4 +1,5 @@
 import { client } from 'apis';
+import { TOAST_MESSAGE } from 'constants/toastMessage';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 
@@ -37,7 +38,7 @@ export const useCreatePost = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('post');
-        toast.success('게시글이 작성되었습니다.');
+        toast.success(TOAST_MESSAGE.ADD_POST_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
@@ -60,6 +61,7 @@ export const usePostUpdate = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('post');
+        toast.success(TOAST_MESSAGE.UPDATE_POST_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
@@ -80,6 +82,7 @@ export const usePostDelete = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('posts');
+        toast.success(TOAST_MESSAGE.DELETE_POST_SUCCESS);
       },
       onError: (error: any) => {
         toast.error(`${error.message}`);
