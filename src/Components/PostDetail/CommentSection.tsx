@@ -1,19 +1,15 @@
-import { CommentProvider } from 'contexts/commentContext';
-
 import CommentForm from '../../Components/CommentForm';
 import CommentList from '../../Components/CommentList';
 import styles from '../../styles/PostDetail.module.css';
 
 const CommentSection = () => {
   return (
-    <CommentProvider>
-      <section className={`${styles.section} dark:bg-gray-800`}>
-        <div className="max-w-4xl mx-auto px-4">
-          <CommentForm />
-          <CommentList />
-        </div>
-      </section>
-    </CommentProvider>
+    <section className={`${styles.section} dark:bg-gray-800`}>
+      <div className="max-w-4xl mx-auto px-4">
+        <CommentForm />
+        <CommentList />
+      </div>
+    </section>
   );
 };
 

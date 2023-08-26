@@ -1,14 +1,17 @@
-import { useCommentContext } from 'contexts/commentContext';
+import { useGetReply } from 'apis/reply';
 import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 import { VFC } from 'react';
+import { useParams } from 'react-router';
 import useRepliesVisibilityStore from 'store/repliesVisibilityStore';
+import { Reply } from 'typings/db';
 
 interface Props {
   toggleShow: () => void;
 }
 
 const CommentContent: VFC<Props> = ({ toggleShow }) => {
-  const { repliesData } = useCommentContext();
+  const { id } = useParams<{ id: string }>();
+  const { data: repliesData } = useGetReply(id);
   const { isRepliesVisible, handleRepliesClick } = useRepliesVisibilityStore();
   const { comment } = useRepliesVisibilityContext();
 
@@ -44,7 +47,7 @@ const CommentContent: VFC<Props> = ({ toggleShow }) => {
           onClick={() => handleRepliesClick(comment?.id)}
         >
           {isRepliesVisible[comment?.id] ? '숨기기' : '보기'}{' '}
-          {`(${repliesData?.filter((reply) => reply.CommentId === comment?.id).length})`}
+          {`(${repliesData?.filter((reply: Reply) => reply.CommentId === comment?.id).length})`}
         </button>
       </div>
     </>

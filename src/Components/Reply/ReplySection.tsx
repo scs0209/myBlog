@@ -1,7 +1,9 @@
-import { useCommentContext } from 'contexts/commentContext';
+import { useGetReply } from 'apis/reply';
 import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 import { VFC } from 'react';
+import { useParams } from 'react-router';
 import useRepliesVisibilityStore from 'store/repliesVisibilityStore';
+import { Reply } from 'typings/db';
 
 import ReplyComp from '.';
 import ReplyForm from './ReplyForm';
@@ -11,7 +13,8 @@ interface Props {
 }
 
 const ReplySection: VFC<Props> = ({ show }) => {
-  const { repliesData } = useCommentContext();
+  const { id } = useParams<{ id: string }>();
+  const { data: repliesData } = useGetReply(id);
   const { isRepliesVisible } = useRepliesVisibilityStore();
   const { comment } = useRepliesVisibilityContext();
 
@@ -21,8 +24,8 @@ const ReplySection: VFC<Props> = ({ show }) => {
       {isRepliesVisible[comment?.id] && (
         <>
           {repliesData
-            ?.filter((reply) => reply.CommentId === comment?.id)
-            .map((reply) => (
+            ?.filter((reply: Reply) => reply.CommentId === comment?.id)
+            .map((reply: Reply) => (
               <ReplyComp key={reply.id} reply={reply} />
             ))}
         </>
