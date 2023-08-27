@@ -1,6 +1,7 @@
 import { useLogin, useUser } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
 import SocialBtn from 'Components/LogIn/SocialBtn';
+import { PATH } from 'constants/path';
 import { useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
 
@@ -26,7 +27,7 @@ const Login = () => {
   });
 
   if (userData) {
-    return <Navigate to="/main/posts" />;
+    return <Navigate to={PATH.POSTLIST} />;
   }
 
   return (

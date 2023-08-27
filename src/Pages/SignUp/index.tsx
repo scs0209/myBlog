@@ -1,5 +1,6 @@
 import { useSignUp, useUser } from 'apis/auth';
 import HeadInfo from 'Components/common/HeadInfo';
+import { PATH } from 'constants/path';
 import { useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
 
@@ -27,7 +28,7 @@ const SignUp = () => {
   });
 
   if (data) {
-    return <Navigate to="/main/posts" />;
+    return <Navigate to={PATH.POSTLIST} />;
   }
 
   return (

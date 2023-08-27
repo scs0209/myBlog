@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { startTransition, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const usePagination = (searchTerm: string) => {
@@ -8,7 +8,9 @@ const usePagination = (searchTerm: string) => {
   const handlePageChange = useCallback(
     (pageNum: number) => {
       setCurrentPage(pageNum);
-      navigate(`/main/posts?page=${pageNum}&search=${searchTerm}`);
+      startTransition(() => {
+        navigate(`/main/posts?page=${pageNum}&search=${searchTerm}`);
+      });
     },
     [setCurrentPage, navigate, searchTerm],
   );

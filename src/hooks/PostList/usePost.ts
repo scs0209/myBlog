@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 const PAGE_SIZE = 10;
 
 const usePosts = (currentPage: number, searchTerm: string) => {
-  const { data: postData } = usePost(currentPage, searchTerm);
+  const { data: postData, isLoading } = usePost(currentPage, searchTerm);
   const { mutateAsync: increasePostViews } = useIncreasePostViews();
 
   const posts = postData?.posts;
@@ -42,6 +42,7 @@ const usePosts = (currentPage: number, searchTerm: string) => {
   );
 
   return {
+    isLoading,
     postData,
     handlePostClick,
     currentPagePosts,

@@ -38,17 +38,21 @@ const Left = () => {
       <Card className="max-w-sm mb-2">
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">Skills</h5>
         <div className="flex flex-wrap">
-          {skills.map((skill) => {
-            return <Badge className="mt-2 mr-2">{skill}</Badge>;
+          {skills.map((skill, i) => {
+            return (
+              <Badge className="mt-2 mr-2" key={i}>
+                {skill}
+              </Badge>
+            );
           })}
         </div>
       </Card>
       <Card className="max-w-sm">
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">Hobbies</h5>
         <div className="flex flex-wrap">
-          {hobbies.map((hobby) => {
+          {hobbies.map((hobby, i) => {
             return (
-              <Badge color="indigo" className="mt-2 mr-2">
+              <Badge color="indigo" className="mt-2 mr-2" key={i}>
                 {hobby}
               </Badge>
             );

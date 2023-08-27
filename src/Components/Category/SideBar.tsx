@@ -16,10 +16,12 @@ const SideBar = () => {
           <Sidebar.Item>
             <Link to="/main/profile">프로필</Link>
           </Sidebar.Item>
-          <Sidebar.Item>
-            <a href="https://portfolio-next-ab9r.vercel.app/" target="_blank" rel="noreferrer">
-              포트폴리오
-            </a>
+          <Sidebar.Item
+            href="https://portfolio-next-ab9r.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <p>포트폴리오</p>
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>

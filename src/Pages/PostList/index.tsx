@@ -1,7 +1,8 @@
 import HeadInfo from 'Components/common/HeadInfo';
-import { CustomFlowbiteTheme, Pagination } from 'flowbite-react';
+import { CustomFlowbiteTheme, Pagination, Spinner } from 'flowbite-react';
 import usePagination from 'hooks/PostList/usePagination';
 import usePosts from 'hooks/PostList/usePost';
+import { startTransition } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { formatDate } from 'utils/dateUtil';
 
@@ -24,7 +25,9 @@ const PostList = () => {
   const { handlePageChange } = usePagination(search);
 
   const handleSearch = (keyword: string) => {
-    navigate(`/main/posts?page=1&search=${keyword}`);
+    startTransition(() => {
+      navigate(`/main/posts?page=1&search=${keyword}`);
+    });
   };
 
   return (
