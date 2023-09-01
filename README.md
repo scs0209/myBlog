@@ -4,6 +4,9 @@
 <img src="https://user-images.githubusercontent.com/110822847/229564131-388a385d-c880-4ab7-967d-d392a6dec03f.png" width="250">
 </div>
 
+## 리팩토링 및 새 기능 추가에 대한 내용(이슈 탭에서 확인)
+https://github.com/scs0209/myBlog/issues
+
 ## 목차
 
 <!-- TOC -->
@@ -149,6 +152,7 @@ npm run start
 
 - `react-hook-form`을 사용하여 유효성 검사 및 불필요한 리렌더링 최소화
 - 소셜 로그인 구현
+
   ![로그인, 회원가입](https://github.com/scs0209/myBlog/assets/110822847/950e6e63-7d88-4a83-9072-9281fc44804f)
 
 2. 게시글 작성
