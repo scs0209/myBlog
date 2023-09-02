@@ -8,6 +8,7 @@ import ErrorFallback from 'Components/ErrorHandling/ErrorFallback';
 import { Flowbite } from 'flowbite-react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Route, Routes } from 'react-router';
 import { ToastContainer, Zoom } from 'react-toastify';
 
@@ -90,6 +91,7 @@ const App = () => {
               </Routes>
             </div>
           </div>
+          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
         </QueryClientProvider>
       </ErrorBoundary>
     </Flowbite>

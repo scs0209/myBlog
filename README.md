@@ -51,7 +51,7 @@
 ## 리팩토링을 진행한 이유
 
 - **UI/UX 개선**: 더 깔끔하고 직관적인 디자인과 사용성이 향상된 컴포넌트를 구현하기 위해
-- **props drilling 문제 해결**: Context API나 Redux를 도입하여 전역 상태 관리를 통해 props drilling을 줄이기 위해(진행 전)
+- **props drilling 문제 해결**: Context API나 Zustand를 도입하여 전역 상태 관리를 통해 props drilling을 줄이기 위해(진행 전)
 - **API 요청 함수의 분리**: 폴더 구조를 개선하여 API 요청과 관련된 함수들을 별도로 관리하기 위해(진행 전)
 
 ## 프로젝트 소개
@@ -218,11 +218,13 @@ npm run start
  ┃ ┣ 📜category.ts
  ┃ ┣ 📜comment.ts
  ┃ ┣ 📜index.ts
+ ┃ ┣ 📜like.ts
+ ┃ ┣ 📜news.ts
  ┃ ┣ 📜password.ts
  ┃ ┣ 📜post.ts
  ┃ ┣ 📜postList.ts
  ┃ ┣ 📜reply.ts
- ┃ ┗ 📜write.ts
+ ┃ ┗ 📜visitor.ts
  ┣ 📂Components
  ┃ ┣ 📂Category
  ┃ ┃ ┣ 📜EditButton.tsx
@@ -243,8 +245,12 @@ npm run start
  ┃ ┃ ┣ 📜CategoryButton.tsx
  ┃ ┃ ┣ 📜DropDown.tsx
  ┃ ┃ ┣ 📜Footer.tsx
+ ┃ ┃ ┣ 📜GlobalLoading.tsx
  ┃ ┃ ┣ 📜Header.tsx
  ┃ ┃ ┗ 📜HeadInfo.tsx
+ ┃ ┣ 📂ErrorHandling
+ ┃ ┃ ┣ 📜ErrorBoundary.tsx
+ ┃ ┃ ┗ 📜ErrorFallback.tsx
  ┃ ┣ 📂HomePage
  ┃ ┃ ┣ 📜Carousels.tsx
  ┃ ┃ ┣ 📜News.tsx
@@ -278,11 +284,10 @@ npm run start
  ┃ ┃ ┗ 📜index.tsx
  ┃ ┗ 📂Signup
  ┃ ┃ ┗ 📜SignupErr.tsx
- ┣ 📂config
- ┃ ┗ 📜index.ts
+ ┣ 📂constants
+ ┃ ┣ 📜path.ts
+ ┃ ┗ 📜toastMessage.ts
  ┣ 📂contexts
- ┃ ┣ 📜categoryContext.tsx
- ┃ ┣ 📜commentContext.tsx
  ┃ ┗ 📜repliesVisibilityContext.tsx
  ┣ 📂hooks
  ┃ ┣ 📂Category
@@ -292,14 +297,10 @@ npm run start
  ┃ ┃ ┗ 📜usePagination.ts
  ┃ ┣ 📂PostDetail
  ┃ ┃ ┣ 📜useDelete.ts
- ┃ ┃ ┣ 📜useEditComment.ts
  ┃ ┃ ┗ 📜useLikes.ts
- ┃ ┣ 📂PostList
+ ┃ ┗ 📂PostList
  ┃ ┃ ┣ 📜usePagination.ts
  ┃ ┃ ┗ 📜usePost.ts
- ┃ ┣ 📜useLogin.ts
- ┃ ┣ 📜usePassword.ts
- ┃ ┗ 📜useSignUp.ts
  ┣ 📂images
  ┃ ┣ 📜banner.jpg
  ┃ ┣ 📜FilmFinder.PNG
@@ -343,6 +344,11 @@ npm run start
  ┃ ┃ ┗ 📜index.tsx
  ┃ ┗ 📂SignUp
  ┃ ┃ ┗ 📜index.tsx
+ ┣ 📂store
+ ┃ ┣ 📜categoryStore.ts
+ ┃ ┣ 📜commentStore.ts
+ ┃ ┣ 📜repliesVisibilityStore.ts
+ ┃ ┗ 📜replyStore.ts
  ┣ 📂styles
  ┃ ┣ 📜CategoryPost.module.css
  ┃ ┣ 📜ChangePassword.module.css
@@ -355,11 +361,9 @@ npm run start
  ┃ ┗ 📜db.ts
  ┣ 📂utils
  ┃ ┣ 📜dateUtil.ts
- ┃ ┣ 📜fetcher.ts
  ┃ ┗ 📜useInput.ts
  ┣ 📜index.css
  ┣ 📜index.tsx
- ┗ 📜setupProxy.js
 ```
 
 ## ❤ git commit message 컨벤션
