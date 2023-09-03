@@ -19,15 +19,7 @@ export const queryErrorHandler = (error: any) => {
   return <div className="fixed bottom-0 h-screen text-8xl">{error.message}</div>;
 };
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      onError: queryErrorHandler,
-      retry: 0,
-      suspense: true,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 const MainPage = loadable(() => import('./Main'), {
   fallback: <div>Loading...</div>,
@@ -68,32 +60,32 @@ const App = () => {
 
   return (
     <Flowbite>
-      <ErrorBoundary
+      {/* <ErrorBoundary
         fallback={(props: FallbackProps) => <ErrorFallback {...props} />}
         onReset={reset}
-      >
-        <QueryClientProvider client={queryClient}>
-          <div className="dark:bg-slate-700">
-            <Header toggleSidebar={toggleSidebar} />
-            <Category showSidebar={showSidebar} />
-            <GlobalLoading />
-            <ToastContainer
-              position="top-center"
-              autoClose={1000}
-              hideProgressBar
-              transition={Zoom}
-              limit={1}
-            />
-            <div>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/main/*" element={<MainPage />} />
-              </Routes>
-            </div>
+      > */}
+      <QueryClientProvider client={queryClient}>
+        <div className="dark:bg-slate-700">
+          <Header toggleSidebar={toggleSidebar} />
+          <Category showSidebar={showSidebar} />
+          <GlobalLoading />
+          <ToastContainer
+            position="top-center"
+            autoClose={1000}
+            hideProgressBar
+            transition={Zoom}
+            limit={1}
+          />
+          <div>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/main/*" element={<MainPage />} />
+            </Routes>
           </div>
-          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-        </QueryClientProvider>
-      </ErrorBoundary>
+        </div>
+        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+      </QueryClientProvider>
+      {/* </ErrorBoundary> */}
     </Flowbite>
   );
 };
