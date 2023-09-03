@@ -4,7 +4,7 @@ import EditButton from 'Components/Category/EditButton';
 import { useCategoryActions } from 'hooks/Category/useCategoryAction';
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import useCategoryStore from 'store/categoryStore';
+import { useCategoryAction } from 'store/categoryStore';
 import useInput from 'utils/useInput';
 
 import { Category } from '../../typings/db';
@@ -18,7 +18,7 @@ const CategoryName = () => {
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, onChangeCategoryName, setEditedCategoryName] = useInput('');
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
-  const { openCreateCategory } = useCategoryStore();
+  const { openCreateCategory } = useCategoryAction();
 
   const { onSubmitEdit, onToggleHidden, onDeleteCategory } = useCategoryActions(userData);
 

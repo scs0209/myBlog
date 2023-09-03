@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Textarea } from 'flowbite-react';
 import React, { ChangeEvent, VFC } from 'react';
-import useReplyStore from 'store/replyStore';
+import { useReplyActions } from 'store/replyStore';
 
 interface Props {
   value: string;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const ReplyEdit: VFC<Props> = ({ onSave, value, onChange }) => {
-  const { handleEditCancel } = useReplyStore();
+  const { handleEditCancel } = useReplyActions();
 
   return (
     <form className="mb-6">

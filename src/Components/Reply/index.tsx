@@ -1,7 +1,7 @@
 import { useDeleteReply, useUpdateReply } from 'apis/reply';
 import UserDropDown from 'Components/common/DropDown';
 import React, { ChangeEvent, useCallback, useState, VFC } from 'react';
-import useReplyStore from 'store/replyStore';
+import { useIsEditing, useReplyActions } from 'store/replyStore';
 import { Reply as ReplyType } from 'typings/db';
 
 import ReplyEdit from './ReplyEdit';
@@ -13,7 +13,8 @@ interface Props {
 const ReplyComp: VFC<Props> = ({ reply }) => {
   const { mutateAsync: updateReply } = useUpdateReply();
   const { mutateAsync: deleteReply } = useDeleteReply();
-  const { isEditing, setIsEditing, handleEdit } = useReplyStore();
+  const isEditing = useIsEditing();
+  const { setIsEditing, handleEdit } = useReplyActions();
   const [editContent, setEditContent] = useState(reply.content);
 
   const handleEditSave = useCallback(() => {

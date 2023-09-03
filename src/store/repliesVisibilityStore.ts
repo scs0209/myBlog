@@ -1,20 +1,38 @@
 import create from 'zustand';
 
-interface RepliesVisibilityStoreState {
+// State 정의
+interface RepliesVisibilityState {
   isRepliesVisible: { [commentId: number]: boolean };
+}
+
+// Actions 정의
+interface RepliesVisibilityActions {
   handleRepliesClick: (commentId: number) => void;
 }
 
-const useRepliesVisibilityStore = create<RepliesVisibilityStoreState>((set) => ({
+export const useRepliesVisibilityStore = create<
+  RepliesVisibilityState & { actions: RepliesVisibilityActions }
+>((set) => ({
+  // State
   isRepliesVisible: {},
-  handleRepliesClick: (commentId: number) =>
-    set((state) => ({
-      ...state,
-      isRepliesVisible: {
-        ...state.isRepliesVisible,
-        [commentId]: !state.isRepliesVisible[commentId],
-      },
-    })),
+
+  // Actions
+  actions: {
+    handleRepliesClick(commentId) {
+      set((state) => ({
+        ...state,
+        isRepliesVisible: {
+          ...state.isRepliesVisible,
+          [commentId]: !state.isRepliesVisible[commentId],
+        },
+      }));
+    },
+  },
 }));
 
-export default useRepliesVisibilityStore;
+// State 선택자
+export const useIsRepliesVisible = () =>
+  useRepliesVisibilityStore((state) => state.isRepliesVisible);
+
+// Actions 선택자
+export const useHandleReplyActions = () => useRepliesVisibilityStore((state) => state.actions);

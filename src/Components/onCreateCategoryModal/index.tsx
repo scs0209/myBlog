@@ -5,13 +5,14 @@ import React, { FormEvent, useCallback } from 'react';
 import useInput from '../../utils/useInput';
 import { useCategories, useCreateCategory } from 'apis/category';
 import { Category } from 'typings/db';
-import useCategoryStore from 'store/categoryStore';
+import { useCategoryAction, useShowCreateCategoryModal } from 'store/categoryStore';
 
 const CreateCategoryModal = () => {
   const [newCategory, onChangeNewCategory, setNewCategory] = useInput('');
   const { data: categories } = useCategories();
   const { mutateAsync: createCategory } = useCreateCategory();
-  const { onCloseModal, setShowCreateCategoryModal, showCreateCategoryModal } = useCategoryStore();
+  const { onCloseModal, setShowCreateCategoryModal } = useCategoryAction();
+  const showCreateCategoryModal = useShowCreateCategoryModal();
 
   const onCreateCategory = useCallback(
     async (e: FormEvent) => {

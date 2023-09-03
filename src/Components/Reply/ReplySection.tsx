@@ -2,7 +2,7 @@ import { useGetReply } from 'apis/reply';
 import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 import { VFC } from 'react';
 import { useParams } from 'react-router';
-import useRepliesVisibilityStore from 'store/repliesVisibilityStore';
+import { useIsRepliesVisible } from 'store/repliesVisibilityStore';
 import { Reply } from 'typings/db';
 
 import ReplyComp from '.';
@@ -15,11 +15,11 @@ interface Props {
 const ReplySection: VFC<Props> = ({ show }) => {
   const { id } = useParams<{ id: string }>();
   const { data: repliesData } = useGetReply(id);
-  const { isRepliesVisible } = useRepliesVisibilityStore();
+  const isRepliesVisible = useIsRepliesVisible();
   const { comment } = useRepliesVisibilityContext();
 
   return (
-    <article className="p-6 mb-6 ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-800 dark:text-white">
+    <article className="p-6 mb-6 ml-6 text-base bg-white rounded-lg lg:ml-12 dark:bg-gray-800 dark:text-white">
       {show && <ReplyForm />}
       {isRepliesVisible[comment?.id] && (
         <>

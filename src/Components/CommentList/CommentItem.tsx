@@ -7,12 +7,13 @@ import ReplySection from 'Components/Reply/ReplySection';
 import CommentContent from './CommentContent';
 import UserDropDown from 'Components/common/DropDown';
 import { useDeleteComment } from 'apis/comment';
-import { useCommentStore } from 'store/commentStore';
+import { useEditId, useCommentActions } from 'store/commentStore';
 
 const CommentItem = () => {
   const { mutateAsync: deleteComment } = useDeleteComment();
   const { comment } = useRepliesVisibilityContext();
-  const { editId, handleEditClick } = useCommentStore();
+  const editId = useEditId();
+  const { handleEditClick } = useCommentActions();
   const [show, setShow] = useState(false);
 
   const handleDeleteClick = (commentId: number) => {

@@ -2,7 +2,7 @@ import { useGetReply } from 'apis/reply';
 import { useRepliesVisibilityContext } from 'contexts/repliesVisibilityContext';
 import { VFC } from 'react';
 import { useParams } from 'react-router';
-import useRepliesVisibilityStore from 'store/repliesVisibilityStore';
+import { useHandleReplyActions, useIsRepliesVisible } from 'store/repliesVisibilityStore';
 import { Reply } from 'typings/db';
 
 interface Props {
@@ -12,7 +12,8 @@ interface Props {
 const CommentContent: VFC<Props> = ({ toggleShow }) => {
   const { id } = useParams<{ id: string }>();
   const { data: repliesData } = useGetReply(id);
-  const { isRepliesVisible, handleRepliesClick } = useRepliesVisibilityStore();
+  const isRepliesVisible = useIsRepliesVisible();
+  const { handleRepliesClick } = useHandleReplyActions();
   const { comment } = useRepliesVisibilityContext();
 
   return (
@@ -26,7 +27,7 @@ const CommentContent: VFC<Props> = ({ toggleShow }) => {
         >
           <svg
             aria-hidden="true"
-            className="mr-1 w-4 h-4"
+            className="w-4 h-4 mr-1"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
