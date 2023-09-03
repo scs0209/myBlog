@@ -71,51 +71,54 @@ const CategoryName = () => {
             <span className="ml-3">전체 게시글</span>
           </Link>
         </li>
-        {categories.map((category: Category) => (
-          <li key={category.id}>
-            {editedCategoryId === category.id ? (
-              <CategoryEditForm
-                editedCategoryName={editedCategoryName}
-                onChangeCategoryName={onChangeCategoryName}
-                onSubmitEdit={handleSubmitEdit}
-              />
-            ) : (
-              <div className="flex items-center justify-between text-sm">
-                {/* 카테고리 이름 */}
-                <Link
-                  to={`/main/categories/${category.id}`}
-                  className={`${
-                    !category.hidden
-                      ? 'flex items-center p-2 text-gray-700 rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300'
-                      : 'hidden'
-                  } ${
-                    activeCategoryId === category.id ? 'font-bold bg-gray-300 dark:bg-gray-600' : ''
-                  }`}
-                  onClick={() => handleClickCategory(category.id)}
-                >
-                  {category.name}
-                </Link>
-                {/* 편집버튼 */}
-                {edit && (
-                  <div className="flex items-center max-h-10">
-                    <CategoryButton type="button" onClick={() => toggleEdit(category.id)}>
-                      ✏
-                    </CategoryButton>
-                    <CategoryButton type="button" onClick={() => onDeleteCategory(category.id)}>
-                      🗑
-                    </CategoryButton>
-                    <CategoryButton
-                      type="button"
-                      onClick={() => onToggleHidden(category.id, !category.hidden)}
+        {categories.map(
+          (category: Category) =>
+            (userData?.role === 'admin' || !category.hidden) && (
+              <li key={category.id}>
+                {editedCategoryId === category.id ? (
+                  <CategoryEditForm
+                    editedCategoryName={editedCategoryName}
+                    onChangeCategoryName={onChangeCategoryName}
+                    onSubmitEdit={handleSubmitEdit}
+                  />
+                ) : (
+                  <div className="flex items-center justify-between text-sm">
+                    {/* 카테고리 이름 */}
+                    <Link
+                      to={`/main/categories/${category.id}`}
+                      className={`${
+                        activeCategoryId === category.id
+                          ? 'font-bold bg-gray-300 dark:bg-gray-600'
+                          : ''
+                      } flex items-center p-2 text-gray-700 rounded-lg dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 ${
+                        category.hidden ? 'line-through' : ''
+                      }`}
+                      onClick={() => handleClickCategory(category.id)}
                     >
-                      {category.hidden ? '🔓' : '🔒'}
-                    </CategoryButton>
+                      {category.name}
+                    </Link>
+                    {/* 편집버튼 */}
+                    {edit && (
+                      <div className="flex items-center max-h-10">
+                        <CategoryButton type="button" onClick={() => toggleEdit(category.id)}>
+                          ✏
+                        </CategoryButton>
+                        <CategoryButton type="button" onClick={() => onDeleteCategory(category.id)}>
+                          🗑
+                        </CategoryButton>
+                        <CategoryButton
+                          type="button"
+                          onClick={() => onToggleHidden(category.id, !category.hidden)}
+                        >
+                          {category.hidden ? '🔓' : '🔒'}
+                        </CategoryButton>
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
-            )}
-          </li>
-        ))}
+              </li>
+            ),
+        )}
       </ul>
       {userData?.role === 'admin' && (
         <div className="flex justify-center">
