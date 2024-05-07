@@ -4,6 +4,8 @@
 <img src="https://user-images.githubusercontent.com/110822847/229564131-388a385d-c880-4ab7-967d-d392a6dec03f.png" width="250">
 </div>
 
+# 현재 과금 때문에 서버를 종료
+
 ## 리팩토링 및 새 기능 추가에 대한 내용(이슈 탭에서 확인)
 
 https://github.com/scs0209/myBlog/issues
