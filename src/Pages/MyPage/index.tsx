@@ -43,9 +43,9 @@ const MyPage = () => {
             alt={userData?.name}
           />
           <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-            {userData.name}
+            {userData?.name}
           </h5>
-          <span className="text-sm text-gray-500 dark:text-gray-400">{userData.email}</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">{userData?.email}</span>
           <div className="flex mt-4 space-x-3 lg:mt-6">
             <button
               className="inline-flex items-center px-6 py-2 text-sm font-medium text-center text-white bg-blue-400 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-cyan-800"

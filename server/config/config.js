@@ -2,18 +2,19 @@ require('dotenv').config();
 
 module.exports = {
   development: {
-    username: 'tutorial_user',
+    username: 'root',
     password: process.env.MYSQL_PASSWORD,
-    database: 'sample',
-    host: 'db-instance.clfzc3a1xomr.ap-northeast-2.rds.amazonaws.com',
-    port: '3306',
-    dialect: 'mysql',
+    database: 'blog',
+    host: 'svc.sel3.cloudtype.app',
+    port: '32697',
+    dialect: 'mariadb',
   },
   production: {
-    username: 'tutorial_user',
+    username: 'root',
     password: process.env.MYSQL_PASSWORD,
-    database: 'sample',
-    host: 'db-instance.clfzc3a1xomr.ap-northeast-2.rds.amazonaws.com',
-    dialect: 'mysql',
+    database: 'blog',
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dialect: 'mariadb',
   },
 };

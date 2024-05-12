@@ -9,8 +9,6 @@ const CommentList = () => {
   const { id } = useParams<{ id: string }>();
   const { data: commentsData } = useGetComment(id);
 
-  console.log(id);
-
   return (
     <>
       {commentsData?.map((comment: Comment) => (

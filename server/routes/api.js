@@ -766,7 +766,6 @@ router.get('/users/:id', async (req, res, next) => {
 
     return res.json(user);
   } catch (error) {
-    console.log(error);
     return next(error);
   }
 });

@@ -18,7 +18,7 @@ const MyPage = loadable(() => import('../../Pages/MyPage'));
 const MainPage = () => {
   return (
     <>
-      <div className="p-0 md:p-12 sm:ml-64 dark:bg-slate-700">
+      <div className="p-0 md:p-12 sm:ml-64 dark:bg-slate-700 min-h-screen">
         <div className="p-6 dark:border-gray-700 mt-14">
           <Routes>
             <Route path="/posts" element={<PostList />} />
