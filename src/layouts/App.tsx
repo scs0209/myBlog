@@ -32,10 +32,6 @@ const App = () => {
   const { reset } = useQueryErrorResetBoundary();
   const [showSidebar, setShowSidebar] = useState(false);
 
-  const toggleSidebar = useCallback(() => {
-    setShowSidebar((prevShowSidebar) => !prevShowSidebar);
-  }, []);
-
   const updateSidebarState = useCallback(() => {
     // 화면 너비가 640 픽셀 이상인 경우 사이드바를 항상 열린 상태로 유지
     if (window.innerWidth >= 640) {
@@ -66,7 +62,7 @@ const App = () => {
       > */}
       <QueryClientProvider client={queryClient}>
         <div className="dark:bg-slate-700">
-          <Header toggleSidebar={toggleSidebar} />
+          <Header />
           <Category showSidebar={showSidebar} />
           <GlobalLoading />
           <ToastContainer

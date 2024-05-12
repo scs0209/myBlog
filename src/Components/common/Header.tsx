@@ -1,17 +1,13 @@
 /* eslint-disable */
 import { DarkThemeToggle } from 'flowbite-react';
-import React, { memo, useCallback, useState, VFC } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import Avatar from 'react-avatar';
 import { Link, useNavigate } from 'react-router-dom';
 
 import ProfileModal from '../ProfileModal';
 import { useLogout, useUser } from 'apis/auth';
 
-interface Props {
-  toggleSidebar: () => void;
-}
-
-const Header: VFC<Props> = ({ toggleSidebar }) => {
+const Header = () => {
   const { data: userData, isError } = useUser();
   const [showPost, setShowPost] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -35,6 +31,10 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
     setShowProfile((prevShowProfile) => !prevShowProfile);
   }, []);
 
+  const handleGoCategoryPage = () => {
+    navigate('/main/side-bar');
+  };
+
   return (
     <>
       <nav className="fixed top-0 z-50 w-full bg-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -42,7 +42,7 @@ const Header: VFC<Props> = ({ toggleSidebar }) => {
           <div className="flex items-center justify-start">
             <button
               type="button"
-              onClick={toggleSidebar}
+              onClick={handleGoCategoryPage}
               className="inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             >
               <span className="sr-only">Open sidebar</span>

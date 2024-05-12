@@ -14,6 +14,7 @@ const FindPassword = loadable(() => import('../../Pages/FindPassword'));
 const ChangePassword = loadable(() => import('../../Pages/ChangePassword'));
 const Profile = loadable(() => import('../../Pages/Profile'));
 const MyPage = loadable(() => import('../../Pages/MyPage'));
+const CategoryPage = loadable(() => import('../../Pages/SideBarPage'));
 
 const MainPage = () => {
   return (
@@ -33,6 +34,7 @@ const MainPage = () => {
             <Route path="/write" element={<Post />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/my-page/:id" element={<MyPage />} />
+            <Route path="/side-bar" element={<CategoryPage />} />
           </Routes>
           <Footer />
         </div>

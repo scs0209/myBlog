@@ -38,7 +38,7 @@ const CreateCategoryModal = () => {
 
   return (
     <Modal show={showCreateCategoryModal} onCloseModal={onCloseModal}>
-      <div className="px-10 mt-3 lg:px-8">
+      <div className="px-10 py-2 mt-3 lg:px-8">
         <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">Create Category</h3>
         <form className="space-y-6" onSubmit={onCreateCategory}>
           <div>
