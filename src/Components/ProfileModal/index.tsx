@@ -70,10 +70,10 @@ const ProfileModal: VFC<Props> = ({ userData, showProfile, onLogout, onClose, id
         </li>
         <li>
           <Link
-            to={`/main/my-page/${id}`}
+            to={`/main/withdrawal/${id}`}
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
           >
-            My Page
+            회원탈퇴
           </Link>
         </li>
         <li>

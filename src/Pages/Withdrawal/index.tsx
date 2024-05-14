@@ -4,7 +4,7 @@ import { Card, Dropdown } from 'flowbite-react';
 import Avatar from 'react-avatar';
 import { useNavigate, useParams } from 'react-router';
 
-const MyPage = () => {
+const WithdrawalPage = () => {
   const { id } = useParams();
   const { data: userData } = useUserById(id);
   const { mutateAsync: deleteUser } = useDeleteUser();
@@ -60,4 +60,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default WithdrawalPage;

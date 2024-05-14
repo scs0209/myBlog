@@ -1,5 +1,4 @@
 import loadable from '@loadable/component';
-import Footer from 'Components/common/Footer';
 import { Route, Routes } from 'react-router-dom';
 
 const Post = loadable(() => import('../../Pages/Post'));
@@ -13,13 +12,14 @@ const FindId = loadable(() => import('../../Pages/FindId'));
 const FindPassword = loadable(() => import('../../Pages/FindPassword'));
 const ChangePassword = loadable(() => import('../../Pages/ChangePassword'));
 const Profile = loadable(() => import('../../Pages/Profile'));
-const MyPage = loadable(() => import('../../Pages/MyPage'));
+const WithdrawalPage = loadable(() => import('../../Pages/Withdrawal'));
 const CategoryPage = loadable(() => import('../../Pages/SideBarPage'));
+const My = loadable(() => import('../../Pages/My'));
 
 const MainPage = () => {
   return (
     <>
-      <div className="p-0 md:p-12 sm:ml-64 dark:bg-slate-700 min-h-screen">
+      <div className="p-0 md:p-12 sm:ml-64 dark:bg-slate-700">
         <div className="p-6 dark:border-gray-700 mt-14">
           <Routes>
             <Route path="/posts" element={<PostList />} />
@@ -33,10 +33,10 @@ const MainPage = () => {
             <Route path="/categories/:categoryId" element={<CategoryList />} />
             <Route path="/write" element={<Post />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/my-page/:id" element={<MyPage />} />
+            <Route path="/withdrawal/:id" element={<WithdrawalPage />} />
+            <Route path="/my/:id" element={<My />} />
             <Route path="/side-bar" element={<CategoryPage />} />
           </Routes>
-          <Footer />
         </div>
       </div>
     </>

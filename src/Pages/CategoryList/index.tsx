@@ -1,10 +1,10 @@
 import { useIncreasePostViews } from 'apis/postList';
 import HeadInfo from 'Components/common/HeadInfo';
+import PostArticle from 'Components/Post/PostArticle';
 import { CustomFlowbiteTheme, Pagination } from 'flowbite-react';
 import { useCategoryList } from 'hooks/CategoryList/useCategoryList';
 import { usePagination } from 'hooks/CategoryList/usePagination';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import { formatDate } from 'utils/dateUtil';
 
 const customTheme: CustomFlowbiteTheme['pagination'] = {
@@ -36,45 +36,23 @@ const CategoryList = () => {
       <HeadInfo title="Category" />
       <div className="h-screen">
         <h1 className="mb-3 text-3xl font-bold dark:text-white">게시글 목록</h1>
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-3 py-3 md:px-6">
-                  title
-                </th>
-                <th scope="col" className="hidden px-6 py-3 md:table-cell">
-                  views
-                </th>
-                <th scope="col" className="px-1 py-3 md:px-6">
-                  dates
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {posts?.map((post: any) => {
-                const createdDate = new Date(post.createdAt);
-                const dateString = formatDate(createdDate);
+        <div className="relative overflow-x-auto divide-y divide-gray-200 dark:divide-gray-100">
+          {posts?.map((post: any) => {
+            const createdDate = new Date(post.createdAt);
+            const dateString = formatDate(createdDate);
 
-                return (
-                  <tr
-                    key={post.id}
-                    onClick={() => handlePostClick(post.id)}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                  >
-                    <th
-                      scope="row"
-                      className="px-2 md:px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate max-w-[150px]"
-                    >
-                      <Link to={`/main/posts/${post.id}`}>{post.title}</Link>
-                    </th>
-                    <td className="hidden px-6 py-3 md:table-cell">{post.views}</td>
-                    <td className="px-1 py-4 md:px-6">{dateString}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+            return (
+              <PostArticle
+                onClick={() => handlePostClick(post?.id)}
+                key={post.id}
+                title={post.title}
+                content={post.content}
+                views={post.views}
+                date={dateString}
+                id={post.id}
+              />
+            );
+          })}
         </div>
         <div className="flex flex-col items-center justify-center text-center">
           <Pagination

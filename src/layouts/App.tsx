@@ -14,6 +14,8 @@ import { ToastContainer, Zoom } from 'react-toastify';
 
 import Category from '../Components/Category';
 import Header from '../Components/common/Header';
+import BottomNav from 'Components/common/BottomNav';
+import Footer from 'Components/common/Footer';
 
 export const queryErrorHandler = (error: any) => {
   return <div className="fixed bottom-0 h-screen text-8xl">{error.message}</div>;
@@ -61,7 +63,7 @@ const App = () => {
         onReset={reset}
       > */}
       <QueryClientProvider client={queryClient}>
-        <div className="dark:bg-slate-700">
+        <div className="dark:bg-slate-700 min-w-[345px]">
           <Header />
           <Category showSidebar={showSidebar} />
           <GlobalLoading />
@@ -78,6 +80,8 @@ const App = () => {
               <Route path="/main/*" element={<MainPage />} />
             </Routes>
           </div>
+          <Footer />
+          <BottomNav />
         </div>
         <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
       </QueryClientProvider>
