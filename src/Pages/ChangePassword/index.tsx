@@ -1,6 +1,6 @@
 import { useUpdatePassword } from 'apis/password';
 import HeadInfo from 'Components/common/HeadInfo';
-import React, { FormEvent, useCallback, useState } from 'react';
+import React, { FormEvent, useCallback } from 'react';
 
 import styles from '../../styles/ChangePassword.module.css';
 import useInput from '../../utils/useInput';
