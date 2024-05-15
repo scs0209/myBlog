@@ -32,11 +32,13 @@ const PostDetail = () => {
   return (
     <>
       <HeadInfo title={post.title} />
-      <div className={`${styles.postDetailContainer} dark:bg-gray-800 dark:border-gray-700`}>
+      <div
+        className={`${styles.postDetailContainer} dark:bg-gray-800 dark:border-gray-700 mt-12 md:mt-0`}
+      >
         {post && (
           <>
             <PostInfo title={title} content={content} createdAt={dateString} />
-            <div className={styles.flexContainer}>
+            <div className={`${styles.flexContainer} dark:bg-slate-700`}>
               <LikeSection />
               <div>
                 {user && user.role === 'admin' && (

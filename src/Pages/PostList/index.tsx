@@ -35,7 +35,7 @@ const PostList = () => {
     <>
       <HeadInfo title="Posts" />
       <div className="min-w-[345px]">
-        <h1 className="text-3xl font-bold mb-3 dark:text-white">게시글 목록</h1>
+        <h1 className="text-3xl font-bold mb-3 dark:text-white mt-2">게시글 목록</h1>
         <div className="relative overflow-x-auto divide-y divide-gray-200 dark:divide-gray-100">
           {currentPagePosts?.map((post: any) => {
             const createdDate = new Date(post.createdAt);

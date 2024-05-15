@@ -4,7 +4,7 @@ import styles from '../../styles/PostDetail.module.css';
 
 const CommentSection = () => {
   return (
-    <section className={`${styles.section} dark:bg-gray-800`}>
+    <section className={`${styles.section} dark:bg-slate-700`}>
       <div className="max-w-4xl mx-auto px-4">
         <CommentForm />
         <CommentList />

@@ -61,11 +61,11 @@ const SideBarPage = () => {
 
   return (
     <>
-      <ul className="space-y-2 mt-4 font-medium list-none min-h-screen">
-        <li>
+      <ul className="space-y-2 mt-4 font-medium list-none min-h-dvh">
+        <li className="text-center">
           <Link
             to="/main/posts"
-            className="p-2 mb-4 font-black text-2xl text-black dark:texts-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300"
+            className="p-2 mb-4 font-black text-2xl text-black hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white"
             onClick={handleClickAllPosts}
           >
             <span>카테고리</span>

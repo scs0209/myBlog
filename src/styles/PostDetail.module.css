@@ -1,5 +1,5 @@
 .postDetailContainer {
-  @apply block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow;
+  @apply block max-w-full;
 }
 
 .title {
@@ -14,7 +14,7 @@
 }
 
 .flexContainer {
-  @apply flex w-full justify-between items-center mb-2;
+  @apply flex w-full justify-between items-center pb-2 pt-2;
 }
 
 .deleteSpan {

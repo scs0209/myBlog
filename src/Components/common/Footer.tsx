@@ -3,9 +3,6 @@ const Footer = () => {
     <footer className="w-full text-gray-600 body-font relative bottom-0 mt-10">
       <div className="bg-gray-200 dark:bg-gray-800">
         <div className="container px-5 py-6 mx-auto flex flex-row justify-between items-center sm:flex-row">
-          <div className="flex title-font font-medium items-center text-gray-800 md:justify-start justify-center dark:text-white">
-            <span className="ml-3 text-xl font-sans font-bold">성창수</span>
-          </div>
           <p className="text-sm text-gray-500 sm:ml-6 sm:mt-0 mt-4">
             © 2023 SCS - All rights reserved
           </p>
