@@ -74,7 +74,7 @@ const App = () => {
             transition={Zoom}
             limit={1}
           />
-          <div>
+          <div className="mt-12 md:mt-0">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/main/*" element={<MainPage />} />

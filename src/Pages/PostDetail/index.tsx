@@ -32,9 +32,7 @@ const PostDetail = () => {
   return (
     <>
       <HeadInfo title={post.title} />
-      <div
-        className={`${styles.postDetailContainer} dark:bg-gray-800 dark:border-gray-700 mt-12 md:mt-0`}
-      >
+      <div className={`${styles.postDetailContainer} dark:bg-gray-800 dark:border-gray-700`}>
         {post && (
           <>
             <PostInfo title={title} content={content} createdAt={dateString} />
