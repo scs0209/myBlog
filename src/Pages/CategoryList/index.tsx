@@ -34,7 +34,7 @@ const CategoryList = () => {
   return (
     <>
       <HeadInfo title="Category" />
-      <div className="h-screen">
+      <div className="min-h-dvh">
         <h1 className="mb-3 text-3xl font-bold dark:text-white">게시글 목록</h1>
         <div className="relative overflow-x-auto divide-y divide-gray-200 dark:divide-gray-100">
           {posts?.map((post: any) => {
